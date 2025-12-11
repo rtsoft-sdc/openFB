@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="Draw_box" Comment="Basic FB with empty ECC">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var="QUEUE_ID"/>
+			</Event>
+			<Event Name="RUN" Type="Event" Comment="">
+				<With Var="X"/>
+				<With Var="Y"/>
+				<With Var="Width"/>
+				<With Var="Height"/>
+				<With Var="QI"/>
+				<With Var="IMG_ID"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INIT0" Type="Event" Comment="">
+			</Event>
+			<Event Name="RUN_O" Type="Event" Comment="">
+				<With Var="QO"/>
+				<With Var="IMG_ID0"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="X" Type="INT" Comment=""/>
+			<VarDeclaration Name="Y" Type="INT" Comment=""/>
+			<VarDeclaration Name="Width" Type="UINT" Comment=""/>
+			<VarDeclaration Name="Height" Type="UINT" Comment=""/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING" Comment=""/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="IMG_ID0" Type="UDINT" Comment=""/>
+			<VarDeclaration Name="Status" Type="STRING" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

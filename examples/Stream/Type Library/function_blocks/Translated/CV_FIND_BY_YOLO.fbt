@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="CV_FIND_BY_YOLO" Comment="Basic FB with empty ECC">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var="QI" />
+				<With Var="QUEUE_ID" />
+				<With Var="WEIGHTS_FILE" />
+				<With Var="NN_FILE" />
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="QI" />
+				<With Var="IMG_ID" />
+				<With Var="CONFIDENCE" />
+				<With Var="OBJECT_CLASS" />
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INIT0" Type="Event" Comment="">
+				<With Var="QO" />
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="QO" />
+				<With Var="X" />
+				<With Var="Y" />
+				<With Var="WIDTH" />
+				<With Var="HIGHT" />
+				<With Var="N" />
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="" />
+			<VarDeclaration Name="QUEUE_ID" Type="STRING" Comment="" />
+			<VarDeclaration Name="IMG_ID" Type="UDINT" Comment="" />
+			<VarDeclaration Name="NN_FILE" Type="STRING" Comment="" />
+			<VarDeclaration Name="WEIGHTS_FILE" Type="STRING" Comment="" />
+			<VarDeclaration Name="CONFIDENCE" Type="REAL" Comment="" />
+			<VarDeclaration Name="OBJECT_CLASS" Type="INT" Comment="" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="" />
+			<VarDeclaration Name="X" Type="INT" Comment="" ArraySize="100" />
+			<VarDeclaration Name="Y" Type="INT" Comment="" ArraySize="100" />
+			<VarDeclaration Name="WIDTH" Type="UINT" Comment="" ArraySize="100" />
+			<VarDeclaration Name="HIGHT" Type="UINT" Comment="" ArraySize="100" />
+			<VarDeclaration Name="N" Type="UINT" Comment="" />
+		</OutputVars>
+	</InterfaceList>
+</FBType>

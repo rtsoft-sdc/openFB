@@ -1,0 +1,10 @@
+{
+    "master-fbs-path": "/home/obotnar/my_repo/dinasore/resources/function_blocks",
+    "dinasores": [        
+        {
+            "address": "localhost",
+            "dinasore-path": "/home/obotnar/4diac-ide/typelibrary/fbs/" 
+        }
+    ],
+    "strategy": ""
+}

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="distributed_example">
+	<VersionInfo Version="1.0" Author="obotnar" Date="2025-11-18">
+	</VersionInfo>
+	<Application Name="distributed_exampleApp">
+		<SubAppNetwork>
+			<FB Name="CAMERA" Type="CAMERA" x="1600" y="900">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="ID" Value="'0'"/>
+				<Parameter Name="PARAM" Value="''"/>
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" x="7000" y="600">
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="Detector_N_Drawer_Exist" Type="Detector_N_Drawer_Exist" x="3700" y="900">
+				<Parameter Name="VIS" Value="TRUE"/>
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				<Parameter Name="MODEL_PTH" Value="'/demo/w7.rknn'"/>
+				<Parameter Name="CLASS_PTH" Value="'/demo/names.txt'"/>
+				<Parameter Name="ANCHORS_PTH" Value="'/demo/RK_anchors.txt'"/>
+				<Parameter Name="THRESHOLD" Value="0.6"/>
+				<Parameter Name="FILTRER_CL" Value="'defect'"/>
+			</FB>
+			<FB Name="PYOPCUA_CLIENT" Type="PYOPCUA_CLIENT" x="5300" y="2100">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="URL" Value="'opc.tcp://ovenplc.dev.rtsoft.ru:4843'"/>
+				<Parameter Name="NS_ID" Value="'ns=2'"/>
+				<Parameter Name="NODE_ID" Value="'s=FORTE.distributed_exampleApp.SWITCH.D'"/>
+				<Parameter Name="D_TYPE" Value="'BOOL'"/>
+			</FB>
+			<FB Name="E_CYCLE_SYSTEM" Type="E_CYCLE" x="8100" y="2600">
+				<Parameter Name="DT" Value="T#300ms"/>
+			</FB>
+			<FB Name="QX" Type="QX" x="11500" y="1400">
+				<Parameter Name="QI" Value="1">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="PARAMS" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="OUT" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="QO" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="STATUS" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+			</FB>
+			<FB Name="OWEN_DO_1_4" Type="OWEN_DO_1_4" x="9500" y="900">
+				<Parameter Name="QI" Value="1">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="DO1" Value="'distributed_exampleApp.QX'">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="DO2" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="DO3" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="DO4" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="QO" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="STATUS" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+			</FB>
+			<FB Name="SWITCH" Type="E_D_FF" x="9400" y="1900">
+				<Parameter Name="D" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+				<Parameter Name="Q" Value="">
+					<Attribute Name="OpcMapping" Value="true"/>
+				</Parameter>
+			</FB>
+			<FB Name="F_NOT" Type="F_NOT" x="10200" y="1900">
+			</FB>
+			<EventConnections>
+				<Connection Source="CAMERA.IND" Destination="Detector_N_Drawer_Exist.REQ"/>
+				<Connection Source="CAMERA.INIT0" Destination="Detector_N_Drawer_Exist.INIT"/>
+				<Connection Source="Detector_N_Drawer_Exist.INITO" Destination="PYOPCUA_CLIENT.INIT" dx1="482.35"/>
+				<Connection Source="PYOPCUA_CLIENT.INIT_O" Destination="IMG_QUEUE_DELETE.INIT" dx1="94.12"/>
+				<Connection Source="Detector_N_Drawer_Exist.CNF" Destination="PYOPCUA_CLIENT.RUN" dx1="423.53"/>
+				<Connection Source="E_CYCLE_SYSTEM.EO" Destination="SWITCH.CLK" dx1="241.18"/>
+				<Connection Source="OWEN_DO_1_4.MAPO" Destination="QX.INIT" dx1="517.65"/>
+				<Connection Source="PYOPCUA_CLIENT.RUN_O" Destination="IMG_QUEUE_DELETE.RSP" dx1="194.12"/>
+				<Connection Source="SWITCH.EO" Destination="F_NOT.REQ"/>
+				<Connection Source="F_NOT.CNF" Destination="QX.REQ" dx1="205.88"/>
+				<Connection Source="IMG_QUEUE_DELETE.IND" Destination="CAMERA.RSP" dx1="70.59" dx2="70.59" dy="-435.29"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="CAMERA.IMG_ID" Destination="Detector_N_Drawer_Exist.IMG_ID"/>
+				<Connection Source="Detector_N_Drawer_Exist.IMG_IDO" Destination="IMG_QUEUE_DELETE.IMG_ID" dx1="1217.65"/>
+				<Connection Source="CAMERA.QO" Destination="Detector_N_Drawer_Exist.QI"/>
+				<Connection Source="Detector_N_Drawer_Exist.QO" Destination="IMG_QUEUE_DELETE.QI" dx1="1105.88"/>
+				<Connection Source="Detector_N_Drawer_Exist.EXIST" Destination="PYOPCUA_CLIENT.VALUE" dx1="182.35"/>
+				<Connection Source="F_NOT.OUT" Destination="QX.OUT" dx1="205.88"/>
+				<Connection Source="SWITCH.Q" Destination="F_NOT.IN"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="2117.65" y="917.65">
+		<Parameter Name="MGR_ID" Value="&quot;10.5.20.137:62499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Device Name="FORTE_PC_1" Type="FORTE_PC" x="3882.35" y="917.65">
+		<Parameter Name="MGR_ID" Value="&quot;10.5.20.68:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="155,234,126"/>
+		<Resource Name="FLOGIC_EMB_RES" Type="FLOGIC_EMB_RES" x="0" y="0">
+			<Parameter Name="ENABLE_RETAIN" Value="" Comment="Enable retain in resource"/>
+			<Parameter Name="OPC_BASE_PATH" Value="" Comment="Path to base OPCUA node"/>
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="distributed_exampleApp.OWEN_DO_1_4.MAP" dx1="841.18"/>
+					<Connection Source="START.WARM" Destination="distributed_exampleApp.OWEN_DO_1_4.MAP"/>
+					<Connection Source="START.COLD" Destination="distributed_exampleApp.E_CYCLE_SYSTEM.START" dx1="364.71"/>
+					<Connection Source="START.WARM" Destination="distributed_exampleApp.E_CYCLE_SYSTEM.START" dx1="364.71"/>
+					<Connection Source="START.STOP" Destination="distributed_exampleApp.E_CYCLE_SYSTEM.STOP" dx1="364.71"/>
+					<Connection Source="distributed_exampleApp.E_CYCLE_SYSTEM.EO" Destination="OPCUAS.REQ"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Mapping From="distributed_exampleApp.E_CYCLE_SYSTEM" To="FORTE_PC_1.FLOGIC_EMB_RES"/>
+	<Mapping From="distributed_exampleApp.QX" To="FORTE_PC_1.FLOGIC_EMB_RES"/>
+	<Mapping From="distributed_exampleApp.SWITCH" To="FORTE_PC_1.FLOGIC_EMB_RES"/>
+	<Mapping From="distributed_exampleApp.OWEN_DO_1_4" To="FORTE_PC_1.FLOGIC_EMB_RES"/>
+	<Mapping From="distributed_exampleApp.CAMERA" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="distributed_exampleApp.Detector_N_Drawer_Exist" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="distributed_exampleApp.PYOPCUA_CLIENT" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="distributed_exampleApp.IMG_QUEUE_DELETE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="distributed_exampleApp.F_NOT" To="FORTE_PC_1.FLOGIC_EMB_RES"/>
+</System>

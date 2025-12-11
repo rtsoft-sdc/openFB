@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="IMG_CONTAINER" Comment="Basic FB with empty ECC">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var="QUEUE_ID"/>
+				<With Var="QI"/>
+			</Event>
+			<Event Name="RSP" Type="Event" Comment="">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INIT0" Type="Event" Comment="">
+				<With Var="QO"/>
+				<With Var="SIZE"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="QO"/>
+				<With Var="SIZE"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING" Comment=""/>
+			<VarDeclaration Name="QI" Type="BOOL" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="SIZE" Type="UINT" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

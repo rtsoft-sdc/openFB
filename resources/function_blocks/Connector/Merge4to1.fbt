@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="Merge4to1" Comment="Template for a Basic Function Block Type">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+				<With Var="QI" />
+				<With Var="QUEUE_ID" />
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="QI" />
+				<With Var="DATA_ID" />
+				<With Var="X" />
+				<With Var="Y" />
+				<With Var="WIDTH" />
+				<With Var="HEIGHT" />
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO" />
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="QO" />
+				<With Var="DATA_ID0" />
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Input event qualifier" />
+			<VarDeclaration Name="QUEUE_ID" Type="STRING" Comment="" />
+			<VarDeclaration Name="DATA_ID" Type="UDINT" Comment="" />
+			<VarDeclaration Name="X" Type="INT" Comment="" />
+			<VarDeclaration Name="Y" Type="INT" Comment="" />
+			<VarDeclaration Name="WIDTH" Type="UINT" Comment="" />
+			<VarDeclaration Name="HEIGHT" Type="UINT" Comment="" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier" />
+			<VarDeclaration Name="DATA_ID0" Type="UDINT" Comment="" />
+		</OutputVars>
+	</InterfaceList>
+</FBType>

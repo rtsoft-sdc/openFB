@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Name="READER2">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="RUN" Type="Event">
+                <With Var="path"/>
+                <With Var="name"/>
+            </Event>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="RUN_O" Type="Event">
+                <With Var="status"/>
+            </Event>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="path" Type="STRING"/>
+            <VarDeclaration Name="name" Type="STRING"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="status" Type="STRING"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

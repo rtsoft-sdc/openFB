@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="Detector_N_Drawer_Exist" Comment="Basic FB with empty ECC" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="VIS"/>
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_ID"/>
+				<With Var="MODEL_PTH"/>
+				<With Var="CLASS_PTH"/>
+				<With Var="THRESHOLD"/>
+				<With Var="QI"/>
+				<With Var="ANCHORS_PTH"/>
+				<With Var="FILTRER_CL"/>
+			</Event>
+			<Event Name="REQ" Type="Event">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event">
+				<With Var="QO"/>
+				<With Var="NAMES"/>
+			</Event>
+			<Event Name="CNF" Type="Event">
+				<With Var="QO"/>
+				<With Var="IMG_IDO"/>
+				<With Var="EXIST"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="VIS" Type="BOOL"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="MODEL_PTH" Type="STRING"/>
+			<VarDeclaration Name="CLASS_PTH" Type="STRING"/>
+			<VarDeclaration Name="ANCHORS_PTH" Type="STRING"/>
+			<VarDeclaration Name="THRESHOLD" Type="REAL"/>
+			<VarDeclaration Name="FILTRER_CL" Type="STRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="NAMES" Type="STRING"/>
+			<VarDeclaration Name="QO" Type="BOOL"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="EXIST" Type="BOOL"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

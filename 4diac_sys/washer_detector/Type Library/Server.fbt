@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="Server" Comment="Template for a Basic Function Block Type">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+				<With Var="QI"/>
+				<With Var="HOST"/>
+				<With Var="PORT"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Input event qualifier"/>
+			<VarDeclaration Name="HOST" Type="STRING" Comment=""/>
+			<VarDeclaration Name="PORT" Type="STRING" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier"/>
+			<VarDeclaration Name="STATUS" Type="STRING" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

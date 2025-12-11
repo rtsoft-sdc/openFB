@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="Decode1to5" Comment="Basic FB with empty ECC">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var="QUEUE_ID" />
+				<With Var="QI" />
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="QI" />
+				<With Var="DATA_ID" />
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INIT_O" Type="Event" Comment="">
+				<With Var="QO" />
+			</Event>
+			<Event Name="REQ_O" Type="Event" Comment="">
+				<With Var="QO" />
+				<With Var="Height" />
+				<With Var="Width" />
+				<With Var="Y" />
+				<With Var="X" />
+				<With Var="TRACK_ID" />
+				<With Var="DATA_ID0" />
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="" />
+			<VarDeclaration Name="QUEUE_ID" Type="STRING" Comment="" />
+			<VarDeclaration Name="DATA_ID" Type="UDINT" Comment="" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="" />
+			<VarDeclaration Name="DATA_ID0" Type="UDINT" Comment="" />
+			<VarDeclaration Name="TRACK_ID" Type="UINT" Comment="" />
+			<VarDeclaration Name="X" Type="INT" Comment="" />
+			<VarDeclaration Name="Y" Type="INT" Comment="" />
+			<VarDeclaration Name="Width" Type="UINT" Comment="" />
+			<VarDeclaration Name="Height" Type="UINT" Comment="" />
+		</OutputVars>
+	</InterfaceList>
+</FBType>
