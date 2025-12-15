@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="washer_detector">
+	<VersionInfo Version="1.0" Author="obotnar" Date="2024-11-25">
+	</VersionInfo>
+	<Application Name="washer_detectorApp">
+		<SubAppNetwork>
+			<FB Name="CAMERA" Type="CAMERA" x="1000" y="-100">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="ID" Value="'0'"/>
+				<Parameter Name="PARAM" Value="''"/>
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" x="6600" y="100">
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="Detector_N_Drawer_Exist" Type="Detector_N_Drawer_Exist" x="3800" y="-900">
+				<Parameter Name="VIS" Value="TRUE"/>
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				<Parameter Name="MODEL_PTH" Value="'/demo/w7.rknn'"/>
+				<Parameter Name="CLASS_PTH" Value="'/demo/names.txt'"/>
+				<Parameter Name="ANCHORS_PTH" Value="'/demo/RK_anchors.txt'"/>
+				<Parameter Name="THRESHOLD" Value="0.6"/>
+				<Parameter Name="FILTRER_CL" Value="'defect'"/>
+			</FB>
+			<FB Name="PY_RELAY_CTRL" Type="PY_RELAY_CTRL" x="5400" y="-800">
+				<Parameter Name="REL_NUM" Value="1"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="CAMERA.INIT0" Destination="Detector_N_Drawer_Exist.INIT" dx1="788.24"/>
+				<Connection Source="CAMERA.IND" Destination="Detector_N_Drawer_Exist.REQ" dx1="1082.35"/>
+				<Connection Source="IMG_QUEUE_DELETE.IND" Destination="CAMERA.RSP" dx1="70.59" dx2="70.59" dy="729.41"/>
+				<Connection Source="Detector_N_Drawer_Exist.INITO" Destination="PY_RELAY_CTRL.INIT" dx1="276.47"/>
+				<Connection Source="Detector_N_Drawer_Exist.CNF" Destination="PY_RELAY_CTRL.REQ" dx1="276.47"/>
+				<Connection Source="PY_RELAY_CTRL.INITO" Destination="IMG_QUEUE_DELETE.INIT" dx1="217.65"/>
+				<Connection Source="PY_RELAY_CTRL.CNF" Destination="IMG_QUEUE_DELETE.RSP" dx1="141.18"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="CAMERA.IMG_ID" Destination="Detector_N_Drawer_Exist.IMG_ID" dx1="1082.35"/>
+				<Connection Source="CAMERA.QO" Destination="Detector_N_Drawer_Exist.QI" dx1="1223.53"/>
+				<Connection Source="Detector_N_Drawer_Exist.QO" Destination="IMG_QUEUE_DELETE.QI" dx1="229.41"/>
+				<Connection Source="Detector_N_Drawer_Exist.IMG_IDO" Destination="IMG_QUEUE_DELETE.IMG_ID" dx1="276.47"/>
+				<Connection Source="Detector_N_Drawer_Exist.EXIST" Destination="PY_RELAY_CTRL.STATE_ON" dx1="276.47"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="3535.29" y="1558.82">
+		<Parameter Name="MGR_ID" Value="&quot;10.5.20.198:62499&quot;" Comment="Device manager socket ID" />
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<FB Name="washer_detectorApp.CAMERA" Type="CAMERA" x="1000" y="-100">
+					<Parameter Name="QI" Value="TRUE"/>
+					<Parameter Name="ID" Value="'0'"/>
+					<Parameter Name="PARAM" Value="''"/>
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				</FB>
+				<FB Name="washer_detectorApp.IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" x="5400" y="200">
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				</FB>
+				<FB Name="washer_detectorApp.Detector_N_Drawer_Exist" Type="Detector_N_Drawer_Exist" x="3800" y="-900">
+					<Parameter Name="VIS" Value="TRUE"/>
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+					<Parameter Name="MODEL_PTH" Value="'/demo/w7.rknn'"/>
+					<Parameter Name="CLASS_PTH" Value="'/demo/names.txt'"/>
+					<Parameter Name="ANCHORS_PTH" Value="'/demo/RK_anchors.txt'"/>
+					<Parameter Name="THRESHOLD" Value="0.6"/>
+					<Parameter Name="FILTRER_CL" Value="'defect'"/>
+				</FB>
+				<FB Name="washer_detectorApp.PY_RELAY_CTRL" Type="PY_RELAY_CTRL" x="5400" y="-600">
+					<Parameter Name="REL_NUM" Value="1"/>
+				</FB>
+				<EventConnections>
+					<Connection Source="washer_detectorApp.CAMERA.INIT0" Destination="washer_detectorApp.Detector_N_Drawer_Exist.INIT"/>
+					<Connection Source="washer_detectorApp.CAMERA.IND" Destination="washer_detectorApp.Detector_N_Drawer_Exist.REQ"/>
+					<Connection Source="washer_detectorApp.IMG_QUEUE_DELETE.IND" Destination="washer_detectorApp.CAMERA.RSP"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer_Exist.INITO" Destination="washer_detectorApp.PY_RELAY_CTRL.INIT"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer_Exist.CNF" Destination="washer_detectorApp.PY_RELAY_CTRL.REQ"/>
+					<Connection Source="washer_detectorApp.PY_RELAY_CTRL.INITO" Destination="washer_detectorApp.IMG_QUEUE_DELETE.INIT"/>
+					<Connection Source="washer_detectorApp.PY_RELAY_CTRL.CNF" Destination="washer_detectorApp.IMG_QUEUE_DELETE.RSP"/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="washer_detectorApp.CAMERA.QO" Destination="washer_detectorApp.Detector_N_Drawer_Exist.QI"/>
+					<Connection Source="washer_detectorApp.CAMERA.IMG_ID" Destination="washer_detectorApp.Detector_N_Drawer_Exist.IMG_ID"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer_Exist.QO" Destination="washer_detectorApp.IMG_QUEUE_DELETE.QI"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer_Exist.IMG_IDO" Destination="washer_detectorApp.IMG_QUEUE_DELETE.IMG_ID"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer_Exist.EXIST" Destination="washer_detectorApp.PY_RELAY_CTRL.STATE_ON"/>
+				</DataConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="3005.88" y="705.88" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="206,116,130"/>
+	</Segment>
+	<Mapping From="washer_detectorApp.CAMERA" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="washer_detectorApp.IMG_QUEUE_DELETE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="washer_detectorApp.Detector_N_Drawer_Exist" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="washer_detectorApp.PY_RELAY_CTRL" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

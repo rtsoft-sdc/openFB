@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="INTERNAL_VAR_FB" Comment="Simple FB with one algorithm">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.1" Author="steamdragon" Date="2025-08-19">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+			</Event>
+			<Event Name="WV" Type="Event" Comment="Override internal Variables">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="BOOL_IN" Type="BOOL" Comment="Manual Override">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="BYTE_IN" Type="BYTE">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="DINT_IN" Type="DINT">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="DWORD_IN" Type="DWORD">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="INT_IN" Type="INT">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="LREAL_IN" Type="LREAL">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="REAL_IN" Type="REAL">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="SINT_IN" Type="SINT">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="STRING_IN" Type="STRING">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="TIME_IN" Type="TIME">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="UDINT_IN" Type="UDINT">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="UINT_IN" Type="UINT">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="USINT_IN" Type="USINT">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="WORD_IN" Type="WORD">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="WSTRING_IN" Type="WSTRING">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BOOL_OUT" Type="BOOL" InitialValue="FALSE">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="BYTE_OUT" Type="BYTE" InitialValue="16#00">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="DINT_OUT" Type="DINT" InitialValue="0">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="DWORD_OUT" Type="DWORD" InitialValue="16#00000000">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="INT_OUT" Type="INT" InitialValue="0">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="LREAL_OUT" Type="LREAL" InitialValue="0.0">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="REAL_OUT" Type="REAL" InitialValue="0.0">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="SINT_OUT" Type="SINT" InitialValue="0">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="STRING_OUT" Type="STRING">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="TIME_OUT" Type="TIME" InitialValue="T#0ms">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="UDINT_OUT" Type="UDINT" InitialValue="0">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="UINT_OUT" Type="UINT" InitialValue="0">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="USINT_OUT" Type="USINT" InitialValue="0">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="WORD_OUT" Type="WORD" InitialValue="16#0000">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+			<VarDeclaration Name="WSTRING_OUT" Type="WSTRING">
+				<Attribute Name="VarConfig" Value="true"/>
+			</VarDeclaration>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

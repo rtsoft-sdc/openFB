@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="Client" Comment="Basic FB with empty ECC">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var="QI"/>
+				<With Var="Compress_level"/>
+				<With Var="QUEUE_ID"/>
+				<With Var="IP"/>
+				<With Var="Port"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="QI"/>
+				<With Var="IMG_ID"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INIT_0" Type="Event" Comment="">
+				<With Var="Status"/>
+				<With Var="QO"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="Status"/>
+				<With Var="IMG_ID0"/>
+				<With Var="QO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT" Comment=""/>
+			<VarDeclaration Name="Compress_level" Type="UINT" Comment=""/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING" Comment=""/>
+			<VarDeclaration Name="IP" Type="STRING" Comment=""/>
+			<VarDeclaration Name="Port" Type="STRING" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="IMG_ID0" Type="UDINT" Comment=""/>
+			<VarDeclaration Name="Status" Type="STRING" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

@@ -1,93 +1,166 @@
-# Openfb
+# Примеры 4diac IDE для исполнения под Python (dinasore)
+
+***Все актуальные системы примеров лежат в папке  4diac_sys***
+## Поиск шайб(Общее описание)
+
+ Пример адаптирован под плату OrangePi с RK3588s (на текущий момент на других платформах **работать не будет**). В примере используется yolov7 для детекции: 
+ - шайб
+ - бракованных шайб 
+ - мусор  
+
+## Пример 1. washer_detector
+### Смешанная система dinasore + forte
+В примере собрана система с разными средами исполнения:
+- Python
+- C++
+В данном примере среда под С++ публикует сообщения по MQQT, а среда под Python ожидаем сообщение и запускает цикл обработки изображения для поиска шайб, их дефектов и прочих объектов(мусора).
+
+## Пример 2. washer_detector_py
+### Cистема исполнения dinasore 
+В примере реализовано детектирование брака шайб.
+
+## Пример 3. washer_detector_relay
+### Cистема исполнения dinasore 
+В примере реализовано детектирование брака шайб. Обнаружение брака приводит к переключению USB-реле, которое комммутирует линиию питания конвейера.
+В этом примере доступен мониторинг блока *PY_RELAY_CTRL* через OPC UA. Для мониторинга доступны события и переменные блока.
+
+#### Тонкости использования
+Возможно необходимо дать права на управление устройствами группе пользователя, который будет запускать среду исполнения.
+Пример:   
+`SUBSYSTEM=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="05df", MODE:="0660", GROUP="dialout"`
+
+Строку записывать файл(Запись только с правами администратора): /etc/udev/rules.d/90-hidusb-relay.rules
+
+# **Примечание! У систем одинковые имена, поэтому при открытие новой системы удаляйте из дерева проектов предыдущую.**
+
+# Подготовка
+1. Скачать и установить 4diac IDE 3.0
+2. Скачать репозиторий https://git.dev.rtsoft.ru/git/rtsedu/dinasore.git
+3. Скачать архив из Cloud: https://cloud.dev.rtsoft.ru/index.php/f/6618348
+4. Распаковать архив в удобное место
+5. Запустить IDE
+6. Импортировать систему из репозитория  4diac_sys: *demo_whashers*
+7. Заменить пути к файлам у блока *Detector_N_Drawer*
+
+
+# Software prerequisites
+### System 
+- python3.10 
+- python3-pip
+- libgl1
+- libxrender1
+- libxext6
+- libgl1-mesa-glx
+- libqt5widgets5
+- libqt5gui5
+- libqt5core5a 
+### Python 
+Все необходимые библиотеки описаны в файле: **docker/requirements.txt**
 
 
 
-## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+# Общее руководство по работе с Dinasore
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+**Dynamic INtelligent Architecture for Software and MOdular REconfiguration - DINASORE**
 
-## Add your files
+------------------------------------------------------------------------
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+# Запускать dinasore
 
+### 1. Клонировать репозиторий
+
+``` bash
+git clone https://git.dev.rtsoft.ru/git/rtsedu/dinasore.git
+cd dinasore
 ```
-cd existing_repo
-git remote add origin https://gl.dev.rtsoft.ru/fl/openfb.git
-git branch -M main
-git push -uf origin main
+
+### 2. Установить Python и зависимости
+
+1.  Убедиться, что Python3 установлен.
+2.  Создать виртуальное окружение:
+
+``` bash
+python3 -m venv .venv
+source .venv/bin/activate   # unix
+.venv\Scripts\activate      # windows
 ```
 
-## Integrate with your tools
+3.  Установить зависимости:
 
-- [ ] [Set up project integrations](https://gl.dev.rtsoft.ru/fl/openfb/-/settings/integrations)
+``` bash
+pip install -r docker/requirements.txt
+```
 
-## Collaborate with your team
+### 3. Запустить Dinasore
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+``` bash
+python3 core/main.py
+```
 
-## Test and Deploy
+### 4. Подключение через 4diac-ide
 
-Use the built-in continuous integration in GitLab.
+Важно настроить соединение на порт dinasore по умолчанию 61499, так же можно подключится по opcua к порту 4840, который тоже установлен по умолчанию
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+------------------------------------------------------------------------
 
-***
+# **Как создать новый функциональный блок**
 
-# Editing this README
+### 1. Создать .fbt файл
+Необходимо создать файл с ТОЧНЫМ названием фукционального блока и расширением .fbt\
+Необходимо описать в структуре xml все входы и выходы блока и их связи\
+Сам блок можно создать в 4diac-ide, а потом найти и скопировать сгенерированый файл.
+``` xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="Hello_FB" OpcUa="SERVICE">
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="INIT" Type="Event"/>
+      <Event Name="REQ" Type="Event">
+        <With Var="IN1"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="INIT_O" Type="Event"/>
+      <Event Name="CNF" Type="Event">
+        <With Var="OUT1"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="IN1" Type="STRING"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="OUT1" Type="STRING"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### 2. Реализовать Python логику
+Необходимо создать файл с ТОЧНЫМ названием фукционального блока и расширением .py\
+Далее создаем класс с названием функционального блока и реализуем всю основную логику в функции ```def schedule()```, так как она будет вызываться при любом ивенте, который прийдет на блок.
 
-## Suggestions for a good README
+``` python
+class Hello_FB:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+    def schedule(self, event_input_name, event_input_value, input_var1):
+        if event_input_name == 'INIT':
+            return event_input_value, None, "initialized"
+        elif event_input_name == 'REQ':
+            out = "hello " + input_var1
+            return None, event_input_value, out
+```
 
-## Name
-Choose a self-explaining name for your project.
+### 3. Разместить файлы
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- Папка dinasore: `resources/function_blocks/...`
+- Папка 4diac-ide: `workspace/typelibrary/...`
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+------------------------------------------------------------------------
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### **ВАЖНО**
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+- После добавления блока перезапустить dinasore
+- Проверить наличие .fbt файла в TypeLibrary 4diac-ide
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+------------------------------------------------------------------------
