@@ -110,7 +110,7 @@ class UaManagerFboot(peer.UaPeer):
 
     import xml.etree.ElementTree as ET
 
-    def validate_xml_with_details(xml_part):
+    def validate_xml_with_details(self, xml_part):
         try:
             ETree.fromstring(xml_part)
             return True
