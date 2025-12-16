@@ -22,6 +22,7 @@ if __name__ == "__main__":
     secs_sample = 20
     monitor = [n_samples, secs_sample]
     agent = False
+    fboot_path = 'data_model.fboot'
 
     help_message = "Usage: python core/main.py [ARGS]\n\n" \
                    " -h, --help: display the help message\n" \
@@ -50,6 +51,7 @@ if __name__ == "__main__":
     parser.add_argument('-g', action='store_true',
                         help="sets on the self-organizing agent")
     parser.add_argument('-m', metavar='monitor', nargs='*', help="activates the behavioral anomaly detection feature. If no paramters are specified, the default values are 10 samples for initial training, each sample with 20 seconds (approximately 3m20s). As an example, you can specify paramters the following way (-m 5 10) meaning 10 samples for training with 10 seconds each sample.")
+    parser.add_argument('-f', metavar='fboot_file', nargs=1, type=str, help="path to the .fboot file to run")
     args = parser.parse_args()
 
     if args.a != None:
@@ -69,6 +71,8 @@ if __name__ == "__main__":
             exit(2)
     else:
         monitor = None
+    if args.f != None:
+        fboot_path = args.f[0]
 
     ##############################################################
     # remove all files in monitoring folder
@@ -91,7 +95,7 @@ if __name__ == "__main__":
     # creates the 4diac manager
     m = manager.Manager(monitor=monitor)
     # sets the ua integration option
-    m.build_ua_manager_fboot(address, port_opc)
+    m.build_ua_manager_fboot(address, port_opc, fboot_path)
 
     # creates the tcp server to communicate with the 4diac
     hand = tcp_server.TcpServer(address, port_diac, 10, m)
