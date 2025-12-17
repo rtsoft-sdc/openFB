@@ -78,7 +78,8 @@ class Manager:
                             # first stop the previous manager
                             self.manager_ua_fboot.stop()
 
-                            self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port)
+                            self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port, 
+                                                                                    self.manager_ua_fboot.fboot_path)
                             self.manager_ua_fboot(config)
 
         #<Response ID="0"><FBList><FB name="EMB_RES" type="EMB_RES"/></FBList></Response>
@@ -174,7 +175,8 @@ class Manager:
                 self.manager_ua_fboot.stop_ua()
                 # except:
                 #     self.manager_ua_fboot.stop()
-                self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port)
+                self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port, 
+                                                                        self.manager_ua_fboot.fboot_path)
                 config = configuration.Configuration('EMB_RES', 'EMB_RES')
                 self.set_config('EMB_RES', config)
                 self.manager_ua_fboot(config)
@@ -249,8 +251,8 @@ class Manager:
         response = b''.join([response_header, response_xml])
         return response
 
-    def build_ua_manager_fboot(self, address, port):
-        self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port)
+    def build_ua_manager_fboot(self, address, port, fboot_path):
+        self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path)
         # creates the opc-ua manager
         config = configuration.Configuration('EMB_RES', 'EMB_RES', monitor=self.monitor)
         # self.set_config('EMB_RES', config)

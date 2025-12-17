@@ -10,10 +10,10 @@ class UaManagerFboot(peer.UaPeer):
     class InvalidFbootState(Exception):
        pass
 
-    def __init__(self, address, port):
+    def __init__(self, address, port, fboot_path):
         self.address = address
         self.port = port
-        self.fboot_path = os.path.join(os.path.dirname(sys.path[0]), 'resources', 'data_model.fboot')
+        self.fboot_path = os.path.join(os.path.dirname(sys.path[0]), 'resources', fboot_path)
         self.base_name = 'DINASORE OPC-UA'
         self.endpoint = 'opc.tcp://{0}:{1}'.format(address, port)
 
@@ -116,9 +116,7 @@ class UaManagerFboot(peer.UaPeer):
             return True
         except ETree.ParseError as e:
             msg = str(e)
-            # e.position = (line, column)
-            line, column = e.position
-            print({"error": msg,"line": line,"column": column,"snippet": xml_part})
+            print({"ERROR in .fboot file": msg,"snippet": xml_part})
             return False
 
     def generate_function_blocks(self, lines):
