@@ -1,4 +1,4 @@
-# Примеры 4diac IDE для исполнения под Python (dinasore)
+# Примеры 4diac IDE для исполнения под Python (OpenFB)
 
 ***Все актуальные системы примеров лежат в папке  4diac_sys***
 ## Поиск шайб(Общее описание)
@@ -9,18 +9,18 @@
  - мусор  
 
 ## Пример 1. washer_detector
-### Смешанная система dinasore + forte
+### Смешанная система OpenFB + forte
 В примере собрана система с разными средами исполнения:
 - Python
 - C++
 В данном примере среда под С++ публикует сообщения по MQQT, а среда под Python ожидаем сообщение и запускает цикл обработки изображения для поиска шайб, их дефектов и прочих объектов(мусора).
 
 ## Пример 2. washer_detector_py
-### Cистема исполнения dinasore 
+### Cистема исполнения OpenFB 
 В примере реализовано детектирование брака шайб.
 
 ## Пример 3. washer_detector_relay
-### Cистема исполнения dinasore 
+### Cистема исполнения OpenFB 
 В примере реализовано детектирование брака шайб. Обнаружение брака приводит к переключению USB-реле, которое комммутирует линиию питания конвейера.
 В этом примере доступен мониторинг блока *PY_RELAY_CTRL* через OPC UA. Для мониторинга доступны события и переменные блока.
 
@@ -34,13 +34,11 @@
 # **Примечание! У систем одинковые имена, поэтому при открытие новой системы удаляйте из дерева проектов предыдущую.**
 
 # Подготовка
-1. Скачать и установить 4diac IDE 3.0
-2. Скачать репозиторий https://git.dev.rtsoft.ru/git/rtsedu/dinasore.git
-3. Скачать архив из Cloud: https://cloud.dev.rtsoft.ru/index.php/f/6618348
-4. Распаковать архив в удобное место
-5. Запустить IDE
-6. Импортировать систему из репозитория  4diac_sys: *demo_whashers*
-7. Заменить пути к файлам у блока *Detector_N_Drawer*
+1. Скачать и установить 4diac IDE FL (https://it.severstal.com/products/oasu-tp/#downloads)
+2. Скачать репозиторий  https://gitverse.ru/rtsoft/OpenFB.git
+3. Запустить IDE
+4. Импортировать систему из репозитория  4diac_sys: *demo_whashers*
+5. Заменить пути к файлам у блока *Detector_N_Drawer*
 
 
 # Software prerequisites
@@ -60,19 +58,19 @@
 
 
 
-# Общее руководство по работе с Dinasore
+# Общее руководство по работе с OpenFB
 
-**Dynamic INtelligent Architecture for Software and MOdular REconfiguration - DINASORE**
+**Dynamic INtelligent Architecture for Software and MOdular REconfiguration - OpenFB**
 
 ------------------------------------------------------------------------
 
-# Запускать dinasore
+# Запускать OpenFB
 
 ### 1. Клонировать репозиторий
 
 ``` bash
-git clone https://git.dev.rtsoft.ru/git/rtsedu/dinasore.git
-cd dinasore
+git clone https://gitverse.ru/rtsoft/OpenFB.git
+cd OpenFB
 ```
 
 ### 2. Установить Python и зависимости
@@ -89,10 +87,10 @@ source .venv/bin/activate   # unix
 3.  Установить зависимости:
 
 ``` bash
-pip install -r docker/requirements.txt
+pip install -r requirements.txt
 ```
 
-### 3. Запустить Dinasore
+### 3. Запустить OpenFB
 
 ``` bash
 python3 core/main.py
@@ -100,7 +98,7 @@ python3 core/main.py
 
 ### 4. Подключение через 4diac-ide
 
-Важно настроить соединение на порт dinasore по умолчанию 61499, так же можно подключится по opcua к порту 4840, который тоже установлен по умолчанию
+Важно настроить соединение на порт OpenFB по умолчанию 61499, так же можно подключится по opcua к порту 4840, который тоже установлен по умолчанию
 
 ------------------------------------------------------------------------
 
@@ -153,14 +151,14 @@ class Hello_FB:
 
 ### 3. Разместить файлы
 
-- Папка dinasore: `resources/function_blocks/...`
+- Папка OpenFB: `resources/function_blocks/...`
 - Папка 4diac-ide: `workspace/typelibrary/...`
 
 ------------------------------------------------------------------------
 
 ### **ВАЖНО**
 
-- После добавления блока перезапустить dinasore
+- После добавления блока перезапустить OpenFB
 - Проверить наличие .fbt файла в TypeLibrary 4diac-ide
 
 ------------------------------------------------------------------------

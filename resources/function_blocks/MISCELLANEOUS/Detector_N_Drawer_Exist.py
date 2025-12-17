@@ -376,7 +376,6 @@ def draw(image, boxes, scores, classes, model_names):
         cv2.rectangle(image, (top, left), (right, bottom), (255, 0, 0), 2)
         cv2.putText(image, '{0} {1:.2f}'.format(model_names[cl], score),
                     (top, left - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-        # cv2.imwrite('/home/orangepi/dinasore/test.png', image)
     return image
 
 def setup_model(model_path, target, device_id):

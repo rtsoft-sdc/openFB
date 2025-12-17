@@ -376,7 +376,6 @@ def draw(image, boxes, scores, classes, model_names):
         cv2.rectangle(image, (top, left), (right, bottom), (255, 0, 0), 2)
         cv2.putText(image, '{0} {1:.2f}'.format(model_names[cl], score),
                     (top, left - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-        cv2.imwrite('/home/orangepi/dinasore/test.png', image)
     return image
 
 def setup_model(model_path, target, device_id):
@@ -435,15 +434,11 @@ class Detector_N_Drawer:
                 boxes, classes, scores = post_process(outputs, self.anchors, self.threshold)
                 if VIS:
                     if boxes is not None:
-                        # boxes = self.helper.get_real_box(boxes)
                         img_p = draw(img_p, boxes, scores, classes, self.names)
-        #        img_p = cv2.resize(img_p, (1080, 720))
+
                 img_p = cv2.cvtColor(img_p, cv2.COLOR_RGB2BGR)
                 cv2.imshow('gfg', img_p)
                 cv2.waitKey(1)
-#                    cv2.imshow('debug', img_p)
-                    #cv2.waitKey(1)
-                #self.smd[str(IMG_ID)]["image"] = img
                 q_out = True
                 logging.error('Exit')
                 return None, event_input_value, q_out, img_id
