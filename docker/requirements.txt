@@ -1,4 +1,4 @@
-#Default dinasore env
+#Default env
 psutil
 cryptography
 opcua

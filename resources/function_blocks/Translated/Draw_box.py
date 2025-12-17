@@ -11,7 +11,7 @@ class Draw_box:
         container_size = 15  # number of images that could be stored
         self.max_size = container_size*image_shape**2
         self.QUEUE_ID = ""
-        self.dir = "/home/smr/fronos/4diac_repo/dinasore/resources"
+        self.dir = os.path.abspath(__file__)
         self.thick = 2
         self.color = (255, 0, 0)
 
@@ -34,7 +34,7 @@ class Draw_box:
                         dst = cv2.rectangle(
                             img, (X[b], Y[b]), (X[b] + Width[b], Y[b] + Height[b]), self.color, self.thick)
                 filename = f"{IMG_ID}.png"
-                cv2.imwrite(os.path.join(self.dir, filename), dst)
+                cv2.imwrite(os.path.join(self.dir, "resources", filename), dst)
                 self.smd[str(IMG_ID)] = {"image": dst}
                 return None, event_input_value, QI, IMG_ID, "Check check iamge in resources folder "
             else:
