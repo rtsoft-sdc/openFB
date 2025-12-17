@@ -11,8 +11,8 @@
 			</FB>
 			<FB Name="CV_FIND_BY_YOLO" Type="CV_FIND_BY_YOLO" Comment="" x="2250.0" y="625.0">
 				<Parameter Name="QUEUE_ID" Value="'q1'"/>
-				<Parameter Name="NN_FILE" Value="'/home/smr/fronos/4diac_repo/yolov4-head-tiny-416.cfg'"/>
-				<Parameter Name="WEIGHTS_FILE" Value="'/home/smr/fronos/4diac_repo/yolov4-head-tiny-416.weights'"/>
+				<Parameter Name="NN_FILE" Value="'/home/user/openfb/yolov4-head-tiny-416.cfg'"/>
+				<Parameter Name="WEIGHTS_FILE" Value="'/home/user/openfb/yolov4-head-tiny-416.weights'"/>
 				<Parameter Name="CONFIDENCE" Value="0.7"/>
 				<Parameter Name="OBJECT_CLASS" Value="1"/>
 			</FB>
@@ -24,7 +24,7 @@
 			</FB>
 			<FB Name="WRITE_VIDEO2FILE" Type="WRITE_VIDEO2FILE" Comment="" x="6000.0" y="250.0">
 				<Parameter Name="QUEUE_ID" Value="'q1'"/>
-				<Parameter Name="filepath" Value="'/home/smr/fronos/test.avi'"/>
+				<Parameter Name="filepath" Value="'/home/user/openfb/test.avi'"/>
 			</FB>
 			<FB Name="Client" Type="Client" Comment="" x="7625.0" y="875.0">
 				<Parameter Name="Compress_level" Value="90"/>
@@ -76,8 +76,8 @@
 				</FB>
 				<FB Name="CV_FIND_BY_YOLO" Type="CV_FIND_BY_YOLO" Comment="" x="2250.0" y="625.0">
 					<Parameter Name="QUEUE_ID" Value="'q1'"/>
-					<Parameter Name="NN_FILE" Value="'/home/smr/fronos/4diac_repo/yolov4-head-tiny-416.cfg'"/>
-					<Parameter Name="WEIGHTS_FILE" Value="'/home/smr/fronos/4diac_repo/yolov4-head-tiny-416.weights'"/>
+					<Parameter Name="NN_FILE" Value="'/home/user/openfb/yolov4-head-tiny-416.cfg'"/>
+					<Parameter Name="WEIGHTS_FILE" Value="'/home/user/openfb/yolov4-head-tiny-416.weights'"/>
 					<Parameter Name="CONFIDENCE" Value="0.7"/>
 					<Parameter Name="OBJECT_CLASS" Value="1"/>
 				</FB>
@@ -86,7 +86,7 @@
 				</FB>
 				<FB Name="WRITE_VIDEO2FILE" Type="WRITE_VIDEO2FILE" Comment="" x="6000.0" y="250.0">
 					<Parameter Name="QUEUE_ID" Value="'q1'"/>
-					<Parameter Name="filepath" Value="'/home/smr/fronos/test.avi'"/>
+					<Parameter Name="filepath" Value="'/home/user/openfb/test.avi'"/>
 				</FB>
 				<FB Name="Client" Type="Client" Comment="" x="7625.0" y="875.0">
 					<Parameter Name="Compress_level" Value="90"/>
