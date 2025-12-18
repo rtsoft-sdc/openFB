@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PYOPCUA_CLIENT" Comment="Basic FB with empty ECC">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="NODE_ID"/>
+				<With Var="QI"/>
+				<With Var="URL"/>
+				<With Var="NS_ID"/>
+				<With Var="D_TYPE"/>
+			</Event>
+			<Event Name="RUN" Type="Event">
+				<With Var="QI"/>
+				<With Var="VALUE"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INIT_O" Type="Event">
+				<With Var="STATUS"/>
+				<With Var="QO"/>
+			</Event>
+			<Event Name="RUN_O" Type="Event">
+				<With Var="STATUS"/>
+				<With Var="QO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="URL" Type="STRING"/>
+			<VarDeclaration Name="NS_ID" Type="STRING"/>
+			<VarDeclaration Name="NODE_ID" Type="STRING"/>
+			<VarDeclaration Name="D_TYPE" Type="STRING"/>
+			<VarDeclaration Name="VALUE" Type="BOOL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

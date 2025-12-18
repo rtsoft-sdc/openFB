@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="PytorchHubModel" Comment="">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+				<With Var="QI" />
+				<With Var="Model_src" />
+				<With Var="Model_name" />
+				<With Var="QUEUE_ID" />
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="QI" />
+				<With Var="Data_IN" />
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="QO" />
+				<With Var="Status" />
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="QO" />
+				<With Var="Data_OUT" />
+				<With Var="Status" />
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Input event qualifier" />
+			<VarDeclaration Name="Model_src" Type="STRING" Comment="" />
+			<VarDeclaration Name="Model_name" Type="STRING" Comment="" />
+			<VarDeclaration Name="QUEUE_ID" Type="STRING" Comment="" />
+			<VarDeclaration Name="Data_IN" Type="UDINT" Comment="" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier" />
+			<VarDeclaration Name="Status" Type="STRING" Comment="" />
+			<VarDeclaration Name="Data_OUT" Type="UDINT" Comment="" />
+		</OutputVars>
+	</InterfaceList>
+</FBType>

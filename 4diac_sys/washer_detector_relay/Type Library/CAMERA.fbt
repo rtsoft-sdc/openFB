@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="CAMERA" Comment="Basic FB with empty ECC" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="QI"/>
+				<With Var="PARAM"/>
+				<With Var="QUEUE_ID"/>
+				<With Var="ID"/>
+			</Event>
+			<Event Name="RSP" Type="Event">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INIT0" Type="Event">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="IND" Type="Event">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+				<With Var="IMG_ID"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="ID" Type="STRING"/>
+			<VarDeclaration Name="PARAM" Type="STRING"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

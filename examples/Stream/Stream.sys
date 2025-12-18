@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="Stream" Comment="">
+	<VersionInfo Version="1.0" Author="obotnar" Date="2023-01-25">
+	</VersionInfo>
+	<Application Name="StreamApp" Comment="">
+		<SubAppNetwork>
+			<FB Name="Server" Type="Server" Comment="" x="-625.0" y="1500.0">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="HOST" Value="'127.0.0.1'"/>
+				<Parameter Name="PORT" Value="'8554'"/>
+			</FB>
+			<FB Name="Client" Type="Client" Comment="" x="2125.0" y="1625.0">
+				<Parameter Name="Compress_level" Value="80"/>
+				<Parameter Name="QUEUE_ID" Value="'q12'"/>
+				<Parameter Name="IP" Value="'127.0.0.1'"/>
+				<Parameter Name="Port" Value="'8554'"/>
+			</FB>
+			<FB Name="IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" Comment="" x="3875.0" y="1625.0">
+				<Parameter Name="QUEUE_ID" Value="'q12'"/>
+			</FB>
+			<FB Name="CAMERA" Type="CAMERA" Comment="" x="625.0" y="1500.0">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="ID" Value="'0'"/>
+				<Parameter Name="QUEUE_ID" Value="'q12'"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="Server.CNF" Destination="Server.REQ" Comment="" dx1="75.0" dx2="75.0" dy="-450.0"/>
+				<Connection Source="Client.CNF" Destination="IMG_QUEUE_DELETE.RSP" Comment=""/>
+				<Connection Source="IMG_QUEUE_DELETE.IND" Destination="CAMERA.RSP" Comment="" dx1="75.0" dx2="75.0" dy="-668.75"/>
+				<Connection Source="Client.INIT_0" Destination="IMG_QUEUE_DELETE.INIT" Comment=""/>
+				<Connection Source="CAMERA.IND" Destination="Client.REQ" Comment="" dx1="318.75"/>
+				<Connection Source="CAMERA.INIT0" Destination="Client.INIT" Comment="" dx1="318.75"/>
+				<Connection Source="Server.INITO" Destination="CAMERA.INIT" Comment=""/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="Client.IMG_ID0" Destination="IMG_QUEUE_DELETE.IMG_ID" Comment=""/>
+				<Connection Source="Client.QO" Destination="IMG_QUEUE_DELETE.QI" Comment=""/>
+				<Connection Source="CAMERA.QO" Destination="Client.QI" Comment="" dx1="318.75"/>
+				<Connection Source="CAMERA.IMG_ID" Destination="Client.IMG_ID" Comment="" dx1="318.75"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" Comment="" x="4912.5" y="1225.0">
+		<Parameter Name="MGR_ID" Value="&quot;10.5.20.122:61499&quot;"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC" Comment="device profile"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111" Comment="color"/>
+		<Resource Name="EMB_RES" Type="" Comment="" x="0.0" y="0.0">
+			<FBNetwork>
+				<FB Name="Server" Type="Server" Comment="" x="-625.0" y="1500.0">
+					<Parameter Name="QI" Value="True"/>
+					<Parameter Name="HOST" Value="'127.0.0.1'"/>
+					<Parameter Name="PORT" Value="'8554'"/>
+				</FB>
+				<FB Name="CAMERA" Type="CAMERA" Comment="" x="625.0" y="1500.0">
+					<Parameter Name="QI" Value="True"/>
+					<Parameter Name="ID" Value="'0'"/>
+					<Parameter Name="QUEUE_ID" Value="'q12'"/>
+				</FB>
+				<FB Name="Client" Type="Client" Comment="" x="2125.0" y="1625.0">
+					<Parameter Name="Compress_level" Value="80"/>
+					<Parameter Name="QUEUE_ID" Value="'q12'"/>
+					<Parameter Name="IP" Value="'127.0.0.1'"/>
+					<Parameter Name="Port" Value="'8554'"/>
+				</FB>
+				<FB Name="IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" Comment="" x="3875.0" y="1625.0">
+					<Parameter Name="QUEUE_ID" Value="'q12'"/>
+				</FB>
+				<EventConnections>
+					<Connection Source="Server.CNF" Destination="Server.REQ" Comment=""/>
+					<Connection Source="Server.INITO" Destination="CAMERA.INIT" Comment=""/>
+					<Connection Source="CAMERA.INIT0" Destination="Client.INIT" Comment=""/>
+					<Connection Source="CAMERA.IND" Destination="Client.REQ" Comment=""/>
+					<Connection Source="Client.INIT_0" Destination="IMG_QUEUE_DELETE.INIT" Comment=""/>
+					<Connection Source="Client.CNF" Destination="IMG_QUEUE_DELETE.RSP" Comment=""/>
+					<Connection Source="IMG_QUEUE_DELETE.IND" Destination="CAMERA.RSP" Comment=""/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="CAMERA.QO" Destination="Client.QI" Comment=""/>
+					<Connection Source="CAMERA.IMG_ID" Destination="Client.IMG_ID" Comment=""/>
+					<Connection Source="Client.QO" Destination="IMG_QUEUE_DELETE.QI" Comment=""/>
+					<Connection Source="Client.IMG_ID0" Destination="IMG_QUEUE_DELETE.IMG_ID" Comment=""/>
+				</DataConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Mapping From="StreamApp.Server" To="FORTE_PC.EMB_RES.Server"/>
+	<Mapping From="StreamApp.CAMERA" To="FORTE_PC.EMB_RES.CAMERA"/>
+	<Mapping From="StreamApp.Client" To="FORTE_PC.EMB_RES.Client"/>
+	<Mapping From="StreamApp.IMG_QUEUE_DELETE" To="FORTE_PC.EMB_RES.IMG_QUEUE_DELETE"/>
+	<Segment Name="Ethernet" Type="Ethernet" Comment="" x="4262.5" y="575.0" dx1="1875.0">
+		<Attribute Name="Color" Type="STRING" Value="201,237,139" Comment="color"/>
+	</Segment>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

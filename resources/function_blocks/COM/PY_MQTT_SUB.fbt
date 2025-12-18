@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PY_MQTT_SUB" Comment="Basic FB with empty ECC" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="PORT"/>
+				<With Var="TOPIC"/>
+				<With Var="IP"/>
+			</Event>
+			<Event Name="REQ" Type="Event">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event">
+				<With Var="MSG"/>
+				<With Var="STATUS"/>
+				<With Var="QO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="IP" Type="STRING"/>
+			<VarDeclaration Name="PORT" Type="STRING"/>
+			<VarDeclaration Name="TOPIC" Type="STRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="MSG" Type="STRING"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

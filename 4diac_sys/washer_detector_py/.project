@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>washer_detector</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.fordiac.ide.systemmanagement.FordiacNature</nature>
+		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>Type Library/convert</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/convert-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/core</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/core-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/devices</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/devices-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/events</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/events-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/iec61131-3</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/iec61131-3-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/io</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/io-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/math</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/math-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/net</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/net-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/reconfiguration</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/reconfiguration-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/resources</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/resources-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/rtevents</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/rtevents-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/segments</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/segments-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/signalprocessing</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/signalprocessing-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/storage</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/storage-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/utils</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/utils-1.0.0/typelib</locationURI>
+		</link>
+		<link>
+			<name>Type Library/convert/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/convert-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/core/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/core-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/devices/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/devices-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/events/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/events-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/iec61131-3/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/iec61131-3-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/io/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/io-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/math/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/math-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/net/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/net-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/reconfiguration/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/reconfiguration-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/resources/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/resources-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/rtevents/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/rtevents-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/segments/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/segments-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/signalprocessing/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/signalprocessing-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/storage/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/storage-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+		<link>
+			<name>Type Library/utils/MANIFEST.MF</name>
+			<type>1</type>
+			<locationURI>ECLIPSE_HOME/typelibrary/utils-1.0.0/MANIFEST.MF</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

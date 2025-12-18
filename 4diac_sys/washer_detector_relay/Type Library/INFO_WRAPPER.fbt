@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Name="INFO_WRAPPER" OpcUa="METHOD">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="INIT" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="INIT_O" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="INPUT" Type="STRING" OpcUa="Constant.INIT"/>
+            <VarDeclaration Name="OUTPUT" Type="STRING" OpcUa="Constant.INIT"/>
+            <VarDeclaration Name="METHOD_NAME" Type="STRING" OpcUa="Constant.INIT"/>
+        </InputVars>            
+        <OutputVars/>
+    </InterfaceList>
+</FBType>

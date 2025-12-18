@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="dets" Comment="">
+	<VersionInfo Version="1.0" Author="obotnar" Date="2023-01-24">
+	</VersionInfo>
+	<Application Name="detsApp" Comment="">
+		<SubAppNetwork>
+			<FB Name="CAMERA" Type="CAMERA" Comment="" x="0.0" y="1375.0">
+				<Parameter Name="QI" Value="True"/>
+				<Parameter Name="ID" Value="'0'"/>
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="CV_FIND_BY_YOLO" Type="CV_FIND_BY_YOLO" Comment="" x="2250.0" y="625.0">
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				<Parameter Name="NN_FILE" Value="'/home/user/openfb/yolov4-head-tiny-416.cfg'"/>
+				<Parameter Name="WEIGHTS_FILE" Value="'/home/user/openfb/yolov4-head-tiny-416.weights'"/>
+				<Parameter Name="CONFIDENCE" Value="0.7"/>
+				<Parameter Name="OBJECT_CLASS" Value="1"/>
+			</FB>
+			<FB Name="Draw_box" Type="Draw_box" Comment="" x="4000.0" y="625.0">
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" Comment="" x="9875.0" y="875.0">
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="WRITE_VIDEO2FILE" Type="WRITE_VIDEO2FILE" Comment="" x="6000.0" y="250.0">
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				<Parameter Name="filepath" Value="'/home/user/openfb/test.avi'"/>
+			</FB>
+			<FB Name="Client" Type="Client" Comment="" x="7625.0" y="875.0">
+				<Parameter Name="Compress_level" Value="90"/>
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				<Parameter Name="IP" Value="'127.0.0.1'"/>
+				<Parameter Name="Port" Value="'8554'"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="CV_FIND_BY_YOLO.CNF" Destination="Draw_box.RUN" Comment=""/>
+				<Connection Source="CV_FIND_BY_YOLO.INIT0" Destination="Draw_box.INIT" Comment=""/>
+				<Connection Source="CAMERA.INIT0" Destination="CV_FIND_BY_YOLO.INIT" Comment="" dx1="156.25"/>
+				<Connection Source="CAMERA.IND" Destination="CV_FIND_BY_YOLO.REQ" Comment="" dx1="256.25"/>
+				<Connection Source="Draw_box.INIT0" Destination="WRITE_VIDEO2FILE.INIT" Comment="" dx1="550.0"/>
+				<Connection Source="Draw_box.RUN_O" Destination="WRITE_VIDEO2FILE.REQ" Comment="" dx1="550.0"/>
+				<Connection Source="IMG_QUEUE_DELETE.IND" Destination="CAMERA.RSP" Comment="" dx1="75.0" dx2="418.75" dy="1893.75"/>
+				<Connection Source="Client.CNF" Destination="IMG_QUEUE_DELETE.RSP" Comment=""/>
+				<Connection Source="Client.INIT_0" Destination="IMG_QUEUE_DELETE.INIT" Comment=""/>
+				<Connection Source="WRITE_VIDEO2FILE.INITO" Destination="Client.INIT" Comment="" dx1="381.25"/>
+				<Connection Source="WRITE_VIDEO2FILE.CNF" Destination="Client.REQ" Comment="" dx1="331.25"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="CV_FIND_BY_YOLO.WIDTH" Destination="Draw_box.Width" Comment=""/>
+				<Connection Source="CV_FIND_BY_YOLO.HIGHT" Destination="Draw_box.Height" Comment=""/>
+				<Connection Source="CV_FIND_BY_YOLO.Y" Destination="Draw_box.Y" Comment=""/>
+				<Connection Source="CV_FIND_BY_YOLO.X" Destination="Draw_box.X" Comment=""/>
+				<Connection Source="CV_FIND_BY_YOLO.QO" Destination="Draw_box.QI" Comment=""/>
+				<Connection Source="CAMERA.IMG_ID" Destination="CV_FIND_BY_YOLO.IMG_ID" Comment="" dx1="375.0"/>
+				<Connection Source="CAMERA.QO" Destination="CV_FIND_BY_YOLO.QI" Comment="" dx1="375.0"/>
+				<Connection Source="CAMERA.IMG_ID" Destination="Draw_box.IMG_ID" Comment="" dx1="2575.0"/>
+				<Connection Source="Draw_box.IMG_ID0" Destination="WRITE_VIDEO2FILE.IMG_ID" Comment="" dx1="256.25"/>
+				<Connection Source="Draw_box.QO" Destination="WRITE_VIDEO2FILE.QI" Comment="" dx1="550.0"/>
+				<Connection Source="Draw_box.IMG_ID0" Destination="Client.IMG_ID" Comment="" dx1="256.25"/>
+				<Connection Source="WRITE_VIDEO2FILE.QO" Destination="Client.QI" Comment="" dx1="262.5"/>
+				<Connection Source="Client.QO" Destination="IMG_QUEUE_DELETE.QI" Comment=""/>
+				<Connection Source="Client.IMG_ID0" Destination="IMG_QUEUE_DELETE.IMG_ID" Comment=""/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" Comment="" x="3181.25" y="1268.75">
+		<Parameter Name="MGR_ID" Value="&quot;10.5.20.122:61499&quot;"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC" Comment="device profile"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111" Comment="color"/>
+		<Resource Name="EMB_RES" Type="" Comment="" x="0.0" y="0.0">
+			<FBNetwork>
+				<FB Name="CAMERA" Type="CAMERA" Comment="" x="0.0" y="1375.0">
+					<Parameter Name="QI" Value="True"/>
+					<Parameter Name="ID" Value="'0'"/>
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				</FB>
+				<FB Name="CV_FIND_BY_YOLO" Type="CV_FIND_BY_YOLO" Comment="" x="2250.0" y="625.0">
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+					<Parameter Name="NN_FILE" Value="'/home/user/openfb/yolov4-head-tiny-416.cfg'"/>
+					<Parameter Name="WEIGHTS_FILE" Value="'/home/user/openfb/yolov4-head-tiny-416.weights'"/>
+					<Parameter Name="CONFIDENCE" Value="0.7"/>
+					<Parameter Name="OBJECT_CLASS" Value="1"/>
+				</FB>
+				<FB Name="Draw_box" Type="Draw_box" Comment="" x="4000.0" y="625.0">
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				</FB>
+				<FB Name="WRITE_VIDEO2FILE" Type="WRITE_VIDEO2FILE" Comment="" x="6000.0" y="250.0">
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+					<Parameter Name="filepath" Value="'/home/user/openfb/test.avi'"/>
+				</FB>
+				<FB Name="Client" Type="Client" Comment="" x="7625.0" y="875.0">
+					<Parameter Name="Compress_level" Value="90"/>
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+					<Parameter Name="IP" Value="'127.0.0.1'"/>
+					<Parameter Name="Port" Value="'8554'"/>
+				</FB>
+				<FB Name="IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" Comment="" x="9875.0" y="875.0">
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				</FB>
+				<EventConnections>
+					<Connection Source="CAMERA.INIT0" Destination="CV_FIND_BY_YOLO.INIT" Comment=""/>
+					<Connection Source="CAMERA.IND" Destination="CV_FIND_BY_YOLO.REQ" Comment=""/>
+					<Connection Source="CV_FIND_BY_YOLO.INIT0" Destination="Draw_box.INIT" Comment=""/>
+					<Connection Source="CV_FIND_BY_YOLO.CNF" Destination="Draw_box.RUN" Comment=""/>
+					<Connection Source="Draw_box.INIT0" Destination="WRITE_VIDEO2FILE.INIT" Comment=""/>
+					<Connection Source="Draw_box.RUN_O" Destination="WRITE_VIDEO2FILE.REQ" Comment=""/>
+					<Connection Source="WRITE_VIDEO2FILE.INITO" Destination="Client.INIT" Comment=""/>
+					<Connection Source="WRITE_VIDEO2FILE.CNF" Destination="Client.REQ" Comment=""/>
+					<Connection Source="Client.INIT_0" Destination="IMG_QUEUE_DELETE.INIT" Comment=""/>
+					<Connection Source="Client.CNF" Destination="IMG_QUEUE_DELETE.RSP" Comment=""/>
+					<Connection Source="IMG_QUEUE_DELETE.IND" Destination="CAMERA.RSP" Comment=""/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="CAMERA.QO" Destination="CV_FIND_BY_YOLO.QI" Comment=""/>
+					<Connection Source="CAMERA.IMG_ID" Destination="CV_FIND_BY_YOLO.IMG_ID" Comment=""/>
+					<Connection Source="CV_FIND_BY_YOLO.QO" Destination="Draw_box.QI" Comment=""/>
+					<Connection Source="CV_FIND_BY_YOLO.X" Destination="Draw_box.X" Comment=""/>
+					<Connection Source="CV_FIND_BY_YOLO.Y" Destination="Draw_box.Y" Comment=""/>
+					<Connection Source="CV_FIND_BY_YOLO.WIDTH" Destination="Draw_box.Width" Comment=""/>
+					<Connection Source="CV_FIND_BY_YOLO.HIGHT" Destination="Draw_box.Height" Comment=""/>
+					<Connection Source="CAMERA.IMG_ID" Destination="Draw_box.IMG_ID" Comment=""/>
+					<Connection Source="Draw_box.QO" Destination="WRITE_VIDEO2FILE.QI" Comment=""/>
+					<Connection Source="Draw_box.IMG_ID0" Destination="WRITE_VIDEO2FILE.IMG_ID" Comment=""/>
+					<Connection Source="WRITE_VIDEO2FILE.QO" Destination="Client.QI" Comment=""/>
+					<Connection Source="Draw_box.IMG_ID0" Destination="Client.IMG_ID" Comment=""/>
+					<Connection Source="Client.QO" Destination="IMG_QUEUE_DELETE.QI" Comment=""/>
+					<Connection Source="Client.IMG_ID0" Destination="IMG_QUEUE_DELETE.IMG_ID" Comment=""/>
+				</DataConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Mapping From="detsApp.CAMERA" To="FORTE_PC.EMB_RES.CAMERA"/>
+	<Mapping From="detsApp.CV_FIND_BY_YOLO" To="FORTE_PC.EMB_RES.CV_FIND_BY_YOLO"/>
+	<Mapping From="detsApp.Draw_box" To="FORTE_PC.EMB_RES.Draw_box"/>
+	<Mapping From="detsApp.WRITE_VIDEO2FILE" To="FORTE_PC.EMB_RES.WRITE_VIDEO2FILE"/>
+	<Mapping From="detsApp.Client" To="FORTE_PC.EMB_RES.Client"/>
+	<Mapping From="detsApp.IMG_QUEUE_DELETE" To="FORTE_PC.EMB_RES.IMG_QUEUE_DELETE"/>
+	<Segment Name="Ethernet" Type="Ethernet" Comment="" x="2887.5" y="756.25" dx1="1875.0">
+		<Attribute Name="Color" Type="STRING" Value="198,110,193" Comment="color"/>
+	</Segment>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

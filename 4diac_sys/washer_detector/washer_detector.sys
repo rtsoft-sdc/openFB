@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="washer_detector">
+	<VersionInfo Version="1.0" Author="obotnar" Date="2024-11-25">
+	</VersionInfo>
+	<Application Name="washer_detectorApp">
+		<SubAppNetwork>
+			<FB Name="CAMERA" Type="CAMERA" x="1000" y="-100">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="ID" Value="'/home/orangepi/Videos/washer.webm'"/>
+				<Parameter Name="PARAM" Value="''"/>
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" x="5400" y="200">
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+			</FB>
+			<FB Name="Detector_N_Drawer" Type="Detector_N_Drawer" x="3500" y="200">
+				<Parameter Name="VIS" Value="TRUE"/>
+				<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				<Parameter Name="MODEL_PTH" Value="'/home/orangepi/demo/w7.rknn'"/>
+				<Parameter Name="CLASS_PTH" Value="'/home/orangepi/demo/names.txt'"/>
+				<Parameter Name="ANCHORS_PTH" Value="'/home/orangepi/demo/RK_anchors.txt'"/>
+				<Parameter Name="THRESHOLD" Value="0.6"/>
+			</FB>
+			<FB Name="PY_MQTT_SUB" Type="PY_MQTT_SUB" x="-700" y="-800">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="IP" Value="'10.5.20.179'"/>
+				<Parameter Name="PORT" Value="'1883'"/>
+				<Parameter Name="TOPIC" Value="'d4'"/>
+			</FB>
+			<FB Name="E_SWITCH" Type="E_SWITCH" x="1100" y="2400">
+				<Parameter Name="G" Value="TRUE"/>
+			</FB>
+			<FB Name="PUBLISH_1" Type="PUBLISH_1" x="3500" y="2100">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="ID" Value="&quot;raw[].mqtt[tcp://localhost:1883, forte, d4]&quot;"/>
+				<Parameter Name="SD_1" Value="STRING#'Hello, world!'"/>
+			</FB>
+			<FB Name="E_CYCLE" Type="E_CYCLE" x="-200" y="2000">
+				<Parameter Name="DT" Value="T#100ms"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="CAMERA.INIT0" Destination="Detector_N_Drawer.INIT" dx1="1011.76" dx2="1011.76" dy="0"/>
+				<Connection Source="CAMERA.IND" Destination="Detector_N_Drawer.REQ" dx1="864.71" dx2="864.71" dy="0"/>
+				<Connection Source="Detector_N_Drawer.INITO" Destination="IMG_QUEUE_DELETE.INIT"/>
+				<Connection Source="Detector_N_Drawer.CNF" Destination="IMG_QUEUE_DELETE.RSP"/>
+				<Connection Source="PY_MQTT_SUB.CNF" Destination="CAMERA.RSP" dx1="464.71" dx2="464.71" dy="0"/>
+				<Connection Source="PY_MQTT_SUB.INITO" Destination="CAMERA.INIT" dx1="458.82" dx2="458.82" dy="0"/>
+				<Connection Source="IMG_QUEUE_DELETE.IND" Destination="PY_MQTT_SUB.REQ" dx1="70.59" dx2="70.59" dy="-1388.24"/>
+				<Connection Source="E_SWITCH.EO1" Destination="PUBLISH_1.REQ" dx1="882.35"/>
+				<Connection Source="E_CYCLE.EO" Destination="E_SWITCH.EI" dx1="358.82"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="Detector_N_Drawer.QO" Destination="IMG_QUEUE_DELETE.QI"/>
+				<Connection Source="Detector_N_Drawer.IMG_IDO" Destination="IMG_QUEUE_DELETE.IMG_ID"/>
+				<Connection Source="CAMERA.QO" Destination="Detector_N_Drawer.QI" dx1="647.06" dx2="647.06" dy="0"/>
+				<Connection Source="CAMERA.IMG_ID" Destination="Detector_N_Drawer.IMG_ID" dx1="482.35" dx2="482.35" dy="0"/>
+				<Connection Source="PY_MQTT_SUB.QO" Destination="CAMERA.QI" dx1="252.94" dx2="252.94" dy="0"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="3535.29" y="1558.82">
+		<Parameter Name="MGR_ID" Value="&quot;10.5.20.198:62499&quot;" Comment="Device manager socket ID" />
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<FB Name="washer_detectorApp.PY_MQTT_SUB" Type="PY_MQTT_SUB" x="-700" y="-800">
+					<Parameter Name="QI" Value="TRUE"/>
+					<Parameter Name="IP" Value="'10.5.20.179'"/>
+					<Parameter Name="PORT" Value="'1883'"/>
+					<Parameter Name="TOPIC" Value="'d4'"/>
+				</FB>
+				<FB Name="washer_detectorApp.CAMERA" Type="CAMERA" x="1000" y="-100">
+					<Parameter Name="QI" Value="TRUE"/>
+					<Parameter Name="ID" Value="'/home/orangepi/Videos/washer.webm'"/>
+					<Parameter Name="PARAM" Value="''"/>
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				</FB>
+				<FB Name="washer_detectorApp.Detector_N_Drawer" Type="Detector_N_Drawer" x="3500" y="200">
+					<Parameter Name="VIS" Value="TRUE"/>
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+					<Parameter Name="MODEL_PTH" Value="'/home/orangepi/demo/w7.rknn'"/>
+					<Parameter Name="CLASS_PTH" Value="'/home/orangepi/demo/names.txt'"/>
+					<Parameter Name="ANCHORS_PTH" Value="'/home/orangepi/demo/RK_anchors.txt'"/>
+					<Parameter Name="THRESHOLD" Value="0.6"/>
+				</FB>
+				<FB Name="washer_detectorApp.IMG_QUEUE_DELETE" Type="IMG_QUEUE_DELETE" x="5400" y="200">
+					<Parameter Name="QUEUE_ID" Value="'q1'"/>
+				</FB>
+				<EventConnections>
+					<Connection Source="washer_detectorApp.PY_MQTT_SUB.INITO" Destination="washer_detectorApp.CAMERA.INIT"/>
+					<Connection Source="washer_detectorApp.PY_MQTT_SUB.CNF" Destination="washer_detectorApp.CAMERA.RSP"/>
+					<Connection Source="washer_detectorApp.CAMERA.INIT0" Destination="washer_detectorApp.Detector_N_Drawer.INIT"/>
+					<Connection Source="washer_detectorApp.CAMERA.IND" Destination="washer_detectorApp.Detector_N_Drawer.REQ"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer.INITO" Destination="washer_detectorApp.IMG_QUEUE_DELETE.INIT"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer.CNF" Destination="washer_detectorApp.IMG_QUEUE_DELETE.RSP"/>
+					<Connection Source="washer_detectorApp.IMG_QUEUE_DELETE.IND" Destination="washer_detectorApp.PY_MQTT_SUB.REQ"/>
+				</EventConnections>
+				<DataConnections>
+					<Connection Source="washer_detectorApp.PY_MQTT_SUB.QO" Destination="washer_detectorApp.CAMERA.QI"/>
+					<Connection Source="washer_detectorApp.CAMERA.QO" Destination="washer_detectorApp.Detector_N_Drawer.QI"/>
+					<Connection Source="washer_detectorApp.CAMERA.IMG_ID" Destination="washer_detectorApp.Detector_N_Drawer.IMG_ID"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer.QO" Destination="washer_detectorApp.IMG_QUEUE_DELETE.QI"/>
+					<Connection Source="washer_detectorApp.Detector_N_Drawer.IMG_IDO" Destination="washer_detectorApp.IMG_QUEUE_DELETE.IMG_ID"/>
+				</DataConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Device Name="FORTE_PC_1" Type="FORTE_PC" x="5011.76" y="1752.94">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID" />
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="192,203,83"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<FB Name="washer_detectorApp.PUBLISH_1" Type="PUBLISH_1" x="3500" y="2100">
+					<Parameter Name="QI" Value="TRUE"/>
+					<Parameter Name="ID" Value="&quot;raw[].mqtt[tcp://localhost:1883, forte, d4]&quot;"/>
+					<Parameter Name="SD_1" Value="STRING#'Hello, world!'"/>
+				</FB>
+				<FB Name="washer_detectorApp.E_SWITCH" Type="E_SWITCH" x="1100" y="2400">
+					<Parameter Name="G" Value="TRUE"/>
+				</FB>
+				<FB Name="washer_detectorApp.E_CYCLE" Type="E_CYCLE" x="-200" y="2000">
+					<Parameter Name="DT" Value="T#100ms"/>
+				</FB>
+				<EventConnections>
+					<Connection Source="washer_detectorApp.E_SWITCH.EO1" Destination="washer_detectorApp.PUBLISH_1.REQ" dx1="505.88"/>
+					<Connection Source="washer_detectorApp.E_CYCLE.EO" Destination="washer_detectorApp.E_SWITCH.EI" dx1="358.82"/>
+					<Connection Source="START.COLD" Destination="washer_detectorApp.E_CYCLE.START" dx1="547.06"/>
+					<Connection Source="START.WARM" Destination="washer_detectorApp.E_CYCLE.START" dx1="364.71"/>
+					<Connection Source="START.STOP" Destination="washer_detectorApp.E_CYCLE.STOP" dx1="70.59"/>
+					<Connection Source="START.COLD" Destination="washer_detectorApp.PUBLISH_1.INIT" dx1="2364.71"/>
+					<Connection Source="START.WARM" Destination="washer_detectorApp.PUBLISH_1.INIT" dx1="2211.76"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="3005.88" y="705.88" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="206,116,130"/>
+	</Segment>
+	<Mapping From="washer_detectorApp.CAMERA" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="washer_detectorApp.IMG_QUEUE_DELETE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="washer_detectorApp.Detector_N_Drawer" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="washer_detectorApp.PY_MQTT_SUB" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="washer_detectorApp.PUBLISH_1" To="FORTE_PC_1.EMB_RES"/>
+	<Mapping From="washer_detectorApp.E_SWITCH" To="FORTE_PC_1.EMB_RES"/>
+	<Mapping From="washer_detectorApp.E_CYCLE" To="FORTE_PC_1.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC_1" Comment="">
+	</Link>
+</System>

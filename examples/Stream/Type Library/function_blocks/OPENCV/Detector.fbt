@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Name="Detector" Comment="Template for a Basic Function Block Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="obotnar" Date="2023-01-18">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+				<With Var="model_name"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="path"/>
+				<With Var="im_name"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="status"/>
+			</Event>
+			<Event Name="RUN_O" Type="Event" Comment="Execution Confirmation">
+				<With Var="boxes"/>
+				<With Var="status"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="model_name" Type="STRING" Comment="Input event qualifier"/>
+			<VarDeclaration Name="path" Type="STRING" Comment=""/>
+			<VarDeclaration Name="im_name" Type="STRING" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="status" Type="STRING" Comment="Output event qualifier"/>
+			<VarDeclaration Name="boxes" Type="STRING" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="475.0" y="1125.0">
+			</ECState>
+			<ECState Name="Init" Comment="Initialization" x="1231.25" y="662.5">
+				<ECAction Algorithm="initialize" Output="INITO"/>
+			</ECState>
+			<ECState Name="NormalOp" Comment="Normal execution" x="2850.0" y="1137.5">
+				<ECAction Algorithm="normalOperation" Output="RUN_O"/>
+			</ECState>
+			<ECState Name="Initialized" Comment="" x="1900.0" y="1137.5">
+			</ECState>
+			<ECState Name="DeInit" Comment="" x="1137.5" y="1518.75">
+				<ECAction Algorithm="deInitialize" Output="INITO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="Init" Condition="INIT[TRUE = model_name]" Comment="" x="837.5" y="918.75"/>
+			<ECTransition Source="Init" Destination="Initialized" Condition="1" Comment="" x="1656.25" y="975.0"/>
+			<ECTransition Source="Initialized" Destination="NormalOp" Condition="REQ" Comment="" x="2612.5" y="1000.0"/>
+			<ECTransition Source="NormalOp" Destination="Initialized" Condition="1" Comment="" x="2575.0" y="1425.0"/>
+			<ECTransition Source="DeInit" Destination="START" Condition="1" Comment="" x="937.5" y="1443.75"/>
+			<ECTransition Source="Initialized" Destination="DeInit" Condition="INIT[FALSE = model_name]" Comment="" x="1687.5" y="1337.5"/>
+		</ECC>
+		<Algorithm Name="initialize" Comment="Initialization algorithm">
+			<ST><![CDATA[
+QO := QI;]]></ST>
+		</Algorithm>
+		<Algorithm Name="deInitialize" Comment="Normally executed algorithm">
+			<ST><![CDATA[
+QO := FALSE;]]></ST>
+		</Algorithm>
+		<Algorithm Name="normalOperation" Comment="new algorithm">
+			<ST><![CDATA[QO := QI;
+
+IF TRUE  = QI THEN
+  (*  only perform normal operation of QI is true*)
+
+END_IF;
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

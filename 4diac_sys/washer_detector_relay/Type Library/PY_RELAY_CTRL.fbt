@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PY_RELAY_CTRL" OpcUa="SERVICE" Comment="Basic FB with empty ECC" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+			</Event>
+			<Event Name="REQ" Type="Event">
+				<With Var="REL_NUM"/>
+				<With Var="STATE_ON"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event">
+				<With Var="REL_COUNT"/>
+			</Event>
+			<Event Name="CNF" Type="Event">
+				<With Var="STATE"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="REL_NUM" Type="INT" OpcUa="Variable.REQ"/>
+			<VarDeclaration Name="STATE_ON" Type="BOOL" OpcUa="Variable.REQ"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="REL_COUNT" Type="INT" OpcUa="Variable.INIT"/>
+			<VarDeclaration Name="STATE" Type="STRING" OpcUa="Variable.REQ"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>
