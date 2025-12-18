@@ -1,5 +1,5 @@
 # Среда исполнения IEC 61499 для разработки ML задач
-Среда исполнения OpenFB совместима с 4diac IDE FLOGIC 3.0, 4diac IDE 2.1.
+Среда исполнения OpenFB совместима с [4diac IDE FLOGIC 3.0](https://it.severstal.com/products/oasu-tp/#downloads), [4diac IDE 2.1](https://eclipse.dev/4diac/4diac_ide/).
 Проект основан на базе проекта [DINASORE](https://github.com/DIGI2-FEUP/dinasore)
 
 ## Лицензия
