@@ -69,8 +69,18 @@ class Manager:
                         config.stop_work()
                     self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
+                        opc_mapping_vars = []
+                        opc_mapping = child.find('OpcMapping')
+                        if opc_mapping is not None:
+                            for var in opc_mapping.findall('Var'):
+                                opc_mapping_vars.append({
+                                    'Name': var.attrib['Name'],
+                                    'Direction': var.attrib['Direction'],
+                                    'Type': var.attrib['Type']
+                                })
+
                         # Creates the configuration
-                        config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
+                        config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor, opc_mapping=opc_mapping_vars)
                         self.set_config(conf_name, config)
                         # check the options for ua_integration
                         if self.ua_integration:
