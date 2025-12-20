@@ -26,6 +26,7 @@ class UaManagerFboot(peer.UaPeer):
         self.method_outputs = None
         self.opcua_method_name = None
         self.resources_running = set()
+        self.opc_mapped_vars = []
 
     def __call__(self, config):
         # base idx for the opc-ua nodeId
@@ -140,7 +141,17 @@ class UaManagerFboot(peer.UaPeer):
                             root_path = utils.get_fb_files_path(child.get('Type'))
                             # Check fbt file
                             fb_file = open(os.path.join(root_path, '{0}.fbt'.format(child.get('Type'))), 'r')
-                            self.parse_fbt(child.get('Name'), fb_file)
+                            fb_name = child.get('Name')
+                            self.parse_fbt(fb_name, fb_file)
+                            opc_mapping = child.find('OpcMapping')
+                            if opc_mapping is not None:
+                                for var in opc_mapping.findall('Var'):
+                                    self.opc_mapped_vars.append({
+                                        'Name': var.attrib['Name'],
+                                        'Direction': var.attrib['Direction'],
+                                        'Type': var.attrib['Type']
+                                    })
+                                
             except KeyError:
                 raise self.InvalidFbootState
 
@@ -198,7 +209,7 @@ class UaManagerFboot(peer.UaPeer):
             self.method_root = xml_root
         else:
             # add ua object to dictionary
-            item = ua_object.UaObject(self, self.folders.get('FunctionBlocks'), fb_name, xml_root)
+            item = ua_object.UaObject(self, self.folders.get('FunctionBlocks'), fb_name, xml_root, opc_mapping=self.opc_mapped_vars, root_path=self.ROOT_PATH, root_list=self.ROOT_LIST)
             self.ua_objects[fb_name] = item
         file.close()
 
