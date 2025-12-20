@@ -60,7 +60,6 @@ class UaObject:
             logging.error('Invalid function block definition, check {0}.fbt for mistakes'.format(self.fb_name))
 
     def populate_vars_folder(self):
-        print("pricol", self.mapped_ua_vars)
         if self.mapped_ua_vars:
             for var in self.mapped_ua_vars:
                 try:
@@ -71,7 +70,6 @@ class UaObject:
                                                         utils.UA_TYPES[var['Type']], 
                                                         0)
                     self.ua_vars[var['Name']] = ua_var
-                    print(self.mapped_ua_vars)
                 except KeyError:
                     raise self.InvalidFbtState
         for child in self.xml_root: # InterfaceList
@@ -111,7 +109,6 @@ class UaObject:
                                                                 utils.UA_TYPES['String'], 
                                                                 0)
                             self.ua_vars[event.get('Name')] = ua_var
-                            print(self.mapped_ua_vars)
                         except KeyError as ke:
                             print('Accessed non existent attrib {0}'.format(ke.args))
                             raise self.InvalidFbtState
