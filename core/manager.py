@@ -84,7 +84,6 @@ class Manager:
 
         #<Response ID="0"><FBList><FB name="EMB_RES" type="EMB_RES"/></FBList></Response>
         elif action == 'QUERY':
-            print('action: QUERY')
             try:
                 if self.manager_ua_fboot.resources_running is not None:
                     for res_name in self.manager_ua_fboot.resources_running:
@@ -114,27 +113,27 @@ class Manager:
         elif action == 'KILL':
             if element.find('FB') is None:
                 os.kill(os.getpid(), signal.SIGINT)
-                return
-            # Iterate over the list of children
-            for child in element:
-                # Kill a configuration (could be a fb)
-                if child.tag == 'FB':
-                    fb_name = child.attrib['Name']
-                    # Checks if exists the configuration
-                    if fb_name in self.config_dictionary:
-                        # Stops the configuration
-                        for config_name, config in self.config_dictionary.items():
-                            config.stop_work()
-                        # Release memory
-                        gc.collect()
-            '''ua_server is killing at the main.py file after ctrl+c (SIGINT)'''
-            # check the options for ua_integration
-            # if self.ua_integration:
-            #     # first stop the previous manager
-            #     self.manager_ua.stop_ua()
-            # If we want to kill the device
-            if len(element) == 0:
-                pass
+            else:
+                # Iterate over the list of children
+                for child in element:
+                    # Kill a configuration (could be a fb)
+                    if child.tag == 'FB':
+                        fb_name = child.attrib['Name']
+                        # Checks if exists the configuration
+                        if fb_name in self.config_dictionary:
+                            # Stops the configuration
+                            for config_name, config in self.config_dictionary.items():
+                                config.stop_work()
+                            # Release memory
+                            gc.collect()
+                '''ua_server is killing at the main.py file after ctrl+c (SIGINT)'''
+                # check the options for ua_integration
+                # if self.ua_integration:
+                #     # first stop the previous manager
+                #     self.manager_ua.stop_ua()
+                # If we want to kill the device
+                if len(element) == 0:
+                    pass
 
         elif action == 'DELETE':
 
