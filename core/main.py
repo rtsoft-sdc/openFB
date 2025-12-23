@@ -103,6 +103,8 @@ if __name__ == "__main__":
     try:
         # handles every client
         while True:
+            print("[INFO]\tOpenfb is up and running on {0}:{1}".format(address, port_diac))
+            print("[INFO]\tOPCUA server is running on {0}:{1}".format(address, port_opc))
             hand.handle_client()
     except KeyboardInterrupt:
         logging.info('interrupted server')
