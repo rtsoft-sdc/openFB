@@ -180,6 +180,10 @@ class Manager:
                 self.set_config('EMB_RES', config)
                 self.manager_ua_fboot(config)
 
+        #fixme
+        elif action == 'RESET':
+            pass
+
         response = self.build_response(request_id, xml)
         return response
 
