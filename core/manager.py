@@ -95,21 +95,32 @@ class Manager:
 
         elif action == 'READ':
             # Iterate over the list of children
-            for child in element:
-                # Reads values from a watch
-                if child.tag == 'Watches':
-                    xml = ETree.Element('Watches')
-                    # Gets all the watches from all the xml_data
-                    for config_id, config in self.config_dictionary.items():
-                        resource_xml, resource_len = config.read_watches(self.start_time)
-                        # Appends only if has anything
-                        if resource_len > 0:
-                            xml.append(resource_xml)
+            #fixme
+            forte3 = True
+            for child in element: 
+               # Reads values from a watch 
+               if child.tag == 'Watches': 
+                   if not forte3: 
+                       ETree.Element('Watches') 
+                   else: 
+                       xml = None 
+                   print(self.config_dictionary) 
+                   # Gets all the watches from all the xml_data 
+                   for config_id, config in self.config_dictionary.items(): 
+                       resource_xml, resource_len = config.read_watches(self.start_time) 
+                       # Appends only if has anything 
+                       print(resource_xml) 
+                       if resource_len > 0: 
+                           if xml is None: 
+                               xml = resource_xml 
+                           else:   
+                               xml.append(resource_xml) 
 
-                    resources_len = len(xml.findall('Resource'))
-                    # If doesn't have any resource
-                    if resources_len < 0:
-                        xml = None
+                   if xml is not None: 
+                       resources_len = len(xml.findall('Resource')) 
+                       # If doesn't have any resource 
+                       if resources_len < 0: 
+                           xml = None
 
         elif action == 'KILL':
             if element.find('FB') is None:
