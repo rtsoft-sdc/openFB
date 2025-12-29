@@ -124,6 +124,8 @@ class UaManagerFboot(peer.UaPeer):
         for line in lines:
             # Remove start fb from line
             #fixme: multimple resources work?
+            if "&quot;" in line:
+                line = line.replace("&quot;", "")
             chunks = line.split(';')
             if len(chunks) != 2:
                 raise self.InvalidFbootState
