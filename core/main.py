@@ -17,7 +17,7 @@ if __name__ == "__main__":
     address = 'localhost'
     port_diac = 61499
     port_opc = 4840
-    log_level = log_levels['ERROR']
+    log_level = log_levels['INFO']
     n_samples = 10
     secs_sample = 20
     monitor = [n_samples, secs_sample]
@@ -89,22 +89,22 @@ if __name__ == "__main__":
     if os.path.isfile(log_path):
         os.remove(log_path)
     logging.basicConfig(filename=log_path,
-                        level=log_level,
+                        level=logging.INFO,
                         format='[%(asctime)s][%(levelname)s][%(threadName)s] %(message)s')
 
     # creates the 4diac manager
     m = manager.Manager(monitor=monitor)
     # sets the ua integration option
     m.build_ua_manager_fboot(address, port_opc, fboot_path)
+    print("[INFO]\tOPCUA server is running on {0}:{1}".format(address, port_opc))
 
     # creates the tcp server to communicate with the 4diac
     hand = tcp_server.TcpServer(address, port_diac, 10, m)
+    print("[INFO]\tOpenfb is up and running on {0}:{1}".format(address, port_diac))
 
     try:
         # handles every client
         while True:
-            print("[INFO]\tOpenfb is up and running on {0}:{1}".format(address, port_diac))
-            print("[INFO]\tOPCUA server is running on {0}:{1}".format(address, port_opc))
             hand.handle_client()
     except KeyboardInterrupt:
         logging.info('interrupted server')
