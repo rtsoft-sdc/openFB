@@ -163,6 +163,8 @@ class UaManagerFboot(peer.UaPeer):
     def generate_connections(self, lines):
         for line in lines:
             # Remove start fb from line
+            if "&quot;" in line:
+                line = line.replace("&quot;", "")
             chunks = line.split(';')
             if len(chunks) != 2:
                 raise self.InvalidFbootState
