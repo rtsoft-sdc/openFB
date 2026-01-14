@@ -122,11 +122,11 @@ class UaManagerFboot(peer.UaPeer):
 
     def generate_function_blocks(self, lines):
         for line in lines:
+            # Remove string/wstring entities
+            line = line.replace("&quot;", "").replace("&apos;", "")
             # Remove start fb from line
-            #fixme: multimple resources work?
-            if "&quot;" in line:
-                line = line.replace("&quot;", "")
             chunks = line.split(';')
+            
             if len(chunks) != 2:
                 raise self.InvalidFbootState
             
@@ -162,9 +162,9 @@ class UaManagerFboot(peer.UaPeer):
 
     def generate_connections(self, lines):
         for line in lines:
+            # Remove string/wstring entities
+            line = line.replace("&quot;", "").replace("&apos;", "")
             # Remove start fb from line
-            if "&quot;" in line:
-                line = line.replace("&quot;", "")
             chunks = line.split(';')
             if len(chunks) != 2:
                 raise self.InvalidFbootState
