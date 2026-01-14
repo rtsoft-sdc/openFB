@@ -22,7 +22,7 @@ if __name__ == "__main__":
     secs_sample = 20
     monitor = [n_samples, secs_sample]
     agent = False
-    fboot_path = 'data_model.fboot'
+    fboot_path = './resources/data_model.fboot'
 
     help_message = "Usage: python core/main.py [ARGS]\n\n" \
                    " -h, --help: display the help message\n" \

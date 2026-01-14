@@ -13,7 +13,7 @@ class UaManagerFboot(peer.UaPeer):
     def __init__(self, address, port, fboot_path):
         self.address = address
         self.port = port
-        self.fboot_path = os.path.join(os.path.dirname(sys.path[0]), 'resources', fboot_path)
+        self.fboot_path = fboot_path
         self.base_name = 'OPENFB OPC-UA'
         self.endpoint = 'opc.tcp://{0}:{1}'.format(address, port)
 
