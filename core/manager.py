@@ -254,7 +254,7 @@ class Manager:
         self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path)
         # creates the opc-ua manager
         config = configuration.Configuration('EMB_RES', 'EMB_RES', monitor=self.monitor)
-        # self.set_config('EMB_RES', config)
+        self.set_config('EMB_RES', config)
         # parses the description file
         self.manager_ua_fboot(config)
         self.manager_ua_fboot.from_fboot()
