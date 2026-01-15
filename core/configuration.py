@@ -9,15 +9,15 @@ import inspect
 
 class Configuration:
 
-    def __init__(self, config_id, config_type, monitor=None, opc_mapping=None):
+    def __init__(self, config_id, config_type, monitor=None):
 
         self.monitor = monitor
-        self.opc_mapping = opc_mapping
+
         self.fb_dictionary = dict()
 
         self.config_id = config_id
 
-        self.create_fb('START', config_type, opc_mapping=self.opc_mapping)
+        self.create_fb('START', config_type)
 
     def get_fb(self, fb_name):
         fb_element = None
@@ -44,7 +44,7 @@ class Configuration:
         fb2update = self.get_fb(fb_name)
         fb2update.ua_variables_update = ua_update
 
-    def create_fb(self, fb_name, fb_type, monitor=False, opc_mapping=None):
+    def create_fb(self, fb_name, fb_type, monitor=False):
         #fixme: new types like iec61499::system::EMB_RES
         fb_type = fb_type.split('::')[-1]
 
@@ -87,9 +87,9 @@ class Configuration:
 
             ## if it is a real FB, not a hidden one
             if monitor:
-                fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, monitor=self.monitor, opc_mapping=opc_mapping)
+                fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, monitor=self.monitor)
             else:
-                fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, opc_mapping=opc_mapping)
+                fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition)
 
             self.set_fb(fb_name, fb_element)
             logging.info('created fb type: {0}, instance: {1}'.format(fb_type, fb_name))

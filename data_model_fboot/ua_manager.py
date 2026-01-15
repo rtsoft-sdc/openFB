@@ -150,17 +150,6 @@ class UaManagerFboot(peer.UaPeer):
                             # Check fbt file
                             fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
                             fb_name = child.get('Name')
-                            opc_mapping = child.find('OpcMapping')
-                            if opc_mapping is not None:
-                                for var in opc_mapping.findall('Var'):
-                                    if fb_name not in self.opc_mapped_vars:
-                                        self.opc_mapped_vars[fb_name] = []
-                                    self.opc_mapped_vars[fb_name].append({
-                                        'Name': var.attrib['Name'],
-                                        'Direction': var.attrib['Direction'],
-                                        'Type': var.attrib['Type']
-                                    })
-
                             self.parse_fbt(fb_name, fb_file)
                                    
             except KeyError:
@@ -221,11 +210,7 @@ class UaManagerFboot(peer.UaPeer):
             self.method_names.append(fb_name)
             self.method_root = xml_root
         else:
-            # add ua object to dictionary
-            map_arr = []
-            if fb_name in self.opc_mapped_vars:
-                map_arr = self.opc_mapped_vars[fb_name]
-            item = ua_object.UaObject(self, self.folders.get('FunctionBlocks'), fb_name, xml_root, opc_mapping=map_arr, root_path=self.ROOT_PATH, root_list=self.ROOT_LIST)
+            item = ua_object.UaObject(self, self.folders.get('FunctionBlocks'), fb_name, xml_root)
             self.ua_objects[fb_name] = item
         file.close()
 
