@@ -97,7 +97,6 @@ class UaObject:
                                                                 0)
                             self.ua_vars[event.get('Name')] = ua_var
                         except KeyError as ke:
-                            print('Accessed non existent attrib {0}'.format(ke.args))
                             raise self.InvalidFbtState
 
     def set_up_connections(self):

@@ -84,7 +84,6 @@ class Manager:
 
         #<Response ID="0"><FBList><FB name="EMB_RES" type="EMB_RES"/></FBList></Response>
         elif action == 'QUERY':
-            print('action: QUERY')
             try:
                 if self.manager_ua_fboot.resources_running is not None:
                     for res_name in self.manager_ua_fboot.resources_running:
