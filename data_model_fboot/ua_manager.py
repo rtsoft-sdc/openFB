@@ -13,7 +13,7 @@ class UaManagerFboot(peer.UaPeer):
     def __init__(self, address, port, fboot_path):
         self.address = address
         self.port = port
-        self.fboot_path = os.path.join(os.path.dirname(sys.path[0]), 'resources', fboot_path)
+        self.fboot_path = fboot_path
         self.base_name = 'OPENFB OPC-UA'
         self.endpoint = 'opc.tcp://{0}:{1}'.format(address, port)
 
@@ -26,6 +26,7 @@ class UaManagerFboot(peer.UaPeer):
         self.method_outputs = None
         self.opcua_method_name = None
         self.resources_running = set()
+        self.opc_mapped_vars = {}
 
     def __call__(self, config):
         # base idx for the opc-ua nodeId
@@ -121,9 +122,11 @@ class UaManagerFboot(peer.UaPeer):
 
     def generate_function_blocks(self, lines):
         for line in lines:
+            # Remove string/wstring entities
+            line = line.replace("&quot;", "").replace("&apos;", "")
             # Remove start fb from line
-            #fixme: multimple resources work?
             chunks = line.split(';')
+            
             if len(chunks) != 2:
                 raise self.InvalidFbootState
             
@@ -136,16 +139,37 @@ class UaManagerFboot(peer.UaPeer):
             try:
                 if xml_element.get('Action') == 'CREATE':
                     for child in xml_element:
-                        if child.tag == 'FB' and child.get('Type') != 'EMB_RES':
-                            root_path = utils.get_fb_files_path(child.get('Type'))
+                        #fixme: new types like iec61499::system::EMB_RES
+                        try:
+                            open_fb_type = (child.get('Type')).split('::')[-1]
+                        except:
+                            continue
+                        
+                        if child.tag == 'FB' and open_fb_type != 'EMB_RES':
+                            root_path = utils.get_fb_files_path(open_fb_type)
                             # Check fbt file
-                            fb_file = open(os.path.join(root_path, '{0}.fbt'.format(child.get('Type'))), 'r')
-                            self.parse_fbt(child.get('Name'), fb_file)
+                            fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
+                            fb_name = child.get('Name')
+                            opc_mapping = child.find('OpcMapping')
+                            if opc_mapping is not None:
+                                for var in opc_mapping.findall('Var'):
+                                    if fb_name not in self.opc_mapped_vars:
+                                        self.opc_mapped_vars[fb_name] = []
+                                    self.opc_mapped_vars[fb_name].append({
+                                        'Name': var.attrib['Name'],
+                                        'Direction': var.attrib['Direction'],
+                                        'Type': var.attrib['Type']
+                                    })
+
+                            self.parse_fbt(fb_name, fb_file)
+                                   
             except KeyError:
                 raise self.InvalidFbootState
 
     def generate_connections(self, lines):
         for line in lines:
+            # Remove string/wstring entities
+            line = line.replace("&quot;", "").replace("&apos;", "")
             # Remove start fb from line
             chunks = line.split(';')
             if len(chunks) != 2:
@@ -198,7 +222,10 @@ class UaManagerFboot(peer.UaPeer):
             self.method_root = xml_root
         else:
             # add ua object to dictionary
-            item = ua_object.UaObject(self, self.folders.get('FunctionBlocks'), fb_name, xml_root)
+            map_arr = []
+            if fb_name in self.opc_mapped_vars:
+                map_arr = self.opc_mapped_vars[fb_name]
+            item = ua_object.UaObject(self, self.folders.get('FunctionBlocks'), fb_name, xml_root, opc_mapping=map_arr, root_path=self.ROOT_PATH, root_list=self.ROOT_LIST)
             self.ua_objects[fb_name] = item
         file.close()
 
