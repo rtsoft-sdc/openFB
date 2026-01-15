@@ -6,17 +6,18 @@ import numpy as np
 import time
 import os
 import sys
+import logging
 
 from os import listdir
 from os.path import isfile, join
 
 #mypath = "monitoring"
 mypath = os.path.join('monitoring','')
-print(mypath)
+logging.debug(mypath)
 
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
-print("all files: " , onlyfiles)
+logging.debug("all files: " , onlyfiles)
 
 fb_names = []
 alg_names = []
@@ -34,7 +35,7 @@ for file in onlyfiles:
     if alg_temp_name not in alg_names: alg_names += [alg_temp_name]
 
 if len(alg_names) == 0 or len(fb_names) == 0:
-    print("No files available yet! Try in a few seconds...")
+    logging.warning("No files available yet! Try in a few seconds...")
     exit()
 
 ## Graphs for how many alerts in a row
@@ -51,8 +52,8 @@ alg_names += [name_events]
 max_samples = 50
 
 
-print(fb_names)
-print(alg_names)
+logging.debug(fb_names)
+logging.debug(alg_names)
 
 fig, axs = plt.subplots(len(alg_names), len(fb_names))
 
@@ -198,7 +199,7 @@ def animate(i):
                     if x == 0:
                         axs[y, x].set_ylabel(alg_names[y])
 
-print('Plotting...')
+logging.info('Plotting...')
 
 # Set up plot to call animate() function periodically
 

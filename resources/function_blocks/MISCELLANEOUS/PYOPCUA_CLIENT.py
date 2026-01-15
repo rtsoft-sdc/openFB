@@ -1,5 +1,5 @@
 from opcua import Client
-
+import logging
 class PYOPCUA_CLIENT:
 	def __init__(self):
 		self.client = None
@@ -25,10 +25,9 @@ class PYOPCUA_CLIENT:
 				self.dtype = self.types[D_TYPE.lower()]
 				self.init_cnt = event_input_value
 			except Exception as e:
-				print(e)
 				state = 'Failed'
 				qo_out = False
-			print(state)
+			logging.debug(state)
 		elif event_input_name == "RUN":
 			if QI == True:
 				cur_value = VALUE

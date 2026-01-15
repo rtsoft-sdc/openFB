@@ -1,6 +1,6 @@
 import numpy as np
 import time
-
+import logging
 class CONTROL_CHART:
 
     def schedule(self, event_name, event_value, range, value):
@@ -8,7 +8,7 @@ class CONTROL_CHART:
         if event_name == 'INIT':
             self.state = 0
             if range is None:
-                print("You should define a range for the Control Chart")
+                logging.warning("You should define a range for the Control Chart")
             else:
                 self.min_range, self.max_range = str(range).split("-")
 
@@ -17,7 +17,7 @@ class CONTROL_CHART:
         elif event_name == 'RUN':
 
             if range is None:
-                print("You should define a range for the Control Chart")
+                logging.warning("You should define a range for the Control Chart")
             else:
                 self.min_range, self.max_range = str(range).split("-")
 

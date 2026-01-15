@@ -116,7 +116,7 @@ class UaManagerFboot(peer.UaPeer):
             return True
         except ETree.ParseError as e:
             msg = str(e)
-            print({"ERROR in .fboot file": msg,"snippet": xml_part})
+            logging.error({"ERROR in .fboot file": msg,"snippet": xml_part})
             return False
 
     def generate_function_blocks(self, lines):

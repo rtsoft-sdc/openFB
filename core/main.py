@@ -1,4 +1,5 @@
 import logging
+import logging.handlers
 import os
 import sys
 import argparse
@@ -12,7 +13,8 @@ from core import manager
 if __name__ == "__main__":
     log_levels = {'ERROR': logging.ERROR,
                   'WARN': logging.WARN,
-                  'INFO': logging.INFO}
+                  'INFO': logging.INFO,
+                  'DEBUG': logging.DEBUG}
 
     address = 'localhost'
     port_diac = 61499
@@ -22,7 +24,8 @@ if __name__ == "__main__":
     secs_sample = 20
     monitor = [n_samples, secs_sample]
     agent = False
-    fboot_path = 'data_model.fboot'
+    fboot_path = "./resources/data_model.fboot"
+    unix_socket = "logger.sock"
 
     help_message = "Usage: python core/main.py [ARGS]\n\n" \
                    " -h, --help: display the help message\n" \
@@ -48,6 +51,8 @@ if __name__ == "__main__":
                         help="port for the opc-ua communication (default: 4840)")
     parser.add_argument('-l', metavar='log_level', nargs=1,
                         help="logging level at the file resources/error_list.log, e.g. INFO, WARN or ERROR (default: ERROR)")
+    parser.add_argument("-s", metavar="logging_socket", nargs=1, type=str,
+                        help="Unix socket path for external logging collectors")
     parser.add_argument('-g', action='store_true',
                         help="sets on the self-organizing agent")
     parser.add_argument('-m', metavar='monitor', nargs='*', help="activates the behavioral anomaly detection feature. If no paramters are specified, the default values are 10 samples for initial training, each sample with 20 seconds (approximately 3m20s). As an example, you can specify paramters the following way (-m 5 10) meaning 10 samples for training with 10 seconds each sample.")
@@ -73,7 +78,8 @@ if __name__ == "__main__":
         monitor = None
     if args.f != None:
         fboot_path = args.f[0]
-
+    if args.s != None:
+        unix_socket = args.s[0]
     ##############################################################
     # remove all files in monitoring folder
     monitoring_path = os.path.join(os.path.dirname(
@@ -88,9 +94,19 @@ if __name__ == "__main__":
         sys.path[0]), 'resources', 'error_list.log')
     if os.path.isfile(log_path):
         os.remove(log_path)
-    logging.basicConfig(filename=log_path,
-                        level=log_level,
-                        format='[%(asctime)s][%(levelname)s][%(threadName)s] %(message)s')
+
+    handlers = [logging.StreamHandler(sys.stdout), logging.FileHandler(log_path)]
+    if os.path.exists(unix_socket):
+        unix_handler = logging.handlers.SysLogHandler(
+            address=unix_socket, facility="local1"
+        )
+        handlers.append(unix_handler)
+
+    logging.basicConfig(
+        level=log_level,
+        format="[%(asctime)s][%(levelname)s][%(threadName)s] %(message)s",
+        handlers=handlers,
+    )
 
     # creates the 4diac manager
     m = manager.Manager(monitor=monitor)
@@ -106,7 +122,6 @@ if __name__ == "__main__":
             hand.handle_client()
     except KeyboardInterrupt:
         logging.info('interrupted server')
-        print("Stoping server")
         m.manager_ua_fboot.stop_ua()
         hand.stop_server()
 

@@ -187,7 +187,7 @@ def get_host():
                 else:
                     host = 'RK3566_RK3568'
         except IOError:
-            print('Read device node {} failed.'.format(DEVICE_COMPATIBLE_NODE))
+            logging.error('Read device node {} failed.'.format(DEVICE_COMPATIBLE_NODE))
             exit(-1)
     else:
         host = os_machine
@@ -201,7 +201,7 @@ class RKNN_model_container():
         rknn.load_rknn(model_path)
         host_name = get_host()
         # Init runtime environment
-        print('--> Init runtime environment')
+        logging.info('--> Init runtime environment')
         # run on RK356x/RK3588 with Debian OS, do not need specify target.
         if host_name == 'RK3588':
             # For RK3588, specify which NPU core the model runs on through the core_mask parameter.
@@ -209,9 +209,8 @@ class RKNN_model_container():
         else:
             ret = rknn.init_runtime()
         if ret != 0:
-            print('Init runtime environment failed')
+            logging.error('Init runtime environment failed')
             exit(ret)
-        print('done')
         
         self.rknn = rknn
 
@@ -220,7 +219,7 @@ class RKNN_model_container():
 
     def run(self, inputs):
         if self.rknn is None:
-            print("ERROR: rknn has been released")
+            logging.error("ERROR: rknn has been released")
             return []
 
         if isinstance(inputs, list) or isinstance(inputs, tuple):
@@ -372,7 +371,7 @@ def post_process(input_data, anchors, obj_thresh):
 def draw(image, boxes, scores, classes, model_names):
     for box, score, cl in zip(boxes, scores, classes):
         top, left, right, bottom = [int(_b) for _b in box]
-        print("%s @ (%d %d %d %d) %.3f" % (model_names[cl], top, left, right, bottom, score))
+        logging.info("%s @ (%d %d %d %d) %.3f" % (model_names[cl], top, left, right, bottom, score))
         cv2.rectangle(image, (top, left), (right, bottom), (255, 0, 0), 2)
         cv2.putText(image, '{0} {1:.2f}'.format(model_names[cl], score),
                     (top, left - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)

@@ -1,3 +1,4 @@
+import logging
 from threading import Thread
 from opc_ua.examples import workers_example
 
@@ -11,7 +12,7 @@ class SubHandler(object):
     """
 
     def event_notification(self, event):
-        print ("New event received: ", event)
+        logging.debug("New event received: ", event)
 
     def datachange_notification(self, node, val, data):
         t = Thread(target=workers_example.SubWorkers.datachange_notification_worker, args=(node, val, data))
