@@ -596,7 +596,9 @@ class FBInterface:
                         value = v_arr[0] + "#'" + v_arr[1] + "'"
                 elif v_type == 'TIME':
                     value = "T" + "#'" + (value.split('#')[1] if '#' in value else value) + "'"
-                elif not (v_type == 'WSTRING'):
+                elif v_type == 'WSTRING':
+                    value = "\"" + value + "\""
+                else:
                     value = f"'{value}'" if isinstance(value, str) else str(value)
                 ETree.SubElement(port, 'Data', {'value': value,
                                                 'forced': 'false'})
