@@ -22,7 +22,7 @@ class Sniffer(threading.Thread):
             self.mtime = datetime.datetime.fromtimestamp(self.fname.stat().st_mtime)
             # Generate package path from py_path
             concatenate = False
-            package = ''
+            package = 'openfb.'
             for dir in self.py_path.split(os.sep)[:-1]:
                 if not concatenate:
                     if dir == 'resources':

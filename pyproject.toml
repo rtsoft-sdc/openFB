@@ -34,7 +34,7 @@ exclude = [
 openfb = ["resources/**/*"]
 
 [project.scripts]
-openfb = "core.main:main"
+openfb = "openfb.core.main:main"
 
 [project.optional-dependencies]
 dev = [

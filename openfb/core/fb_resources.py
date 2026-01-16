@@ -29,7 +29,7 @@ class FBResources:
 
         try:
             concatenate = False
-            package = ''
+            package = 'openfb.'
             for dir in self.root_path.split(os.sep):
                 if not concatenate:
                     if dir == 'resources':
@@ -38,6 +38,7 @@ class FBResources:
                     package += dir + '.'
             package = package[:-1]
             # Import method from python file
+            logging.error(package)
             py_fb = importlib.import_module('.' + self.fb_type, package=package)
             # Gets the running fb method
             fb_class = getattr(py_fb, self.fb_type)
