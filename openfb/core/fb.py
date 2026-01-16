@@ -1,9 +1,9 @@
 import threading
 import logging
-from core import fb_interface
-from core import sniffer
+from openfb.core import fb_interface
+from openfb.core import sniffer
 import os
-from data_model_fboot import utils
+from openfb.data_model_fboot import utils
 import queue
 
 class FB(threading.Thread, fb_interface.FBInterface):

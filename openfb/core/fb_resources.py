@@ -3,7 +3,7 @@ import os
 import sys
 import xml.etree.ElementTree as ETree
 import logging
-from data_model_fboot import utils
+from openfb.data_model_fboot import utils
 
 
 class FBResources:

@@ -1,6 +1,6 @@
-from core import fb_resources
-from core import fb
-from core import fb_interface
+from openfb.core import fb_resources
+from openfb.core import fb
+from openfb.core import fb_interface
 from xml.etree import ElementTree as ETree
 import logging
 import inspect

@@ -1,7 +1,7 @@
 import socket
 import logging
 import sys
-from communication import client_thread
+from openfb.communication import client_thread
 
 
 class TcpServer:

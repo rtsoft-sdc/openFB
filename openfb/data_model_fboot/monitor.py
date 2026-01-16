@@ -1,10 +1,16 @@
 from threading import Thread
 from threading import Event
-from data_model_fboot import utils
+from openfb.data_model_fboot import utils
 import psutil
 import os
 import sys
+from importlib.resources import files
 
+# If openFB used as a package set env var OPENFB_LOCAL_DIR with to resources folder 
+if os.environ.get("OPENFB_LOCAL_DIR"):
+    resource_dir = os.environ.get("OPENFB_LOCAL_DIR")
+else:
+    resource_dir = str(files("openfb.resources"))
 
 class MonitorSystem(Thread):
     # creates the event kill thread event
@@ -35,7 +41,7 @@ class MonitorSystem(Thread):
         self.ua_vars_dict = dict(zip(var_names, ua_vars))
 
         # open logs file
-        self.logs_path = os.path.join(os.path.dirname(sys.path[0]), 'resources', 'error_list.log')
+        self.logs_path = os.path.join(resource_dir, 'error_list.log')
 
         # create ua variable for log
         self.ua_log = ua_peer.create_variable(folder_path, 

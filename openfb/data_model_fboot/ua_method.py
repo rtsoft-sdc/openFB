@@ -2,7 +2,7 @@ from collections import OrderedDict
 from xml.etree import ElementTree as ETree
 from opcua import ua
 from opcua import uamethod
-from data_model_fboot import utils
+from openfb.data_model_fboot import utils
 import os
 import sys
 import logging

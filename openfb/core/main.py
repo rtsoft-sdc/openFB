@@ -4,13 +4,19 @@ import os
 import sys
 import argparse
 import glob
+from importlib.resources import files
 
-sys.path.append(os.path.join(os.path.dirname(sys.path[0])))
+from openfb.communication import tcp_server
+from openfb.core import manager
 
-from communication import tcp_server
-from core import manager
+# If openFB used as a package set env var OPENFB_LOCAL_DIR with to resources folder 
+if os.environ.get("OPENFB_LOCAL_DIR"):
+    resource_dir = os.environ.get("OPENFB_LOCAL_DIR")
+else:
+    resource_dir = str(files("openfb.resources"))
 
-if __name__ == "__main__":
+
+def main():
     log_levels = {'ERROR': logging.ERROR,
                   'WARN': logging.WARN,
                   'INFO': logging.INFO,
@@ -24,22 +30,10 @@ if __name__ == "__main__":
     secs_sample = 20
     monitor = [n_samples, secs_sample]
     agent = False
-    fboot_path = "./resources/data_model.fboot"
+
+    fboot_path = os.path.join(resource_dir, 'data_model.fboot')
     unix_socket = "logger.sock"
 
-    help_message = "Usage: python core/main.py [ARGS]\n\n" \
-                   " -h, --help: display the help message\n" \
-                   " -a, --address: ip address to bind at (default: localhost)\n" \
-                   " -p, --port_diac: port for the 4diac communication (default: 61499)\n" \
-                   " -u, --port_opc: port for the opc-ua communication (default: 4840)\n" \
-                   " -l, --log_level: logging level at the file resources/error_list.log\n" \
-                   "                  INFO, WARN or ERROR (default: ERROR)\n" \
-                   " -g, --agent: sets on the self-organizing agent\n" \
-                   " -m, --monitor: activates the behavioral anomaly detection feature. \n" \
-                   "       If no parameters are specified, the default values are 10 samples\n" \
-                   "       for the initial training dataset and each sample with 20 seconds. \n" \
-                   "       As an example, you can specify the monitoring parameters in the following way (-m 5 10) \n" \
-                   "       meaning 10 samples for training dataset with 10 seconds of monitoring per sample. \n"
 
     # build parser for application command line arguments
     parser = argparse.ArgumentParser()
@@ -82,16 +76,15 @@ if __name__ == "__main__":
         unix_socket = args.s[0]
     ##############################################################
     # remove all files in monitoring folder
-    monitoring_path = os.path.join(os.path.dirname(
-        sys.path[0]), 'resources', 'monitoring', '')
-    files = glob.glob("{0}*".format(monitoring_path))
-    for f in files:
-        os.remove(f)
+    monitoring_path = os.path.join(resource_dir, 'monitoring', '')
+    if os.path.exists(monitoring_path):
+        files = glob.glob("{0}*".format(monitoring_path))
+        for f in files:
+            os.remove(f)
     ##############################################################
 
     # Configure the logging output
-    log_path = os.path.join(os.path.dirname(
-        sys.path[0]), 'resources', 'error_list.log')
+    log_path = os.path.join(resource_dir, 'error_list.log')
     if os.path.isfile(log_path):
         os.remove(log_path)
 
@@ -126,3 +119,6 @@ if __name__ == "__main__":
         hand.stop_server()
 
         sys.exit(0)
+
+if __name__ == "__main__":
+    main()

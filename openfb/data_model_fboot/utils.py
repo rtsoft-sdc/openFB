@@ -2,7 +2,7 @@ from opcua import ua
 import os
 import sys
 import logging
-
+from importlib.resources import files
 
 UA_TYPES = {'String': ua.VariantType.String,
             'STRING': ua.VariantType.String,
@@ -51,6 +51,12 @@ XML_NODE = {ua.ObjectIds.String: 'String',
             ua.ObjectIds.UInt64: 'Integer',
             ua.ObjectIds.Float: 'Float',
             ua.ObjectIds.Boolean: 'Boolean'}
+
+# If openFB used as a package set env var OPENFB_LOCAL_DIR with to resources folder 
+if os.environ.get("OPENFB_LOCAL_DIR"):
+    resource_dir = os.environ.get("OPENFB_LOCAL_DIR")
+else:
+    resource_dir = str(files("openfb.resources"))
 
 
 def default_folder(ua_peer, obj_idx, obj_path, path_list, folder_name):
@@ -112,10 +118,7 @@ def any_element_in_string(array, string):
 
 
 def get_fb_files_path(fb_name):
-    root_fbs_path = os.path.join(os.path.dirname(sys.path[0]),
-                                 'resources',
-                                 'function_blocks')
-
+    root_fbs_path = os.path.join(resource_dir, 'function_blocks')
     try:
         path = next(scan_match(fb_name, root_fbs_path))
     except Exception as e:

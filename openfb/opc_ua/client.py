@@ -1,5 +1,5 @@
 from opcua import Client
-from opc_ua import base
+from openfb.opc_ua import base
 import logging
 
 

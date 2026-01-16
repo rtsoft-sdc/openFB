@@ -1,5 +1,5 @@
-from core import configuration
-from data_model_fboot import ua_manager as ua_manager_fboot
+from openfb.core import configuration
+from openfb.data_model_fboot import ua_manager as ua_manager_fboot
 from xml.etree import ElementTree as ETree
 import time
 import struct

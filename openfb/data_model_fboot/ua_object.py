@@ -1,4 +1,4 @@
-from data_model_fboot import utils
+from openfb.data_model_fboot import utils
 import logging
 import uuid
 
