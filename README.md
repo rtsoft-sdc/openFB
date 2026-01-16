@@ -40,7 +40,7 @@ pip install -r requirements.txt
 ### 3. Запустить OpenFB
 
 ``` bash
-python3 core/main.py
+python3 run.py
 ```
 
 ### 4. Подключение через 4diac-ide
@@ -166,3 +166,11 @@ class Hello_FB:
 - libqt5core5a 
 ### Python 
 Все необходимые библиотеки описаны в файле: **docker/requirements.txt**
+
+------------------------------------------------------------------------
+
+# Установка openFB как утилиту командной строки
+
+OpenFB можно установить двумя способами:
+- из исходников: `pip install .`
+- из py whl: `pip install openfb-1.0.0-py3-none-any.whl`
