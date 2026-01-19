@@ -7,7 +7,7 @@ import logging
 
 class UaPeer(Server, base.UaBase):
 
-    def __init__(self, address, server_name='systec_ua'):
+    def __init__(self, address, server_name='openfb'):
         Server.__init__(self)
         base.UaBase.__init__(self)
 
@@ -17,7 +17,7 @@ class UaPeer(Server, base.UaBase):
         self.set_server_name(server_name)
 
         # setup our own namespace, not really necessary but should as spec
-        self.uri = "http://systec.fe.up.pu"
+        self.uri = "urn:openfb:opcua-server"
         self.register_namespace(self.uri)
 
         self.root = self.get_root_node()
