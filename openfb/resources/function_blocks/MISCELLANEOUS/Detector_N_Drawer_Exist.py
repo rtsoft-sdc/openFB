@@ -41,7 +41,7 @@ class COCO_test_helper():
     def letter_box(self, im, new_shape, pad_color=(0,0,0), info_need=False):
         # Resize and pad image while meeting stride-multiple constraints
         shape = im.shape[:2]  # current shape [height, width]
-        logging.error(f"INITIAL SHAPE: {shape}")
+        logging.info(f"INITIAL SHAPE: {shape}")
         if isinstance(new_shape, int):
             new_shape = (new_shape, new_shape)
 
@@ -226,7 +226,6 @@ class RKNN_model_container():
             pass
 
         inputs = inputs[:,:,:,None].transpose((-1,0,1,2))
-        logging.error(f'SHAPE: {inputs.shape}')
         result = self.rknn.inference(inputs=[inputs])
     
         return result
@@ -385,7 +384,7 @@ def setup_model(model_path, target, device_id):
         model = RKNN_model_container(model_path, target, device_id)
     else:
         assert False, "{} is not rknn/pytorch/onnx model".format(model_path)
-    logging.error('Model-{} is {} model, starting val'.format(model_path, platform))
+    logging.info('Model-{} is {} model, starting val'.format(model_path, platform))
     return model, platform
 
 
@@ -417,7 +416,7 @@ class Detector_N_Drawer_Exist:
             with open(ANCHORS_PTH, 'r') as f:
                 values = [float(_v) for _v in f.readlines()]
                 self.anchors = np.array(values).reshape(3,-1,2).tolist()
-            logging.error("use anchors from '{}', which is {}".format(ANCHORS_PTH, self.anchors))
+            logging.info("use anchors from '{}', which is {}".format(ANCHORS_PTH, self.anchors))
 
             names_output = " ;".join(self.names)
             self.filter = FILTRER_CL.lower()

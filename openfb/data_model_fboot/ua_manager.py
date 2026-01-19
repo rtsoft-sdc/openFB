@@ -85,7 +85,7 @@ class UaManagerFboot(peer.UaPeer):
         try:
             file = open(self.fboot_path, 'r')
         except FileNotFoundError:
-            logging.warning('Could not find fboot definition file. Awaiting deployment.')
+            logging.error('Could not find fboot definition file. Awaiting deployment.')
         else:
             if os.stat(self.fboot_path).st_size == 0:
                 logging.warning('Fboot definition file is empty. Awaiting deployment')

@@ -27,7 +27,7 @@ class Merge4to1:
                         DATA_ID)]["image"], "detector": data}
                     self.smd[str(DATA_ID)] = output
                 except:
-                    logging.error("BRKONE DATA: %s" % [X, Y, WIDTH, HEIGHT])
+                    logging.error("BROKEN DATA: %s" % [X, Y, WIDTH, HEIGHT])
                     logging.error(
                         f"Data shape is {data.shape}; Data:\n {data}")
                     return None, event_input_value, False, None

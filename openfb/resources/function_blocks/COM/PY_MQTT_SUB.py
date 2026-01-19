@@ -14,7 +14,7 @@ class PY_MQTT_SUB:
 
     def on_message(self, userdata, msg):
         content = str(msg.payload)
-        logging.error(msg.topic+" "+content)
+        logging.info(msg.topic+" "+content)
         self.msg = msg.payload.decode()
         self.client.disconnect()  # Disconnect after receiving the first message
 
@@ -38,10 +38,9 @@ class PY_MQTT_SUB:
         elif event_input_name == 'REQ':
             "Write your handler for current event here."
             if QI == True:
-                logging.error("I'M HERE GUYS")
                 msg = subscribe.simple(self.topic,  port=self.port, msg_count=1, hostname=self.ip)
                 message = msg.payload.decode()
-                logging.error(message)
+                logging.info(message)
                 status = "Received"
                 return None, event_input_value, QI, status, message
             else:

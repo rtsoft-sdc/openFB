@@ -14,7 +14,7 @@ class TcpServer:
 
         # Bind the socket to the port
         server_address = (ip, port)
-        logging.info('starting up on %s port %s' % server_address)
+        logging.info('TCP server starting up on %s port %s' % server_address)
 
         # Reuse the socket address
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

@@ -545,7 +545,7 @@ class FBInterface:
         return events_list + vars_list
 
     def update_outputs(self, outputs):
-        logging.error(f'Updating the outputs:{outputs}')
+        logging.info(f'Updating the outputs:{outputs}')
 
         # Converts the second part of the list to variables
         for index, var_name in enumerate(self.output_vars):

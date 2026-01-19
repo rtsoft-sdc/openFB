@@ -45,14 +45,13 @@ class Configuration:
         fb2update.ua_variables_update = ua_update
 
     def create_fb(self, fb_name, fb_type, monitor=False):
-        # fb_name = fb_name.replace('.', '-')
-        logging.warning(f'creating a new fb {fb_name} Type: {fb_type}...')
+
         fb_res = fb_resources.FBResources(fb_type)
 
         exists_fb = fb_res.exists_fb()
         if not exists_fb:
             # Downloads the fb definition and python code
-            logging.info('fb doesnt exists, needs to be downloaded ...')
+            logging.warning('fb doesnt exists, needs to be downloaded ...')
             fb_res.download_fb()
 
         fb_definition, fb_obj = fb_res.import_fb()
@@ -90,7 +89,7 @@ class Configuration:
 
             self.set_fb(fb_name, fb_element)
             logging.info('created fb type: {0}, instance: {1}'.format(fb_type, fb_name))
-            logging.error("List of existing blocks: %s" % self.fb_dictionary)
+            logging.info("List of existing blocks: %s" % self.fb_dictionary)
             # returns the both elements
             return fb_element, fb_definition
         else:
@@ -104,7 +103,6 @@ class Configuration:
         destination_attr = destination.split(sep='.')
         source_fb = self.get_fb(source_attr[0]) if len(source_attr) == 2 else self.get_fb('.'.join(source_attr[:-1]))
         source_name = source_attr[1] if len(source_attr) == 2 else source_attr[-1]
-        dfb = '.'.join(destination_attr[:-1])
         destination_fb = self.get_fb(destination_attr[0]) if len(destination_attr) == 2 else self.get_fb('.'.join(destination_attr[:-1]))
         destination_name = destination_attr[1] if len(destination_attr) == 2 else destination_attr[-1]
 
@@ -146,14 +144,13 @@ class Configuration:
         logging.info('watch deleted between {0} and {1}'.format(source, destination))
 
     def write_connection(self, source_value, destination):
-        logging.error('writing a connection...')
-        logging.error(f"SRC: {source_value} DST {destination}")
+        logging.info('writing a connection...')
+        logging.info(f"SRC: {source_value} DST {destination}")
         destination_attr = destination.split(sep='.')
         destination_fb = self.get_fb(destination_attr[0]) if len(destination_attr) == 2 else self.get_fb('.'.join(destination_attr[:-1]))
         destination_name = destination_attr[1] if len(destination_attr) == 2 else destination_attr[-1]
 
         v_type, value, is_watch = destination_fb.read_attr(destination_name)
-        logging.error("Event recived!!!!!!!!!!!!!!!!!")
 
         # Verifies if is to write an event
         if source_value == '$e':
@@ -167,7 +164,6 @@ class Configuration:
 
         # Writes a hardcoded value
         else:
-            logging.info('writing a hardcoded value...')
             value_to_set = self.convert_type(source_value, v_type)
             logging.error(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {value_to_set} DST:{destination_name}")
 

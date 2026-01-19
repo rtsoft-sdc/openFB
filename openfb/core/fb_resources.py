@@ -38,7 +38,6 @@ class FBResources:
                     package += dir + '.'
             package = package[:-1]
             # Import method from python file
-            logging.error(package)
             py_fb = importlib.import_module('.' + self.fb_type, package=package)
             # Gets the running fb method
             fb_class = getattr(py_fb, self.fb_type)

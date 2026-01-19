@@ -37,10 +37,8 @@ class ClientThread(threading.Thread):
     def remove_service_symbols(self, data):
         if "&apos;" in data:
             data = data.replace('&apos;', '')
-            logging.error(f"After replacement: {data}")
         elif "&quote;" in data:
             data = data.replace('&quote;', '')
-            logging.error(f"After replacement: {data}")
         return data
     
     def remove_name_sys(self, data_str):
@@ -57,9 +55,7 @@ class ClientThread(threading.Thread):
         elif destination is not None:
             destination = destination.get('Destination')
             destination = destination.split('.')[1:]
-            logging.error(destination, data_str)
             destination = '.'.join(destination)
-            logging.error(destination)
 
             xml_data.find('Connection').set('Destination', destination)
         else:

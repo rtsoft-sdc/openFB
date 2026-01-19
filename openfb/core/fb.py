@@ -57,7 +57,7 @@ class FB(threading.Thread, fb_interface.FBInterface):
 
             try:
                 outputs = self.fb_obj.schedule(*inputs)
-                logging.info(f"Inputs: {inputs}, MOdule ouputs:{outputs}")
+                logging.info(f"Inputs: {inputs}, Module ouputs:{outputs}")
 
             except TypeError as error:
                 logging.error('invalid number of arguments (check if fb method args are in fb_type.fbt)')

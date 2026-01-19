@@ -137,13 +137,13 @@ class UaObject:
 
             except Exception as error:
                 # reports the error
-                logging.warning('Error writing the value in the opc-ua server.')
-                logging.warning(error)
+                logging.error('Error writing the value in the opc-ua server.')
+                logging.error(error)
                 if v_type == 'STRING':
                     # writes the value as a string
                     var_ua.set_value(str(value))
                     # writes the solution
-                    logging.warning('Error solved writing the variable as string.')
+                    logging.error('Error solved writing the variable as string.')
                         
     
     
