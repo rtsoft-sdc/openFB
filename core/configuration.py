@@ -45,6 +45,9 @@ class Configuration:
         fb2update.ua_variables_update = ua_update
 
     def create_fb(self, fb_name, fb_type, monitor=False):
+        #fixme: new types like iec61499::system::EMB_RES
+        fb_type = fb_type.split('::')[-1]
+
         # fb_name = fb_name.replace('.', '-')
         logging.warning(f'creating a new fb {fb_name} Type: {fb_type}...')
         fb_res = fb_resources.FBResources(fb_type)
@@ -140,7 +143,7 @@ class Configuration:
             source_fb.set_attr(source_name, set_watch=False)
         except AttributeError as error:
             # check if the return if None
-            logging.error(error)
+            # logging.error(error)
             logging.error("don't forget to delete the watch when you delete a function block")
 
         logging.info('watch deleted between {0} and {1}'.format(source, destination))
