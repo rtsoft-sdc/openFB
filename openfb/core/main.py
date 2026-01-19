@@ -100,6 +100,8 @@ def main():
         format="[%(asctime)s][%(levelname)s][%(threadName)s] %(message)s",
         handlers=handlers,
     )
+    if log_level != logging.DEBUG:
+        logging.getLogger("opcua").setLevel(logging.CRITICAL)
 
     # creates the 4diac manager
     m = manager.Manager(monitor=monitor)
