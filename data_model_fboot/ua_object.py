@@ -8,7 +8,7 @@ class UaObject:
     class InvalidFbtState(Exception):
         pass
 
-    def __init__(self, ua_server, ua_folder, fb_name, xml_root):
+    def __init__(self, ua_server, ua_folder, fb_name, xml_root, opc_mapping=None, root_path=None, root_list=None):
         self.ua_server = ua_server
         self.ua_folder = ua_folder
         self.fb_name = fb_name
@@ -17,6 +17,7 @@ class UaObject:
         self.opc_ua_type = xml_root.get('OpcUa')
         self.folders = dict()
         self.ua_vars = dict()
+        self.mapped_ua_vars = opc_mapping
         # creates the fb inside the configuration
         self.ua_server.config.create_virtualized_fb(self.fb_name, self.fb_type, self.update_variables)
         # creates required connections
@@ -59,6 +60,18 @@ class UaObject:
             logging.error('Invalid function block definition, check {0}.fbt for mistakes'.format(self.fb_name))
 
     def populate_vars_folder(self):
+        if self.mapped_ua_vars:
+            for var in self.mapped_ua_vars:
+                try:
+                    var_idx = '{0}:{1}'.format(self.folders['VarFolder'].get('idx'), var["Name"])
+                    ua_var = self.ua_server.create_typed_variable(self.folders['VarFolder'].get('path'),
+                                                        var_idx,
+                                                        var["Name"], 
+                                                        utils.UA_TYPES[var['Type']], 
+                                                        0)
+                    self.ua_vars[var['Name']] = ua_var
+                except KeyError:
+                    raise self.InvalidFbtState
         for child in self.xml_root: # InterfaceList
             if child.tag != 'InterfaceList':
                 raise self.InvalidFbtState

@@ -590,7 +590,7 @@ class FBInterface:
             v_type, value, is_watch = self.read_attr(var_name)
             if is_watch and (value is not None):
                 port = ETree.Element('Port', {'name': var_name})
-                if v_type == 'ANY':
+                if v_type == 'ANY' and isinstance(value, str):
                     if "STRING" in value or "WSTRING" in value:
                         v_arr = value.split('#')
                         value = v_arr[0] + "#'" + v_arr[1] + "'"

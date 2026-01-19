@@ -8,11 +8,12 @@ import queue
 
 class FB(threading.Thread, fb_interface.FBInterface):
 
-    def __init__(self, fb_name, fb_type, fb_obj, fb_xml, monitor=None):
+    def __init__(self, fb_name, fb_type, fb_obj, fb_xml, monitor=None, opc_mapping=None):
         threading.Thread.__init__(self, name=fb_name)
         fb_interface.FBInterface.__init__(self, fb_name, fb_type, fb_xml, monitor)
 
         self.fb_obj = fb_obj
+        self.opc_mapping = opc_mapping
         self.kill_event = threading.Event()
         self.execution_end = threading.Event()
         self.ua_variables_update = None
