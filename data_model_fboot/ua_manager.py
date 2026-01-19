@@ -139,8 +139,14 @@ class UaManagerFboot(peer.UaPeer):
             try:
                 if xml_element.get('Action') == 'CREATE':
                     for child in xml_element:
-                        if child.tag == 'FB' and child.get('Type') != 'EMB_RES':
-                            root_path = utils.get_fb_files_path(child.get('Type'))
+                        #fixme: new types like iec61499::system::EMB_RES
+                        try:
+                            open_fb_type = (child.get('Type')).split('::')[-1]
+                        except:
+                            continue
+                        
+                        if child.tag == 'FB' and open_fb_type != 'EMB_RES':
+                            root_path = utils.get_fb_files_path(open_fb_type)
                             # Check fbt file
                             fb_file = open(os.path.join(root_path, '{0}.fbt'.format(child.get('Type'))), 'r')
                             fb_name = child.get('Name')
