@@ -44,7 +44,7 @@ class Configuration:
         fb2update = self.get_fb(fb_name)
         fb2update.ua_variables_update = ua_update
 
-    def create_fb(self, fb_name, fb_type, monitor=False):
+    def create_fb(self, fb_name, fb_type, monitor=False, opc_mapping=None):
         #fixme: new types like iec61499::system::EMB_RES
         fb_type = fb_type.split('::')[-1]
 
