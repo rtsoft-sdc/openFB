@@ -67,7 +67,7 @@ class Manager:
                     # Stops the configuration
                     for config_name, config in self.config_dictionary.items():
                         config.stop_work()
-                    self.config_dictionary = dict()
+                    # self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
                         config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
@@ -86,8 +86,8 @@ class Manager:
         elif action == 'QUERY':
             try:
                 if self.manager_ua_fboot.resources_running is not None:
+                    xml = ETree.Element('FBList')
                     for res_name in self.manager_ua_fboot.resources_running:
-                        xml = ETree.Element('FBList')
                         fb = ETree.SubElement(xml, 'FB', {'name': res_name, 'type': "EMB_RES"})
             except:
                 pass
@@ -149,10 +149,12 @@ class Manager:
             for child in element:
                 # Deletes a configuration (could be a fb)
                 if child.tag == 'FB':
-                    # conf_name = child.attrib['Name']
+                    conf_name = child.attrib['Name']
                     # Checks if exists the configuration
-                    # if conf_name in self.config_dictionary:
-                    self.config_dictionary = dict()
+                    if conf_name in self.config_dictionary:
+                        # Stops the configuration
+                        self.config_dictionary.pop(conf_name)
+                    # self.config_dictionary = dict()
                     # Deletes the configuration
                     # self.stop_all()
                     # Release memory

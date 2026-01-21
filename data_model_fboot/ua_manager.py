@@ -133,7 +133,8 @@ class UaManagerFboot(peer.UaPeer):
             if self.validate_xml_with_details(chunks[1]) != True:
                 raise self.InvalidFbootState
             
-            self.resources_running.add(chunks[0])
+            if chunks[0] != "":
+                self.resources_running.add(chunks[0])
 
             xml_element = ETree.fromstring(chunks[1])
             try:
@@ -177,7 +178,8 @@ class UaManagerFboot(peer.UaPeer):
             if self.validate_xml_with_details(chunks[1]) != True:
                 raise self.InvalidFbootState
             
-            self.resources_running.add(chunks[0])
+            if chunks[0] != "":
+                self.resources_running.add(chunks[0])
 
             xml_element = ETree.fromstring(chunks[1])
             try:
