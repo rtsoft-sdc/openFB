@@ -120,8 +120,9 @@ def get_fb_files_path(fb_name):
         fb_name = fb_name.split('::')[-1]
         path = next(scan_match(fb_name, root_fbs_path))
     except Exception as e:
-        print("Name {0} path {1}".format(fb_name, root_fbs_path))
-        sys.exit(0)
+        print("[ERROR] FB does not exist. name {0} path {1}".format(fb_name, root_fbs_path))
+        # sys.exit(0)
+        return None
     if "__pycache__" in path:
         path = path.replace('/__pycache__', '')
     return path

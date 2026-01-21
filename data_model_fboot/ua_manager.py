@@ -148,6 +148,8 @@ class UaManagerFboot(peer.UaPeer):
                         
                         if child.tag == 'FB' and open_fb_type != 'EMB_RES':
                             root_path = utils.get_fb_files_path(open_fb_type)
+                            if root_path == None:
+                                raise self.InvalidFbootState
                             # Check fbt file
                             fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
                             fb_name = child.get('Name')
