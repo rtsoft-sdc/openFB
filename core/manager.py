@@ -1,5 +1,6 @@
 from core import configuration
 from data_model_fboot import ua_manager as ua_manager_fboot
+from data_model_fboot import utils
 from xml.etree import ElementTree as ETree
 import time
 import struct
@@ -200,8 +201,15 @@ class Manager:
         if action == 'CREATE':
             # Iterate over the list of children
             for child in element:
+                if child.tag == 'FB':
+                    conf_type = child.attrib['Type']
+                    if utils.get_fb_files_path(conf_type) == None:
+                        xml = ETree.Element('Response', {'ID': request_id, 'Reason': 'NO_SUCH_OBJECT'})
+                        response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
+                        return response
+                
                 # Create watch
-                if child.tag == 'Watch':
+                elif child.tag == 'Watch':
                     watch_source = child.attrib['Source']
                     watch_destination = child.attrib['Destination']
                     self.get_config(config_id).create_watch(watch_source, watch_destination)
@@ -240,12 +248,7 @@ class Manager:
         return response
 
     @staticmethod
-    def build_response(request_id, xml_response):
-        xml = ETree.Element('Response', {'ID': request_id})
-        # Verifies if is a default response
-        if xml_response is not None:
-            xml.append(xml_response)
-
+    def build_response_header(xml):
         response_xml = ETree.tostring(xml)
         hex_input = '{:04x}'.format(len(response_xml))
         second_byte = int(hex_input[0:2], 16)
@@ -253,7 +256,16 @@ class Manager:
         response_len = struct.pack('BB', second_byte, third_byte)
         response_header = b''.join([b'\x50', response_len])
 
-        response = b''.join([response_header, response_xml])
+        return response_header
+
+    @staticmethod
+    def build_response(request_id, xml_response):
+        xml = ETree.Element('Response', {'ID': request_id})
+        # Verifies if is a default response
+        if xml_response is not None:
+            xml.append(xml_response)
+
+        response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
         return response
 
     def build_ua_manager_fboot(self, address, port, fboot_path):
