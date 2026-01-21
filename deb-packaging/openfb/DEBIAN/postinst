@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e 
+
+APP_NAME=openfb
+APP_DIR=/opt/$APP_NAME
+UV_DIR=$APP_DIR/tools/uv
+UV_BIN=$UV_DIR/bin/uv
+VENV_DIR=$APP_DIR/venv
+WHEEL_LOC=$APP_DIR/openfb-1.0.0-py3-none-any.whl
+
+#Install uv util and setup environment
+pip3 install --no-cache-dir -U --target $UV_DIR uv 
+$UV_BIN python install 3.9
+$UV_BIN venv $VENV_DIR
+echo $VENV_DIR
+source $VENV_DIR/bin/activate
+python3 -V
+which pip
+$UV_BIN pip install pip
+pip install --no-cache -U pip
+pip install --no-cache $WHEEL_LOC
+
+
+# Setup soft link to 

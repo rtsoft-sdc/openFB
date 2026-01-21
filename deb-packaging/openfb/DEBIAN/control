@@ -1,0 +1,10 @@
+Source: openFB
+Maintainer: Oleg Botnar <obotnar@dev.rtsoft.ru>
+Section: utils
+Priority: optional
+Version: 1.0.0
+Build-Depends: debhelper-compat (= 13)
+Package: openFB
+Architecture: all
+Depends: bash, python3 (>=3.9), python3-pip
+Description: Runtime environment IEC 61499 for ML tasks' support
