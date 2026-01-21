@@ -25,7 +25,7 @@ def main():
     address = 'localhost'
     port_diac = 61499
     port_opc = 4840
-    log_level = log_levels['ERROR']
+    log_level = log_levels['INFO']
     n_samples = 10
     secs_sample = 20
     monitor = [n_samples, secs_sample]
@@ -107,9 +107,11 @@ def main():
     m = manager.Manager(monitor=monitor)
     # sets the ua integration option
     m.build_ua_manager_fboot(address, port_opc, fboot_path)
+    print("[INFO]\tOPCUA server is running on {0}:{1}".format(address, port_opc))
 
     # creates the tcp server to communicate with the 4diac
     hand = tcp_server.TcpServer(address, port_diac, 10, m)
+    print("[INFO]\tOpenfb is up and running on {0}:{1}".format(address, port_diac))
 
     try:
         # handles every client

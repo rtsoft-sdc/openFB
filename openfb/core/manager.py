@@ -113,25 +113,25 @@ class Manager:
         elif action == 'KILL':
             if element.find('FB') is None:
                 os.kill(os.getpid(), signal.SIGINT)
-                return
             # Iterate over the list of children
-            for child in element:
-                # Kill a configuration (could be a fb)
-                if child.tag == 'FB':
-                    fb_name = child.attrib['Name']
-                    # Checks if exists the configuration
-                    if fb_name in self.config_dictionary:
-                        # Stops the configuration
-                        for config_name, config in self.config_dictionary.items():
-                            config.stop_work()
-                        # Release memory
-                        gc.collect()
-            '''ua_server is killing at the main.py file after ctrl+c (SIGINT)'''
-            # check the options for ua_integration
-            # if self.ua_integration:
-            #     # first stop the previous manager
-            #     self.manager_ua.stop_ua()
-            # If we want to kill the device
+            else:
+                for child in element:
+                    # Kill a configuration (could be a fb)
+                    if child.tag == 'FB':
+                        fb_name = child.attrib['Name']
+                        # Checks if exists the configuration
+                        if fb_name in self.config_dictionary:
+                            # Stops the configuration
+                            for config_name, config in self.config_dictionary.items():
+                                config.stop_work()
+                            # Release memory
+                            gc.collect()
+                '''ua_server is killing at the main.py file after ctrl+c (SIGINT)'''
+                # check the options for ua_integration
+                # if self.ua_integration:
+                #     # first stop the previous manager
+                #     self.manager_ua.stop_ua()
+                # If we want to kill the device
             if len(element) == 0:
                 pass
 
@@ -179,6 +179,10 @@ class Manager:
                 config = configuration.Configuration('EMB_RES', 'EMB_RES')
                 self.set_config('EMB_RES', config)
                 self.manager_ua_fboot(config)
+        
+        #fixme
+        elif action == 'RESET':
+            pass
 
         response = self.build_response(request_id, xml)
         return response
@@ -254,7 +258,7 @@ class Manager:
         self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path)
         # creates the opc-ua manager
         config = configuration.Configuration('EMB_RES', 'EMB_RES', monitor=self.monitor)
-        # self.set_config('EMB_RES', config)
+        self.set_config('EMB_RES', config)
         # parses the description file
         self.manager_ua_fboot(config)
         self.manager_ua_fboot.from_fboot()

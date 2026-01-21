@@ -120,6 +120,8 @@ def any_element_in_string(array, string):
 def get_fb_files_path(fb_name):
     root_fbs_path = os.path.join(resource_dir, 'function_blocks')
     try:
+        #fixme: new types like iec61499::system::EMB_RES
+        fb_name = fb_name.split('::')[-1]
         path = next(scan_match(fb_name, root_fbs_path))
     except Exception as e:
         logging.error("Name {0} path {1}".format(fb_name, root_fbs_path))

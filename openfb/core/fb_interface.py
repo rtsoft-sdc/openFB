@@ -590,13 +590,15 @@ class FBInterface:
             v_type, value, is_watch = self.read_attr(var_name)
             if is_watch and (value is not None):
                 port = ETree.Element('Port', {'name': var_name})
-                if v_type == 'ANY':
+                if v_type == 'ANY' and isinstance(value, str):
                     if "STRING" in value or "WSTRING" in value:
                         v_arr = value.split('#')
                         value = v_arr[0] + "#'" + v_arr[1] + "'"
                 elif v_type == 'TIME':
                     value = "T" + "#'" + (value.split('#')[1] if '#' in value else value) + "'"
-                elif not (v_type == 'WSTRING'):
+                elif v_type == 'WSTRING':
+                    value = "\"" + value + "\""
+                else:
                     value = f"'{value}'" if isinstance(value, str) else str(value)
                 ETree.SubElement(port, 'Data', {'value': value,
                                                 'forced': 'false'})
@@ -609,8 +611,7 @@ class FBInterface:
             v_type, value, is_watch = self.read_attr(event_name)
             if is_watch and (value is not None):
                 port = ETree.Element('Port', {'name': event_name})
-                ETree.SubElement(port, 'Data', {'value': str(value),
-                                                'time': str(int((time.time() * 1000) - start_time))})
+                ETree.SubElement(port, 'Data', {'value': str(value)})
                 fb_root.append(port)
 
         # Gets the number of watches
