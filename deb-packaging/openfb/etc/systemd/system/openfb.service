@@ -1,0 +1,11 @@
+[Unit]
+Description=Driver monitor service
+After=mm.service
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/openfb -a 0.0.0.0 -p 61499 -l INFO -u 4840
+
+[Install]
+WantedBy=default.target
