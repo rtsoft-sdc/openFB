@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+
+systemctl stop openfb.service
+systemctl disable openfb.service
+systemctl daemon-reload
+
+rm -rf /opt/openfb
+unlink /usr/bin/openfb
