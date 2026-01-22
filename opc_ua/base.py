@@ -1,5 +1,6 @@
 from opcua import ua
-
+import logging
+from opcua.ua.uaerrors import BadNoMatch
 
 class UaBase:
 
@@ -28,16 +29,25 @@ class UaBase:
 
         return my_var
 
-    def create_typed_variable(self, path, index, var_name, var_type, value_rank, dimensions=0, writable=False):
+    def create_typed_variable(self, path, index, var_name, var_type,
+                            value_rank, dimensions=0, writable=False):
+
         my_obj = self.root.get_child(path)
-        my_var = my_obj.add_variable(index, var_name, [], var_type)
-        my_var.set_value_rank(value_rank)
-        my_var.set_array_dimensions([dimensions])
 
-        if writable:
-            my_var.set_writable()
+        try:
+            my_var = my_obj.get_child(var_name)
 
-        return my_var
+            return my_var
+
+        except BadNoMatch:
+            my_var = my_obj.add_variable(index, var_name, [], var_type)
+            my_var.set_value_rank(value_rank)
+            my_var.set_array_dimensions([dimensions])
+
+            if writable:
+                my_var.set_writable()
+
+            return my_var
 
     def create_folder(self, path, index, folder_name):
         my_obj = self.root.get_child(path)
