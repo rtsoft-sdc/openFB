@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
-if [ "$1" = "purge" ]; then
-    rm -rf /opt/myapp
-fi
+
+systemctl stop openfb.service
+systemctl disable openfb.service
+systemctl daemon-reload
+
+rm -rf /opt/openfb
+unlink /usr/bin/openfb
