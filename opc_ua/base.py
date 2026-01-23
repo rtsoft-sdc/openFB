@@ -30,25 +30,36 @@ class UaBase:
         return my_var
 
     def create_typed_variable(self, path, index, var_name, var_type,
-                            value_rank, dimensions=0, writable=False):
+                            value_rank, dimensions=0, writable=True):
 
         my_obj = self.root.get_child(path)
 
         try:
-            my_var = my_obj.get_child(var_name)
-
-            return my_var
+            return my_obj.get_child(var_name)
 
         except BadNoMatch:
-            my_var = my_obj.add_variable(index, var_name, [], var_type)
+            if value_rank == -1:
+                init_value = ua.Variant(None, var_type)
+            else:
+                init_value = ua.Variant([], var_type)
+
+            my_var = my_obj.add_variable(
+                index,
+                var_name,
+                init_value,
+                var_type
+            )
+
             my_var.set_value_rank(value_rank)
-            my_var.set_array_dimensions([dimensions])
+
+            if value_rank >= 1:
+                my_var.set_array_dimensions([dimensions])
 
             if writable:
                 my_var.set_writable()
 
             return my_var
-
+    
     def create_folder(self, path, index, folder_name):
         my_obj = self.root.get_child(path)
         my_obj.add_folder(index, folder_name)
