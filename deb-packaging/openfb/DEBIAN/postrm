@@ -1,10 +1,14 @@
 #!/bin/bash
 set -e
 
+if command -v systemctl &> /dev/null; then
 
-systemctl stop openfb.service
-systemctl disable openfb.service
-systemctl daemon-reload
+    systemctl stop openfb.service
+    systemctl disable openfb.service
+    systemctl daemon-reload
+else
+    rm /etc/systemd/system/openfb.service
+fi
 
 rm -rf /opt/openfb
 unlink /usr/bin/openfb

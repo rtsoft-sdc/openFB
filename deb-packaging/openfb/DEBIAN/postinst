@@ -21,8 +21,12 @@ pip install --no-cache $WHEEL_LOC
 
 ln -s $VENV_DIR/bin/openfb /usr/bin/openfb
 
-echo -e "\e[3;96m Enable & start openfb as systemd service... \033[0m"
-systemctl daemon-reload
-systemctl enable openfb.service
-systemctl start openfb.service
+if command -v systemctl &> /dev/null; then
+    echo -e "\e[3;96m Enable & start openfb as systemd service... \033[0m"
+    systemctl daemon-reload
+    systemctl enable openfb.service
+    systemctl start openfb.service
+else
+    echo -e "\[3;96m Unable to install systemd service. Suppose package will be installed inside docker"
 
+fi
