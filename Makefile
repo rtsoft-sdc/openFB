@@ -25,10 +25,10 @@ clean:
 	find . -type f -name '*.pyo' -delete
 	rm -rf dist
 	rm -rf openfb.egg-info
-	rm openfb.deb
-	rm deb-packaging/openfb.deb
-	rm deb-packaging/openfb/opt/openfb/openfb-1.0.0-py3-none-any.whl
-	rm openfb/resources/data_model.fboot
-	rm openfb/resources/error_list.log
+	rm -f openfb.deb
+	rm -f deb-packaging/openfb.deb
+	rm -f deb-packaging/openfb/opt/openfb/openfb-1.0.0-py3-none-any.whl
+	rm -f openfb/resources/data_model.fboot
+	rm -f openfb/resources/error_list.log
 
 
