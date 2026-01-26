@@ -49,7 +49,7 @@ class Configuration:
         fb_type = fb_type.split('::')[-1]
 
         # fb_name = fb_name.replace('.', '-')
-        logging.warning(f'creating a new fb {fb_name} Type: {fb_type}...')
+        logging.info(f'creating a new fb {fb_name} Type: {fb_type}...')
         fb_res = fb_resources.FBResources(fb_type)
 
         exists_fb = fb_res.exists_fb()
@@ -116,7 +116,7 @@ class Configuration:
         logging.info('connection created between {0} and {1}'.format(source, destination))
 
     def create_watch(self, source, destination):
-        logging.info('creating a new watch...')
+        logging.debug('creating a new watch...')
 
         source_attr = source.split(sep='.')
         source_fb =  self.get_fb(source_attr[0]) if len(source_attr) == 2 else self.get_fb('.'.join(source_attr[:-1]))
@@ -129,10 +129,10 @@ class Configuration:
             logging.error(error)
             logging.error("don't forget to delete the watch when you delete a function block")
 
-        logging.info('watch created between {0} and {1}'.format(source, destination))
+        logging.debug('watch created between {0} and {1}'.format(source, destination))
 
     def delete_watch(self, source, destination):
-        logging.info('deleting a new watch...')
+        logging.debug('deleting a new watch...')
 
         source_attr = source.split(sep='.')
         source_fb = self.get_fb(source_attr[0]) if len(source_attr) == 2 else self.get_fb('.'.join(source_attr[:-1]))
@@ -145,11 +145,11 @@ class Configuration:
             # logging.error(error)
             logging.error("don't forget to delete the watch when you delete a function block")
 
-        logging.info('watch deleted between {0} and {1}'.format(source, destination))
+        logging.debug('watch deleted between {0} and {1}'.format(source, destination))
 
     def write_connection(self, source_value, destination):
-        logging.info('writing a connection...')
-        logging.info(f"SRC: {source_value} DST {destination}")
+        logging.debug('writing a connection...')
+        logging.debug(f"SRC: {source_value} DST {destination}")
         destination_attr = destination.split(sep='.')
         destination_fb = self.get_fb(destination_attr[0]) if len(destination_attr) == 2 else self.get_fb('.'.join(destination_attr[:-1]))
         destination_name = destination_attr[1] if len(destination_attr) == 2 else destination_attr[-1]
@@ -176,7 +176,7 @@ class Configuration:
         logging.info('connection ({0}) configured with the value {1}'.format(destination, source_value))
 
     def read_watches(self, start_time):
-        logging.info('reading watches...')
+        logging.debug('reading watches...')
 
         resources_xml = ETree.Element('Resource', {'name': self.config_id})
 

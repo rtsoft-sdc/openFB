@@ -18,15 +18,15 @@ class ClientThread(threading.Thread):
             # Receive the data in small chunks and retransmit it
             while True:
                 data = self.connection.recv(2048)
-                logging.info('received {0}'.format(data))
+                logging.debug('received {0}'.format(data))
 
                 if data:
                     response = self.parse_request(data)
-                    logging.info('sending response {0}'.format(response))
+                    logging.debug('sending response {0}'.format(response))
                     self.connection.sendall(response)
 
                 else:
-                    logging.info('no more data from {0}'.format(self.client_address))
+                    logging.debug('no more data from {0}'.format(self.client_address))
                     break
 
         finally:
