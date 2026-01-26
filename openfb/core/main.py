@@ -22,7 +22,7 @@ def main():
                   'INFO': logging.INFO,
                   'DEBUG': logging.DEBUG}
 
-    address = 'localhost'
+    address = '0.0.0.0'
     port_diac = 61499
     port_opc = 4840
     log_level = log_levels['INFO']
@@ -38,7 +38,7 @@ def main():
     # build parser for application command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', metavar='address', nargs=1,
-                        help="ip address to bind at (default: localhost)")
+                        help="ip address to bind at (default: 0.0.0.0)")
     parser.add_argument('-p', metavar='port_diac', nargs=1, type=int,
                         help="port for the 4diac communication (default: 61499)")
     parser.add_argument('-u', metavar='port_opc', nargs=1, type=int,
