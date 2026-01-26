@@ -29,6 +29,23 @@ class UaBase:
 
         return my_var
 
+    def default_value(self, var_type, value_rank):
+        if value_rank == 0:  
+            return {
+                ua.VariantType.Boolean: False,
+                ua.VariantType.Int16: 0,
+                ua.VariantType.Int32: 0,
+                ua.VariantType.Int64: 0,
+                ua.VariantType.UInt16: 0,
+                ua.VariantType.UInt32: 0,
+                ua.VariantType.UInt64: 0,
+                ua.VariantType.Float: 0.0,
+                ua.VariantType.Double: 0.0,
+                ua.VariantType.String: "",
+            }.get(var_type, None)
+        else:
+            return []
+
     def create_typed_variable(self, path, index, var_name, var_type,
                             value_rank, dimensions=0, writable=True):
 
@@ -46,8 +63,7 @@ class UaBase:
             my_var = my_obj.add_variable(
                 index,
                 var_name,
-                init_value,
-                var_type
+                self.default_value(var_type, value_rank),
             )
 
             my_var.set_value_rank(value_rank)
@@ -56,7 +72,7 @@ class UaBase:
                 my_var.set_array_dimensions([dimensions])
 
             if writable:
-                my_var.set_writable()
+                my_var.set_writable(True)
 
             return my_var
     
