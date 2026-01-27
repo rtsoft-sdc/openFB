@@ -1,5 +1,6 @@
 from opcua import ua
-
+from openfb.data_model_fboot.ua_observer import UaObserver
+from opcua.ua.uaerrors import BadNoMatch
 
 class UaBase:
 
@@ -7,6 +8,7 @@ class UaBase:
         self.root = None
         self.methods_dictionary = dict()
         self.variables_dictionary = dict()
+        self.observer = UaObserver()
 
     def get_object(self, path):
         obj = self.root.get_child(path)
@@ -27,18 +29,7 @@ class UaBase:
             my_var.set_writable()
 
         return my_var
-
-    def create_typed_variable(self, path, index, var_name, var_type, value_rank, dimensions=0, writable=False):
-        my_obj = self.root.get_child(path)
-        my_var = my_obj.add_variable(index, var_name, [], var_type)
-        my_var.set_value_rank(value_rank)
-        my_var.set_array_dimensions([dimensions])
-
-        if writable:
-            my_var.set_writable()
-
-        return my_var
-
+    
     def create_folder(self, path, index, folder_name):
         my_obj = self.root.get_child(path)
         my_obj.add_folder(index, folder_name)
