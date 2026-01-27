@@ -12,6 +12,14 @@ class PY_MQTT_SUB:
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.msg = ''
 
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Close MQTT connection")
+        try:
+            self.client.disconnect()
+        except Exception:
+            logging.error(Exception)
+
     def on_message(self, userdata, msg):
         content = str(msg.payload)
         logging.info(msg.topic+" "+content)

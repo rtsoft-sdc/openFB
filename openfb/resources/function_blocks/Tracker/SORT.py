@@ -19,6 +19,16 @@ class SORT:
         self.max_size = container_size*image_shape**2
         self.track_ids = []
 
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Object is being destroyed")
+        try:
+            if self.smd is SharedMemoryDict:
+                del self.smd
+        except Exception as err:
+            logging.warning("Error occured during closing shared memory")
+            logging.warning(err)
+        
     def schedule(self, event_input_name, event_input_value, QI, N_INIT, MAX_AGE, IOU, QUEUE_ID, DATA_ID):
         'Write your code here.'
         if event_input_name == 'INIT':

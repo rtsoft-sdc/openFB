@@ -402,6 +402,16 @@ class Detector_N_Drawer_Exist:
         self.model_im_size = (640, 640)
         self.filter = ''
 
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Object is being destroyed")
+        try:
+            if self.smd is SharedMemoryDict:
+                del self.smd
+        except Exception as err:
+            logging.warning("Error occured during closing shared memory")
+            logging.warning(err)
+
     def schedule(self, event_input_name, event_input_value, QI, VIS, IMG_ID, QUEUE_ID, MODEL_PTH,  CLASS_PTH, ANCHORS_PTH, TH, FILTRER_CL):
         'Write your code here.'
         if event_input_name == 'INIT':

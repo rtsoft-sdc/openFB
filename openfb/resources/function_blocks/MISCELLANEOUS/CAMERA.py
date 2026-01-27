@@ -1,4 +1,5 @@
 import cv2
+import logging
 from shared_memory_dict import SharedMemoryDict
 
 
@@ -10,6 +11,19 @@ class CAMERA:
         container_size = 15  # number of images that could be stored
         self.max_size = container_size*image_shape**2
         self.QUEUE_ID = ""
+
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Object is being destroyed")
+        try:
+            if self.smd is SharedMemoryDict:
+                del self.smd
+            if not isinstance(self.cap, str):
+                self.cap.release()
+                
+        except Exception as err:
+            logging.warning("Error occured during closing shared memory")
+            logging.warning(err)
 
     def schedule(self, event_input_name, event_input_value, QI, ID, PARAM, QUEUE_ID):
         'Write your code here.'
@@ -27,6 +41,7 @@ class CAMERA:
             "Write your handler for current event here."
             if QI == True and self.cap.isOpened():
                 ret, frame = self.cap.read()
+                self.cap.
                 if ret == True:
                     if len(self.smd.keys()) == 0:
                         ind = 0

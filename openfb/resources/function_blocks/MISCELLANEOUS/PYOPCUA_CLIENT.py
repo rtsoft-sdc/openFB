@@ -10,6 +10,14 @@ class PYOPCUA_CLIENT:
 		self.init_cnt = 0
 		self.run_cnt = 0
 
+	def __del__(self):
+        # cleanup logic
+		logging.debug("Object is being destroyed")
+		try:
+			self.client.disconnect()
+		except Exception as err:
+			logging.error(err)
+
 	def schedule(self, event_input_name, event_input_value, 
 			  	QI, URL, NS_ID, NODE_ID, D_TYPE, VALUE):
 		state = ''

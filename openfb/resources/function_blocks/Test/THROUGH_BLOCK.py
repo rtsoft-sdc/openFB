@@ -1,5 +1,10 @@
 import logging
+
 class THROUGH_BLOCK:
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Object is being destroyed")
+
     def schedule(self, event_name, event_value, BOOL_IN, BYTE_IN, DINT_IN, DWORD_IN, INT_IN,
                  LREAL_IN, REAL_IN, SINT_IN, STRING_IN, TIME_IN, UDINT_IN, UINT_IN,
                    USINT_IN, WORD_IN, WSTRING_IN):

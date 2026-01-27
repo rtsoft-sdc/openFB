@@ -1,6 +1,12 @@
 import random
+import logging
+
+
 
 class GENERATE_TWO_RANDOM:
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Object is being destroyed")
 
     def schedule(self, event_name, event_value, range):
         if event_name == 'INIT':

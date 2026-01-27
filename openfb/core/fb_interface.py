@@ -524,7 +524,6 @@ class FBInterface:
         self.new_event.clear()
 
     def read_inputs(self):
-        logging.info('reading fb inputs...')
 
         # First convert the vars dictionary to a list
         events_list = []
@@ -535,7 +534,7 @@ class FBInterface:
 
         # Second converts the event dictionary to a list
         vars_list = []
-        logging.info('input vars: {0}'.format(self.input_vars))
+        logging.debug('input vars: {0}'.format(self.input_vars))
         # Get all the vars
         for index, var_name in enumerate(self.input_vars):
             v_type, value, is_watch = self.read_attr(var_name)
@@ -545,7 +544,7 @@ class FBInterface:
         return events_list + vars_list
 
     def update_outputs(self, outputs):
-        logging.info(f'Updating the outputs:{outputs}')
+        logging.debug(f'Updating the outputs:{outputs}')
 
         # Converts the second part of the list to variables
         for index, var_name in enumerate(self.output_vars):
