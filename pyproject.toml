@@ -1,0 +1,43 @@
+[project]
+name = "openfb"
+version = "1.0.0"
+description = "Runtime environment IEC 614999 for ML tasks' support."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "cryptography>=46.0.3",
+    "numpy>=2.2.6",
+    "opcua>=0.98.13",
+    "opencv-python>=4",
+    "pandas>=2.3.3",
+    "psutil>=7.2.1",
+    "pyhid-usb-relay>=1.2.0",
+    "scikit-learn>=1.7.2",
+    "shared-memory-dict>=0.7.2",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.packages.find]
+where = ["."]
+namespaces = false
+exclude = [
+    "__pycache__*",
+    "4diac_sys",
+    "examples",
+]
+
+[test.setuptools.package-data]
+openfb = ["resources/**/*"]
+
+[project.scripts]
+openfb = "openfb.core.main:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0.2",
+    "ruff>=0.14.13",
+]

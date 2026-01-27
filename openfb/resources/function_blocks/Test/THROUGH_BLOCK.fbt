@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="THROUGH_BLOCK" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="obotnar" Date="2026-01-26">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="BOOL_IN"/>
+				<With Var="BYTE_IN"/>
+				<With Var="DINT_IN"/>
+				<With Var="DWORD_IN"/>
+				<With Var="INT_IN"/>
+				<With Var="LREAL_IN"/>
+				<With Var="REAL_IN"/>
+				<With Var="WSTRING_IN"/>
+				<With Var="WORD_IN"/>
+				<With Var="USINT_IN"/>
+				<With Var="UINT_IN"/>
+				<With Var="UDINT_IN"/>
+				<With Var="TIME_IN"/>
+				<With Var="STRING_IN"/>
+				<With Var="SINT_IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="WSTRING_OUT"/>
+				<With Var="USINT_OUT"/>
+				<With Var="UINT_OUT"/>
+				<With Var="UDINT_OUT"/>
+				<With Var="TIME_OUT"/>
+				<With Var="SINT_OUT"/>
+				<With Var="BOOL_OUT"/>
+				<With Var="BYTE_OUT"/>
+				<With Var="DINT_OUT"/>
+				<With Var="DWORD_OUT"/>
+				<With Var="INT_OUT"/>
+				<With Var="LREAL_OUT"/>
+				<With Var="REAL_OUT"/>
+				<With Var="STRING_OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="BOOL_IN" Type="BOOL"/>
+			<VarDeclaration Name="BYTE_IN" Type="BYTE"/>
+			<VarDeclaration Name="DINT_IN" Type="DINT"/>
+			<VarDeclaration Name="DWORD_IN" Type="DWORD"/>
+			<VarDeclaration Name="INT_IN" Type="INT"/>
+			<VarDeclaration Name="LREAL_IN" Type="LREAL"/>
+			<VarDeclaration Name="REAL_IN" Type="REAL"/>
+			<VarDeclaration Name="SINT_IN" Type="SINT"/>
+			<VarDeclaration Name="STRING_IN" Type="STRING"/>
+			<VarDeclaration Name="TIME_IN" Type="TIME"/>
+			<VarDeclaration Name="UDINT_IN" Type="UDINT"/>
+			<VarDeclaration Name="UINT_IN" Type="UINT"/>
+			<VarDeclaration Name="USINT_IN" Type="USINT"/>
+			<VarDeclaration Name="WORD_IN" Type="WORD"/>
+			<VarDeclaration Name="WSTRING_IN" Type="WSTRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BOOL_OUT" Type="BOOL"/>
+			<VarDeclaration Name="BYTE_OUT" Type="BYTE"/>
+			<VarDeclaration Name="DINT_OUT" Type="DINT"/>
+			<VarDeclaration Name="DWORD_OUT" Type="DWORD"/>
+			<VarDeclaration Name="INT_OUT" Type="INT"/>
+			<VarDeclaration Name="LREAL_OUT" Type="LREAL"/>
+			<VarDeclaration Name="REAL_OUT" Type="REAL"/>
+			<VarDeclaration Name="SINT_OUT" Type="SINT"/>
+			<VarDeclaration Name="STRING_OUT" Type="STRING"/>
+			<VarDeclaration Name="TIME_OUT" Type="TIME"/>
+			<VarDeclaration Name="UDINT_OUT" Type="UDINT"/>
+			<VarDeclaration Name="UINT_OUT" Type="UINT"/>
+			<VarDeclaration Name="USINT_OUT" Type="USINT"/>
+			<VarDeclaration Name="WORD_OUT" Type="WORD"/>
+			<VarDeclaration Name="WSTRING_OUT" Type="WSTRING"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="550" y="425">
+			</ECState>
+		</ECC>
+	</BasicFB>
+</FBType>
