@@ -208,7 +208,7 @@ class Configuration:
     def stop_work(self):
         logging.info('stopping the fb flow...')
         for fb_name, fb_element in self.fb_dictionary.items():
-            logging.error("Stop block %s" %fb_name)
+            logging.debug("Stop block %s" %fb_name)
             if fb_name != 'START':
                 fb_element.stop()
 

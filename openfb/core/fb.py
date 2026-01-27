@@ -54,25 +54,22 @@ class FB(threading.Thread, fb_interface.FBInterface):
 
             inputs = self.read_inputs()
 
-            logging.info('running fb...')
 
             try:
                 outputs = self.fb_obj.schedule(*inputs)
-                logging.info(f"Inputs: {inputs}, Module ouputs:{outputs}")
+                logging.debug(f"Inputs: {inputs}, Module ouputs:{outputs}")
 
             except TypeError as error:
                 logging.error('invalid number of arguments (check if fb method args are in fb_type.fbt)')
                 logging.exception(error)
                 logging.error(error)
                 # Stops the thread
-                logging.info('stopping the fb work...')
                 break
 
             except Exception as ex:
                 logging.error(ex)
                 logging.exception(ex)
                 # Stops the thread
-                logging.info('stopping the fb work...')
                 break
 
             else:
@@ -83,7 +80,6 @@ class FB(threading.Thread, fb_interface.FBInterface):
                 if outputs is None:
                     logging.error('Outputs are null, please check {0}.py'.format(self.fb_name))
                     # Stops the thread
-                    logging.info('stopping the fb work...')
                     break
 
                 self.update_outputs(outputs)
