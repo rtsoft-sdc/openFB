@@ -133,7 +133,8 @@ class UaManagerFboot(peer.UaPeer):
             if self.validate_xml_with_details(chunks[1]) != True:
                 raise self.InvalidFbootState
             
-            self.resources_running.add(chunks[0])
+            if chunks[0] != "":
+                self.resources_running.add(chunks[0])
 
             xml_element = ETree.fromstring(chunks[1])
             try:
@@ -147,6 +148,8 @@ class UaManagerFboot(peer.UaPeer):
                         
                         if child.tag == 'FB' and open_fb_type != 'EMB_RES':
                             root_path = utils.get_fb_files_path(open_fb_type)
+                            if root_path == None:
+                                raise self.InvalidFbootState
                             # Check fbt file
                             fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
                             fb_name = child.get('Name')
@@ -177,7 +180,8 @@ class UaManagerFboot(peer.UaPeer):
             if self.validate_xml_with_details(chunks[1]) != True:
                 raise self.InvalidFbootState
             
-            self.resources_running.add(chunks[0])
+            if chunks[0] != "":
+                self.resources_running.add(chunks[0])
 
             xml_element = ETree.fromstring(chunks[1])
             try:

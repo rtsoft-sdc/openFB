@@ -1,3 +1,4 @@
+from openfb.data_model_fboot import utils
 from openfb.core import configuration
 from openfb.data_model_fboot import ua_manager as ua_manager_fboot
 from xml.etree import ElementTree as ETree
@@ -67,7 +68,7 @@ class Manager:
                     # Stops the configuration
                     for config_name, config in self.config_dictionary.items():
                         config.stop_work()
-                    self.config_dictionary = dict()
+                    # self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
                         config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
@@ -86,8 +87,8 @@ class Manager:
         elif action == 'QUERY':
             try:
                 if self.manager_ua_fboot.resources_running is not None:
+                    xml = ETree.Element('FBList')
                     for res_name in self.manager_ua_fboot.resources_running:
-                        xml = ETree.Element('FBList')
                         fb = ETree.SubElement(xml, 'FB', {'name': res_name, 'type': "EMB_RES"})
             except:
                 pass
@@ -149,10 +150,12 @@ class Manager:
             for child in element:
                 # Deletes a configuration (could be a fb)
                 if child.tag == 'FB':
-                    # conf_name = child.attrib['Name']
+                    conf_name = child.attrib['Name']
                     # Checks if exists the configuration
-                    # if conf_name in self.config_dictionary:
-                    self.config_dictionary = dict()
+                    if conf_name in self.config_dictionary:
+                        # Stops the configuration
+                        self.config_dictionary.pop(conf_name)
+                    # self.config_dictionary = dict()
                     # Deletes the configuration
                     # self.stop_all()
                     # Release memory
@@ -198,8 +201,15 @@ class Manager:
         if action == 'CREATE':
             # Iterate over the list of children
             for child in element:
+                if child.tag == 'FB':
+                    conf_type = child.attrib['Type']
+                    if utils.get_fb_files_path(conf_type) == None:
+                        xml = ETree.Element('Response', {'ID': request_id, 'Reason': 'NO_SUCH_OBJECT'})
+                        response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
+                        return response
+                
                 # Create watch
-                if child.tag == 'Watch':
+                elif child.tag == 'Watch':
                     watch_source = child.attrib['Source']
                     watch_destination = child.attrib['Destination']
                     self.get_config(config_id).create_watch(watch_source, watch_destination)
@@ -238,12 +248,7 @@ class Manager:
         return response
 
     @staticmethod
-    def build_response(request_id, xml_response):
-        xml = ETree.Element('Response', {'ID': request_id})
-        # Verifies if is a default response
-        if xml_response is not None:
-            xml.append(xml_response)
-
+    def build_response_header(xml):
         response_xml = ETree.tostring(xml)
         hex_input = '{:04x}'.format(len(response_xml))
         second_byte = int(hex_input[0:2], 16)
@@ -251,7 +256,16 @@ class Manager:
         response_len = struct.pack('BB', second_byte, third_byte)
         response_header = b''.join([b'\x50', response_len])
 
-        response = b''.join([response_header, response_xml])
+        return response_header
+
+    @staticmethod
+    def build_response(request_id, xml_response):
+        xml = ETree.Element('Response', {'ID': request_id})
+        # Verifies if is a default response
+        if xml_response is not None:
+            xml.append(xml_response)
+
+        response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
         return response
 
     def build_ua_manager_fboot(self, address, port, fboot_path):
