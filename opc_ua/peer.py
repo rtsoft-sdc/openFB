@@ -3,7 +3,8 @@ from opc_ua import base
 from opcua import Server
 import threading
 import logging
-
+from opcua.ua.uaerrors import BadNoMatch
+from opcua import ua
 
 class UaPeer(Server, base.UaBase):
 
@@ -64,3 +65,53 @@ class UaPeer(Server, base.UaBase):
         result = self.client_dictionary[client_address].call_method(path.copy(), *args)
         self.lock.release()
         return result
+    
+    def default_value(self, var_type, value_rank):
+        if value_rank == 0:  
+            return {
+                ua.VariantType.Boolean: False,
+                ua.VariantType.Int16: 0,
+                ua.VariantType.Int32: 0,
+                ua.VariantType.Int64: 0,
+                ua.VariantType.UInt16: 0,
+                ua.VariantType.UInt32: 0,
+                ua.VariantType.UInt64: 0,
+                ua.VariantType.Float: 0.0,
+                ua.VariantType.Double: 0.0,
+                ua.VariantType.String: "",
+            }.get(var_type, None)
+        else:
+            return []
+
+    def create_typed_variable(self, path, index, var_name, var_type,
+                            value_rank, dimensions=0, writable=True):
+
+        my_obj = self.root.get_child(path)
+
+        try:
+            return my_obj.get_child(var_name)
+
+        except BadNoMatch:
+            if value_rank == -1:
+                init_value = ua.Variant(None, var_type)
+            else:
+                init_value = ua.Variant([], var_type)
+
+            my_var = my_obj.add_variable(
+                index,
+                var_name,
+                self.default_value(var_type, value_rank),
+            )
+
+            my_var.set_value_rank(value_rank)
+
+            if value_rank >= 1:
+                my_var.set_array_dimensions([dimensions])
+
+            if writable:
+                my_var.set_writable(True)
+                sub = self.create_subscription(0, self.observer)
+                sub.subscribe_data_change(my_var)
+
+            return my_var
+        

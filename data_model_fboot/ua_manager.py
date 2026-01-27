@@ -225,6 +225,8 @@ class UaManagerFboot(peer.UaPeer):
             map_arr = []
             if fb_name in self.opc_mapped_vars:
                 map_arr = self.opc_mapped_vars[fb_name]
+            if not self.observer.is_class_instance_set():
+                self.observer.set_class_instance(self.config)
             item = ua_object.UaObject(self, self.folders.get('FunctionBlocks'), fb_name, xml_root, opc_mapping=map_arr, root_path=self.ROOT_PATH, root_list=self.ROOT_LIST)
             self.ua_objects[fb_name] = item
         file.close()
