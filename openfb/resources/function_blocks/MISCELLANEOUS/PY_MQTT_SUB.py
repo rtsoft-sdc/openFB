@@ -12,6 +12,14 @@ class PY_MQTT_SUB:
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
         self.msg = ''
 
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Object is being destroyed")
+        try:
+            self.client.disconnect()
+        except Exception as err:
+            logging.error(err)
+
     def on_message(self, userdata, msg):
         content = str(msg.payload)
         logging.info(msg.topic+" "+content)

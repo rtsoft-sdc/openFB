@@ -1,3 +1,6 @@
+import logging
+
+
 class EVENT_ANALYZER:
 
     def __init__(self):
@@ -6,6 +9,9 @@ class EVENT_ANALYZER:
         self.buffer=None
         self.n_max=0
 
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Object is being destroyed")
 
     def schedule(self, event_input_name, event_input_value, classif1, N):
 

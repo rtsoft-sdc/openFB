@@ -1,7 +1,14 @@
 import numpy as np
 import time
 import logging
+
+
+
 class CONTROL_CHART:
+
+    def __del__(self):
+        # cleanup logic
+        logging.debug("Object is being destroyed")
 
     def schedule(self, event_name, event_value, range, value):
 
