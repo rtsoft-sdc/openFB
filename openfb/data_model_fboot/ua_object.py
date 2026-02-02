@@ -127,36 +127,43 @@ class UaObject:
             self.ua_server.config.create_connection('{0}.{1}'.format(self.fb_name, 'READ_O'),
                                                 '{0}.{1}'.format(sleep_fb_name, 'SLEEP'))
         else:
-            fb = self.ua_server.config.get_fb(self.fb_name)
-            
-            if fb.output_events is not None and fb.output_connections is not None:
-                for conn_name in fb.output_connections:
-                    conns = fb.output_connections[conn_name]
-                    for conn in conns:
-                        self.ua_server.config.create_connection('{0}.{1}'.format(conn.destination_fb.fb_name, conn.value_name), 
-                                                    '{0}.{1}'.format(self.fb_name, conn_name))
+            for _, conf in self.ua_server.config_dictionary.items():
+                fb = conf.get_fb(self.fb_name)
+                if fb is None:
+                    continue
+                
+                if fb.output_events is not None and fb.output_connections is not None:
+                    for conn_name in fb.output_connections:
+                        conns = fb.output_connections[conn_name]
+                        for conn in conns:
+                            self.ua_server.config.create_connection('{0}.{1}'.format(conn.destination_fb.fb_name, conn.value_name), 
+                                                        '{0}.{1}'.format(self.fb_name, conn_name))
 
     def update_variables(self):
         # gets the function block
-        fb = self.ua_server.config.get_fb(self.fb_name)
-        # iterates over the variables dict
-        for var_name, var_ua in self.ua_vars.items():
-            # reads the variable value
-            v_type, value, _ = fb.read_attr(var_name)
+        for _, conf in self.ua_server.config_dictionary.items():
+            fb = conf.get_fb(self.fb_name)
+            if fb is None:
+                continue
+        
+            # iterates over the variables dict
+            for var_name, var_ua in self.ua_vars.items():
+                # reads the variable value
+                v_type, value, _ = fb.read_attr(var_name)
 
-            try:
-                # writes the value inside the opc-ua variable
-                var_ua.set_value(value)
+                try:
+                    # writes the value inside the opc-ua variable
+                    var_ua.set_value(value)
 
-            except Exception as error:
-                # reports the error
-                logging.error('Error writing the value in the opc-ua server.')
-                logging.error(error)
-                if v_type == 'STRING':
-                    # writes the value as a string
-                    var_ua.set_value(str(value))
-                    # writes the solution
-                    logging.error('Error solved writing the variable as string.')
+                except Exception as error:
+                    # reports the error
+                    logging.error('Error writing the value in the opc-ua server.')
+                    logging.error(error)
+                    if v_type == 'STRING':
+                        # writes the value as a string
+                        var_ua.set_value(str(value))
+                        # writes the solution
+                        logging.error('Error solved writing the variable as string.')
                         
     
     

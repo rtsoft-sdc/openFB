@@ -66,8 +66,8 @@ class Manager:
                     conf_name = child.attrib['Name']
                     conf_type = child.attrib['Type']
                     # Stops the configuration
-                    for config_name, config in self.config_dictionary.items():
-                        config.stop_work()
+                    # for config_name, config in self.config_dictionary.items():
+                    #     config.stop_work()
                     # self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
@@ -80,7 +80,7 @@ class Manager:
                             self.manager_ua_fboot.stop()
 
                             self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port, 
-                                                                                    self.manager_ua_fboot.fboot_path)
+                                                                                    self.manager_ua_fboot.fboot_path, self.config_dictionary)
                             self.manager_ua_fboot(config)
 
         #<Response ID="0"><FBList><FB name="EMB_RES" type="EMB_RES"/></FBList></Response>
@@ -212,7 +212,9 @@ class Manager:
                 elif child.tag == 'Watch':
                     watch_source = child.attrib['Source']
                     watch_destination = child.attrib['Destination']
-                    self.get_config(config_id).create_watch(watch_source, watch_destination)
+                    # self.get_config(config_id).create_watch(watch_source, watch_destination)
+                    for _, conf in self.config_dictionary.items():
+                        conf.create_watch(watch_source, watch_destination)
 
         elif action == 'DELETE':
             # Iterate over the list of children
@@ -227,6 +229,7 @@ class Manager:
             # check the options for ua_integration
             if self.ua_integration:
                 # saves the actual configuration on fboot file
+                print("save fboot " * 100)
                 self.manager_ua_fboot.save_fboot(self.requests)
                 self.requests = []
                 self.manager_ua_fboot.from_fboot()
@@ -269,7 +272,7 @@ class Manager:
         return response
 
     def build_ua_manager_fboot(self, address, port, fboot_path):
-        self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path)
+        self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path, self.config_dictionary)
         # creates the opc-ua manager
         config = configuration.Configuration('EMB_RES', 'EMB_RES', monitor=self.monitor)
         self.set_config('EMB_RES', config)

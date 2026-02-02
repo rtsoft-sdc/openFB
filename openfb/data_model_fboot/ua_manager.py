@@ -10,7 +10,7 @@ class UaManagerFboot(peer.UaPeer):
     class InvalidFbootState(Exception):
        pass
 
-    def __init__(self, address, port, fboot_path):
+    def __init__(self, address, port, fboot_path, conf_dict=dict()):
         self.address = address
         self.port = port
         self.fboot_path = fboot_path
@@ -27,6 +27,8 @@ class UaManagerFboot(peer.UaPeer):
         self.opcua_method_name = None
         self.resources_running = set()
         self.opc_mapped_vars = {}
+
+        self.config_dictionary = conf_dict
 
     def __call__(self, config):
         # base idx for the opc-ua nodeId
@@ -191,7 +193,8 @@ class UaManagerFboot(peer.UaPeer):
                             if len(self.method_names) == 0 or ( not utils.any_element_in_string(self.method_names, child.get('Source')) \
                                                                 and not utils.any_element_in_string(self.method_names, child.get('Destination'))):
                                 # Create connection
-                                self.config.create_connection(child.get('Source'), child.get('Destination'))
+                                for _, conf in self.config_dictionary.items():
+                                    conf.create_connection(child.get('Source'), child.get('Destination'))
                             elif len(self.method_names) != 0:
                                 if utils.any_element_in_string(self.method_names, child.get('Source')):
                                     # Save event name to be triggered
