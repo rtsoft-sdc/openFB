@@ -180,8 +180,8 @@ class Manager:
                 self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port, 
                                                                         self.manager_ua_fboot.fboot_path)
                 config = configuration.Configuration('EMB_RES', 'EMB_RES')
-                self.set_config('EMB_RES', config)
-                self.manager_ua_fboot(config)
+                # self.set_config('EMB_RES', config)
+                # self.manager_ua_fboot(config)
         
         #fixme
         elif action == 'RESET':
@@ -214,6 +214,9 @@ class Manager:
                     watch_destination = child.attrib['Destination']
                     # self.get_config(config_id).create_watch(watch_source, watch_destination)
                     for _, conf in self.config_dictionary.items():
+                        # print("\n\n\n\n")
+                        # print([c.fb_dictionary.keys() for c in self.config_dictionary.values()])
+                        # print("\n\n\n\n\n\n")
                         conf.create_watch(watch_source, watch_destination)
 
         elif action == 'DELETE':
@@ -229,7 +232,6 @@ class Manager:
             # check the options for ua_integration
             if self.ua_integration:
                 # saves the actual configuration on fboot file
-                print("save fboot " * 100)
                 self.manager_ua_fboot.save_fboot(self.requests)
                 self.requests = []
                 self.manager_ua_fboot.from_fboot()
