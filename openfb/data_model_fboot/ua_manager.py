@@ -59,7 +59,19 @@ class UaManagerFboot(peer.UaPeer):
         }
 
     def save_fboot(self, requests):
-        file = open(self.fboot_path, 'w')
+        existing_resources = set()
+
+        if os.path.exists(self.fboot_path):
+            with open(self.fboot_path, 'r') as f:
+                for line in f:
+                    if ';' in line:
+                        name = line.split(';', 1)[0]
+                        if name:
+                            existing_resources.add(name)
+
+        mode = 'a' if existing_resources else 'w'
+        file = open(self.fboot_path, mode)
+
         start_fb = None
         is_watch = False
         for request in requests:
@@ -68,21 +80,25 @@ class UaManagerFboot(peer.UaPeer):
                 if child.tag == 'Watch':
                     is_watch = True
                     break
-            
+
             if is_watch:
                 is_watch = False
                 continue
 
             if start_fb is None:
-                file.write(';')
                 for child in element:
                     start_fb = child.attrib['Name']
+                if start_fb in existing_resources:
+                    break
+                file.write(';')
             else:
-                file.write('{0};'.format(start_fb))
+                file.write(f'{start_fb};')
+
             file.write(request)
             file.write('\n')
-        file.close()
 
+        file.close()
+    
     def from_fboot(self):
         # Check if data model file exists and is not empty
         try:
