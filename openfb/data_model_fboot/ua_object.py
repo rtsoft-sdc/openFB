@@ -139,7 +139,7 @@ class UaObject:
     def update_variables(self):
         # gets the function block
 
-        fb = self.ua_server.config.get_fb(self.fb_name)
+        fb = self.ua_server.find_fb(self.fb_name)
     
         # iterates over the variables dict
         for var_name, var_ua in self.ua_vars.items():

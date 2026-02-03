@@ -63,6 +63,12 @@ class UaManagerFboot(peer.UaPeer):
     def set_config_dictionary(self, conf_dict):
         self.config_dictionary = conf_dict
 
+    def find_fb(self, fb_name):
+        for conf in self.config_dictionary.values():
+            for name, fb in conf.fb_dictionary.items():
+                if name == fb_name:
+                    return fb
+
     def save_fboot(self, requests):
         existing_resources = set()
 
@@ -122,7 +128,8 @@ class UaManagerFboot(peer.UaPeer):
                 else:
                     if len(self.method_names) != 0:
                         self.method = ua_method.UaMethod(self, self.folders.get('OPC-UA_Methods'), self.method_root)
-                    self.config.start_work()
+                    for conf in self.config_dictionary.values():
+                        conf.start_work()
 
     def parse_fboot(self, file):
         lines = file.readlines()
