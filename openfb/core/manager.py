@@ -40,6 +40,7 @@ class Manager:
 
     def set_config(self, config_id, config_element):
         self.config_dictionary[config_id] = config_element
+        self.manager_ua_fboot.set_config_dictionary(self.config_dictionary)
 
     def parse_general(self, xml_data):
         # Parses the xml
@@ -71,6 +72,7 @@ class Manager:
                     # self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
+                        print("\n\n\nCreating configuration {0} of type {1}\n\n\n".format(conf_name, conf_type))
                         config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
                         self.set_config(conf_name, config)
                         # check the options for ua_integration
@@ -212,12 +214,7 @@ class Manager:
                 elif child.tag == 'Watch':
                     watch_source = child.attrib['Source']
                     watch_destination = child.attrib['Destination']
-                    # self.get_config(config_id).create_watch(watch_source, watch_destination)
-                    for _, conf in self.config_dictionary.items():
-                        # print("\n\n\n\n")
-                        # print([c.fb_dictionary.keys() for c in self.config_dictionary.values()])
-                        # print("\n\n\n\n\n\n")
-                        conf.create_watch(watch_source, watch_destination)
+                    self.get_config(config_id).create_watch(watch_source, watch_destination)
 
         elif action == 'DELETE':
             # Iterate over the list of children
@@ -245,6 +242,7 @@ class Manager:
                     connection_destination = child.attrib['Destination']
                     connection_source = child.attrib['Source']
                     try:
+                        print("\n\n\nWriting connection: {0} -> {1}\n\n\n".format(connection_source, connection_destination))
                         self.get_config(config_id).write_connection(connection_source, connection_destination)
                     except:
                         pass
@@ -274,7 +272,7 @@ class Manager:
         return response
 
     def build_ua_manager_fboot(self, address, port, fboot_path):
-        self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path, self.config_dictionary)
+        self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path, self.config_dictionary, self)
         # creates the opc-ua manager
         config = configuration.Configuration('EMB_RES', 'EMB_RES', monitor=self.monitor)
         self.set_config('EMB_RES', config)

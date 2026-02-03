@@ -4,13 +4,14 @@ from openfb.data_model_fboot import ua_object, monitor, utils, ua_method
 import logging
 import os
 import sys
+from openfb.core.configuration import Configuration
 
 class UaManagerFboot(peer.UaPeer):
 
     class InvalidFbootState(Exception):
        pass
 
-    def __init__(self, address, port, fboot_path, conf_dict=dict()):
+    def __init__(self, address, port, fboot_path, conf_dict=dict(), main_manager=None):
         self.address = address
         self.port = port
         self.fboot_path = fboot_path
@@ -29,6 +30,7 @@ class UaManagerFboot(peer.UaPeer):
         self.opc_mapped_vars = {}
 
         self.config_dictionary = conf_dict
+        self.main_manager = main_manager
 
     def __call__(self, config):
         # base idx for the opc-ua nodeId
@@ -57,6 +59,9 @@ class UaManagerFboot(peer.UaPeer):
             'path': folder_path,
             'path_list': folder_list
         }
+
+    def set_config_dictionary(self, conf_dict):
+        self.config_dictionary = conf_dict
 
     def save_fboot(self, requests):
         existing_resources = set()
@@ -144,6 +149,7 @@ class UaManagerFboot(peer.UaPeer):
             line = line.replace("&quot;", "").replace("&apos;", "")
             # Remove start fb from line
             chunks = line.split(';')
+            resource_name = chunks[0]
             
             if len(chunks) != 2:
                 raise self.InvalidFbootState
@@ -153,6 +159,11 @@ class UaManagerFboot(peer.UaPeer):
             
             if chunks[0] != "":
                 self.resources_running.add(chunks[0])
+                self.config = self.config_dictionary.get(chunks[0])
+                if self.config is None:
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config = self.config_dictionary.get(chunks[0])
+                    self.main_manager.set_config(chunks[0], self.config)
 
             xml_element = ETree.fromstring(chunks[1])
             try:
@@ -200,6 +211,11 @@ class UaManagerFboot(peer.UaPeer):
             
             if chunks[0] != "":
                 self.resources_running.add(chunks[0])
+                self.config = self.config_dictionary.get(chunks[0])
+                if self.config is None:
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config = self.config_dictionary.get(chunks[0])
+                    self.main_manager.set_config(chunks[0], self.config)
 
             xml_element = ETree.fromstring(chunks[1])
             try:
@@ -208,9 +224,11 @@ class UaManagerFboot(peer.UaPeer):
                         if child.tag == 'Connection':
                             if len(self.method_names) == 0 or ( not utils.any_element_in_string(self.method_names, child.get('Source')) \
                                                                 and not utils.any_element_in_string(self.method_names, child.get('Destination'))):
-                                # Create connection
-                                for _, conf in self.config_dictionary.items():
-                                    conf.create_connection(child.get('Source'), child.get('Destination'))
+                                
+                                # PROBLEM
+                                # print(self.config.fb_dictionary)
+                                # print("\n#"*7)
+                                self.config.create_connection(child.get('Source'), child.get('Destination'))
                             elif len(self.method_names) != 0:
                                 if utils.any_element_in_string(self.method_names, child.get('Source')):
                                     # Save event name to be triggered
