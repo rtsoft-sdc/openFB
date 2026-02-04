@@ -697,9 +697,4 @@ class Connection:
         self.destination_fb.set_attr(self.value_name, new_value=value)
 
     def send_event(self, value):
-        #fixme
-        try:
-            self.destination_fb.push_event(self.value_name, value)
-        except:
-            print("===================error sending event======================")
-            print(self.value_name, value)
+        self.destination_fb.push_event(self.value_name, value)

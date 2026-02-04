@@ -15,8 +15,5 @@ class UaObserver:
         return node[0] + "." + node[2]
 
     def datachange_notification(self, node, val, data):
-        # print("----------------------")
-        # print(self.split_node(node), val)
-        # print("----------------------")
         if self.is_class_instance_set():
             self.class_instance.write_connection(val, self.split_node(node))

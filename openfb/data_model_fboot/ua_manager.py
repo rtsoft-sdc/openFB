@@ -231,10 +231,6 @@ class UaManagerFboot(peer.UaPeer):
                         if child.tag == 'Connection':
                             if len(self.method_names) == 0 or ( not utils.any_element_in_string(self.method_names, child.get('Source')) \
                                                                 and not utils.any_element_in_string(self.method_names, child.get('Destination'))):
-                                
-                                # PROBLEM
-                                # print(self.config.fb_dictionary)
-                                # print("\n#"*7)
                                 self.config.create_connection(child.get('Source'), child.get('Destination'))
                             elif len(self.method_names) != 0:
                                 if utils.any_element_in_string(self.method_names, child.get('Source')):

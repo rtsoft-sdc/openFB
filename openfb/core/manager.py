@@ -72,7 +72,6 @@ class Manager:
                     # self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
-                        print("\n\n\nCreating configuration {0} of type {1}\n\n\n".format(conf_name, conf_type))
                         config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
                         self.set_config(conf_name, config)
                         # check the options for ua_integration
@@ -242,7 +241,6 @@ class Manager:
                     connection_destination = child.attrib['Destination']
                     connection_source = child.attrib['Source']
                     try:
-                        print("\n\n\nWriting connection: {0} -> {1}\n\n\n".format(connection_source, connection_destination))
                         self.get_config(config_id).write_connection(connection_source, connection_destination)
                     except:
                         pass
