@@ -70,27 +70,36 @@ class UaManagerFboot(peer.UaPeer):
                     return fb
 
     def save_fboot(self, requests):
-        existing_resources = set()
+        blocks = []
+        current_block = []
+        current_name = None
 
         if os.path.exists(self.fboot_path):
             with open(self.fboot_path, 'r') as f:
                 for line in f:
-                    if ';' in line:
-                        name = line.split(';', 1)[0]
-                        if name:
-                            existing_resources.add(name)
+                    name, _, req = line.partition(';')
 
-        first_request = ETree.fromstring(requests[0])
-        for child in first_request:
-            new_resource = child.attrib['Name']
+                    if name == '':
+                        reqest = ETree.fromstring(req)
+                        name = reqest.find('FB').get('Name')
+                    if name == '' or name != current_name:
+                        if current_block:
+                            blocks.append((current_name, current_block))
+                        current_name = name if name else None
+                        current_block = [line]
+                    else:
+                        current_block.append(line)
 
-        mode = 'w' if new_resource in existing_resources else 'a'
-        file = open(self.fboot_path, mode)
+                if current_block:
+                    blocks.append((current_name, current_block))
 
+        new_block = []
         start_fb = None
         is_watch = False
+
         for request in requests:
             element = ETree.fromstring(request)
+
             for child in element:
                 if child.tag == 'Watch':
                     is_watch = True
@@ -103,14 +112,24 @@ class UaManagerFboot(peer.UaPeer):
             if start_fb is None:
                 for child in element:
                     start_fb = child.attrib['Name']
-                file.write(';')
+                new_block.append(';' + request + '\n')
             else:
-                file.write(f'{start_fb};')
+                new_block.append(f'{start_fb};{request}\n')
 
-            file.write(request)
-            file.write('\n')
+        replaced = False
+        for i, (name, _) in enumerate(blocks):
+            if name == start_fb:
+                blocks[i] = (start_fb, new_block)
+                replaced = True
+                break
 
-        file.close()
+        if not replaced:
+            blocks.append((start_fb, new_block))
+
+        with open(self.fboot_path, 'w') as f:
+            for _, block in blocks:
+                for line in block:
+                    f.write(line)
     
     def from_fboot(self):
         # Check if data model file exists and is not empty

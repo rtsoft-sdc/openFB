@@ -18,8 +18,11 @@ class UaBase:
         if path is None:
             self.root.add_object(index, new_obj_name)
         else:
-            my_obj = self.root.get_child(path)
-            my_obj.add_object(index, new_obj_name)
+            try:
+                my_obj = self.root.get_child(path)
+                my_obj.add_object(index, new_obj_name)
+            except:
+                pass
 
     def create_variable(self, path, index, var_name, val, writable=False):
         my_obj = self.root.get_child(path)
@@ -31,8 +34,11 @@ class UaBase:
         return my_var
     
     def create_folder(self, path, index, folder_name):
-        my_obj = self.root.get_child(path)
-        my_obj.add_folder(index, folder_name)
+        try:
+            my_obj = self.root.get_child(path)
+            my_obj.add_folder(index, folder_name)
+        except:
+            pass
 
     def create_property(self, path, index, property_name, value):
         my_obj = self.root.get_child(path)
