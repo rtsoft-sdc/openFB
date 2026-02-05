@@ -80,7 +80,11 @@ class UaManagerFboot(peer.UaPeer):
                         if name:
                             existing_resources.add(name)
 
-        mode = 'a' if existing_resources else 'w'
+        first_request = ETree.fromstring(requests[0])
+        for child in first_request:
+            new_resource = child.attrib['Name']
+
+        mode = 'w' if new_resource in existing_resources else 'a'
         file = open(self.fboot_path, mode)
 
         start_fb = None
@@ -99,8 +103,6 @@ class UaManagerFboot(peer.UaPeer):
             if start_fb is None:
                 for child in element:
                     start_fb = child.attrib['Name']
-                if start_fb in existing_resources:
-                    break
                 file.write(';')
             else:
                 file.write(f'{start_fb};')
