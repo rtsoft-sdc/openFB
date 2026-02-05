@@ -226,8 +226,9 @@ class Configuration:
                 #     return None
                 converted_value = value
             else:
-                if "#" in value:
-                    value = value.split("#")[1]
+                if type(value) == str:
+                    if "#" in value:
+                        value = value.split("#")[1]
 
                 # String variable
                 if value_type == 'WSTRING' or value_type == 'STRING' or value_type == 'TIME':
@@ -241,6 +242,8 @@ class Configuration:
                     # Checks if is false
                     elif value == '0' or value == 'false' or value == 'False' or value == 'FALSE' or value == 'f':
                         converted_value = False
+                    else:
+                        converted_value = value
 
                 # Integer variable
                 # elif value_type == 'UINT' or value_type == 'Event' or value_type == 'INT':
@@ -250,7 +253,7 @@ class Configuration:
                 elif value_type == 'REAL' or value_type == 'LREAL':
                     converted_value = float(value)
                 elif value_type == 'DWORD' or value_type == 'WORD' or value_type == 'BYTE':
-                    converted_value = int(value, 16)
+                    converted_value = int(value, 16) if type(value) == str else value
                 else:
                     converted_value = int(value)
         except:
