@@ -72,9 +72,12 @@ class UaObject:
                     self.ua_vars[var['Name']] = ua_var
                 except KeyError:
                     raise self.InvalidFbtState
+        interface_list = 0
         for child in self.xml_root: # InterfaceList
             if child.tag != 'InterfaceList':
-                raise self.InvalidFbtState
+                continue
+            else:
+                interface_list += 1
             for element in child: # Event and Vars Inputs/Outputs
                 if element.tag == 'InputVars' or element.tag == 'OutputVars':
                     for var_declaration in element: # Var Declarations
@@ -91,11 +94,16 @@ class UaObject:
                                 self.ua_vars[var_declaration.get('Name')] = ua_var
                             except KeyError:
                                 raise self.InvalidFbtState
+        if interface_list != 1:
+            raise self.InvalidFbtState
 
     def populate_events_folder(self):
+        interface_list = 0
         for child in self.xml_root: # InterfaceList
             if child.tag != 'InterfaceList':
-                raise self.InvalidFbtState
+                continue
+            else:
+                interface_list += 1
             for element in child: # Event and Vars Inputs/Outputs
                 if element.tag == 'EventInputs' or element.tag == 'EventOutputs':
                     for event in element: # Events
@@ -112,6 +120,8 @@ class UaObject:
                         except KeyError as ke:
                             logging.error('Accessed non existent attrib {0}'.format(ke.args))
                             raise self.InvalidFbtState
+        if interface_list != 1:
+            raise self.InvalidFbtState
 
     def set_up_connections(self):
         if self.opc_ua_type == 'DEVICE.SENSOR':

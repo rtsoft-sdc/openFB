@@ -229,7 +229,6 @@ class Manager:
             # check the options for ua_integration
             if self.ua_integration:
                 # saves the actual configuration on fboot file
-                print("save fboot " * 100)
                 self.manager_ua_fboot.save_fboot(self.requests)
                 self.requests = []
                 self.manager_ua_fboot.from_fboot()
