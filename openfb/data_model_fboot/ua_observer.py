@@ -16,4 +16,8 @@ class UaObserver:
 
     def datachange_notification(self, node, val, data):
         if self.is_class_instance_set():
-            self.class_instance.write_connection(val, self.split_node(node))
+            for _, conf in self.class_instance.items():
+                if conf.fb_dictionary.get(self.split_node(node)) is None:
+                    continue
+                else:
+                    conf.write_connection(val, self.split_node(node))
