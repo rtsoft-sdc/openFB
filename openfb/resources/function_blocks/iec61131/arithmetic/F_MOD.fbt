@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<FBType Comment="modulo" Name="F_MOD">
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Normal Execution Request" Name="REQ" Type="Event">
+        <With Var="IN1"/>
+        <With Var="IN2"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Execution Confirmation" Name="CNF" Type="Event">
+        <With Var="OUT"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="divident input" Name="IN1" Type="ANY_INT"/>
+      <VarDeclaration Comment="divisor input" Name="IN2" Type="ANY_INT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="rest of IN1 devided by IN2" Name="OUT" Type="ANY"/>
+    </OutputVars>
+  </InterfaceList>
+</FBType>

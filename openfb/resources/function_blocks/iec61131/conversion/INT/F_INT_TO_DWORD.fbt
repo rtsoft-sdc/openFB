@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="F_INT_TO_DWORD" Comment="Convert INT to DWORD">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="INT" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="DWORD" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>
