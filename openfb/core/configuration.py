@@ -169,7 +169,7 @@ class Configuration:
         # Writes a hardcoded value
         else:
             value_to_set = self.convert_type(source_value, v_type)
-            logging.error(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {value_to_set} DST:{destination_name}")
+            logging.info(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {value_to_set} DST:{destination_name}")
 
             destination_fb.set_attr(destination_name, value_to_set)
 

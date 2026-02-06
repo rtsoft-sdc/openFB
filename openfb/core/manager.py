@@ -40,6 +40,7 @@ class Manager:
 
     def set_config(self, config_id, config_element):
         self.config_dictionary[config_id] = config_element
+        self.manager_ua_fboot.set_config_dictionary(self.config_dictionary)
 
     def parse_general(self, xml_data):
         # Parses the xml
@@ -66,8 +67,8 @@ class Manager:
                     conf_name = child.attrib['Name']
                     conf_type = child.attrib['Type']
                     # Stops the configuration
-                    for config_name, config in self.config_dictionary.items():
-                        config.stop_work()
+                    # for config_name, config in self.config_dictionary.items():
+                    #     config.stop_work()
                     # self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
@@ -80,7 +81,7 @@ class Manager:
                             self.manager_ua_fboot.stop()
 
                             self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port, 
-                                                                                    self.manager_ua_fboot.fboot_path)
+                                                                                    self.manager_ua_fboot.fboot_path, self.config_dictionary)
                             self.manager_ua_fboot(config)
 
         #<Response ID="0"><FBList><FB name="EMB_RES" type="EMB_RES"/></FBList></Response>
@@ -180,8 +181,8 @@ class Manager:
                 self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port, 
                                                                         self.manager_ua_fboot.fboot_path)
                 config = configuration.Configuration('EMB_RES', 'EMB_RES')
-                self.set_config('EMB_RES', config)
-                self.manager_ua_fboot(config)
+                # self.set_config('EMB_RES', config)
+                # self.manager_ua_fboot(config)
         
         #fixme
         elif action == 'RESET':
@@ -269,7 +270,7 @@ class Manager:
         return response
 
     def build_ua_manager_fboot(self, address, port, fboot_path):
-        self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path)
+        self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path, self.config_dictionary, self)
         # creates the opc-ua manager
         config = configuration.Configuration('EMB_RES', 'EMB_RES', monitor=self.monitor)
         self.set_config('EMB_RES', config)
