@@ -193,8 +193,7 @@ class UaManagerFboot(peer.UaPeer):
                             if len(self.method_names) == 0 or ( not utils.any_element_in_string(self.method_names, child.get('Source')) \
                                                                 and not utils.any_element_in_string(self.method_names, child.get('Destination'))):
                                 # Create connection
-                                for _, conf in self.config_dictionary.items():
-                                    conf.create_connection(child.get('Source'), child.get('Destination'))
+                                self.config.create_connection(child.get('Source'), child.get('Destination'))
                             elif len(self.method_names) != 0:
                                 if utils.any_element_in_string(self.method_names, child.get('Source')):
                                     # Save event name to be triggered

@@ -157,7 +157,7 @@ class Configuration:
         v_type, value, is_watch = destination_fb.read_attr(destination_name)
 
         # Verifies if is to write an event
-        if source_value == '$e' or v_type == 'Event':
+        if source_value == '$e':
             logging.info('writing an event...')
             if value is not None:
                 # If the value is not None increment

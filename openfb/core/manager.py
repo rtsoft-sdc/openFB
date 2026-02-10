@@ -212,9 +212,9 @@ class Manager:
                 elif child.tag == 'Watch':
                     watch_source = child.attrib['Source']
                     watch_destination = child.attrib['Destination']
-                    # self.get_config(config_id).create_watch(watch_source, watch_destination)
-                    for _, conf in self.config_dictionary.items():
-                        conf.create_watch(watch_source, watch_destination)
+                    self.get_config(config_id).create_watch(watch_source, watch_destination)
+                    # for _, conf in self.config_dictionary.items():
+                    #     conf.create_watch(watch_source, watch_destination)
 
         elif action == 'DELETE':
             # Iterate over the list of children
