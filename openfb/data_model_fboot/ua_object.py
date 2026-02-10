@@ -115,7 +115,7 @@ class UaObject:
                                                                 var_idx,
                                                                 event.get('Name'), 
                                                                 utils.UA_TYPES['String'], 
-                                                                0)
+                                                                0, writable=False)
                             self.ua_vars[event.get('Name')] = ua_var
                         except KeyError as ke:
                             logging.error('Accessed non existent attrib {0}'.format(ke.args))
