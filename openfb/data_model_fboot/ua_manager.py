@@ -4,13 +4,14 @@ from openfb.data_model_fboot import ua_object, monitor, utils, ua_method
 import logging
 import os
 import sys
+from openfb.core.configuration import Configuration
 
 class UaManagerFboot(peer.UaPeer):
 
     class InvalidFbootState(Exception):
        pass
 
-    def __init__(self, address, port, fboot_path, conf_dict=dict()):
+    def __init__(self, address, port, fboot_path, conf_dict=dict(), main_manager=None):
         self.address = address
         self.port = port
         self.fboot_path = fboot_path
@@ -29,6 +30,7 @@ class UaManagerFboot(peer.UaPeer):
         self.opc_mapped_vars = {}
 
         self.config_dictionary = conf_dict
+        self.main_manager = main_manager
 
     def __call__(self, config):
         # base idx for the opc-ua nodeId
@@ -58,31 +60,77 @@ class UaManagerFboot(peer.UaPeer):
             'path_list': folder_list
         }
 
+    def set_config_dictionary(self, conf_dict):
+        self.config_dictionary = conf_dict
+
+    def find_fb(self, fb_name):
+        for conf in self.config_dictionary.values():
+            for name, fb in conf.fb_dictionary.items():
+                if name == fb_name:
+                    return fb
+
     def save_fboot(self, requests):
-        file = open(self.fboot_path, 'w')
+        blocks = []
+        current_block = []
+        current_name = None
+
+        if os.path.exists(self.fboot_path):
+            with open(self.fboot_path, 'r') as f:
+                for line in f:
+                    name, _, req = line.partition(';')
+
+                    if name == '':
+                        reqest = ETree.fromstring(req)
+                        name = reqest.find('FB').get('Name')
+                    if name == '' or name != current_name:
+                        if current_block:
+                            blocks.append((current_name, current_block))
+                        current_name = name if name else None
+                        current_block = [line]
+                    else:
+                        current_block.append(line)
+
+                if current_block:
+                    blocks.append((current_name, current_block))
+
+        new_block = []
         start_fb = None
         is_watch = False
+
         for request in requests:
             element = ETree.fromstring(request)
+
             for child in element:
                 if child.tag == 'Watch':
                     is_watch = True
                     break
-            
+
             if is_watch:
                 is_watch = False
                 continue
 
             if start_fb is None:
-                file.write(';')
                 for child in element:
                     start_fb = child.attrib['Name']
+                new_block.append(';' + request + '\n')
             else:
-                file.write('{0};'.format(start_fb))
-            file.write(request)
-            file.write('\n')
-        file.close()
+                new_block.append(f'{start_fb};{request}\n')
 
+        replaced = False
+        for i, (name, _) in enumerate(blocks):
+            if name == start_fb:
+                blocks[i] = (start_fb, new_block)
+                replaced = True
+                break
+
+        if not replaced:
+            blocks.append((start_fb, new_block))
+
+        with open(self.fboot_path, 'w') as f:
+            for _, block in blocks:
+                for line in block:
+                    f.write(line)
+    
     def from_fboot(self):
         # Check if data model file exists and is not empty
         try:
@@ -101,7 +149,8 @@ class UaManagerFboot(peer.UaPeer):
                 else:
                     if len(self.method_names) != 0:
                         self.method = ua_method.UaMethod(self, self.folders.get('OPC-UA_Methods'), self.method_root)
-                    self.config.start_work()
+                    for conf in self.config_dictionary.values():
+                        conf.start_work()
 
     def parse_fboot(self, file):
         lines = file.readlines()
@@ -128,6 +177,7 @@ class UaManagerFboot(peer.UaPeer):
             line = line.replace("&quot;", "").replace("&apos;", "")
             # Remove start fb from line
             chunks = line.split(';')
+            resource_name = chunks[0]
             
             if len(chunks) != 2:
                 raise self.InvalidFbootState
@@ -137,6 +187,11 @@ class UaManagerFboot(peer.UaPeer):
             
             if chunks[0] != "":
                 self.resources_running.add(chunks[0])
+                self.config = self.config_dictionary.get(chunks[0])
+                if self.config is None:
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config = self.config_dictionary.get(chunks[0])
+                    self.main_manager.set_config(chunks[0], self.config)
 
             xml_element = ETree.fromstring(chunks[1])
             try:
@@ -184,6 +239,11 @@ class UaManagerFboot(peer.UaPeer):
             
             if chunks[0] != "":
                 self.resources_running.add(chunks[0])
+                self.config = self.config_dictionary.get(chunks[0])
+                if self.config is None:
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config = self.config_dictionary.get(chunks[0])
+                    self.main_manager.set_config(chunks[0], self.config)
 
             xml_element = ETree.fromstring(chunks[1])
             try:
@@ -192,7 +252,6 @@ class UaManagerFboot(peer.UaPeer):
                         if child.tag == 'Connection':
                             if len(self.method_names) == 0 or ( not utils.any_element_in_string(self.method_names, child.get('Source')) \
                                                                 and not utils.any_element_in_string(self.method_names, child.get('Destination'))):
-                                # Create connection
                                 self.config.create_connection(child.get('Source'), child.get('Destination'))
                             elif len(self.method_names) != 0:
                                 if utils.any_element_in_string(self.method_names, child.get('Source')):
@@ -232,7 +291,7 @@ class UaManagerFboot(peer.UaPeer):
             if fb_name in self.opc_mapped_vars:
                 map_arr = self.opc_mapped_vars[fb_name]
             if not self.observer.is_class_instance_set():
-                self.observer.set_class_instance(self.config)
+                self.observer.set_class_instance(self.config_dictionary)
             item = ua_object.UaObject(self, self.folders.get('FunctionBlocks'), fb_name, xml_root, opc_mapping=map_arr, root_path=self.ROOT_PATH, root_list=self.ROOT_LIST)
             self.ua_objects[fb_name] = item
         file.close()

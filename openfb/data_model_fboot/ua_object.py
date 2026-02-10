@@ -138,7 +138,7 @@ class UaObject:
                                                 '{0}.{1}'.format(sleep_fb_name, 'SLEEP'))
         else:
             fb = self.ua_server.config.get_fb(self.fb_name)
-            
+
             if fb.output_events is not None and fb.output_connections is not None:
                 for conn_name in fb.output_connections:
                     conns = fb.output_connections[conn_name]
@@ -148,7 +148,9 @@ class UaObject:
 
     def update_variables(self):
         # gets the function block
-        fb = self.ua_server.config.get_fb(self.fb_name)
+
+        fb = self.ua_server.find_fb(self.fb_name)
+    
         # iterates over the variables dict
         for var_name, var_ua in self.ua_vars.items():
             # reads the variable value

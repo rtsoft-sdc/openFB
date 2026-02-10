@@ -458,4 +458,5 @@ class Detector_N_Drawer_Exist:
                 cv2.waitKey(1)
                 filter_cl_exist = self.filter in named_classes
                 q_out = True
-                return None, event_input_value, self.names, q_out, img_id, filter_cl_exist
+                names_output = " ;".join(named_classes)
+                return None, event_input_value, names_output, q_out, img_id, filter_cl_exist
