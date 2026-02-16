@@ -72,6 +72,10 @@ class Manager:
                     # self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
+                        if utils.get_fb_files_path(conf_type) == None:
+                            xml = ETree.Element('Response', {'ID': request_id, 'Reason': 'NO_SUCH_OBJECT'})
+                            response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
+                            return response
                         config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
                         self.set_config(conf_name, config)
                         # check the options for ua_integration
