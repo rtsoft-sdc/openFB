@@ -397,7 +397,7 @@ class FBInterface:
 
             #############################################
 
-    def set_attr(self, name, new_value=None, set_watch=None):
+    def set_attr(self, name, new_value=None, set_watch=None, new_type=None):
         # Locks the dictionary usage
         self.lock.acquire()
         try:
@@ -409,7 +409,8 @@ class FBInterface:
                     self.input_vars[name] = (v_type, value, set_watch)
                 # Sets the var value
                 elif new_value is not None:
-                    self.input_vars[name] = (v_type, new_value, is_watch)
+                    final_type = new_type if new_type is not None else v_type
+                    self.input_vars[name] = (final_type, new_value, is_watch)
 
             # INPUT EVENT
             elif name in self.input_events:
@@ -429,7 +430,8 @@ class FBInterface:
                     self.output_vars[name] = (var_type, value, set_watch)
                 # Sets the var value
                 elif new_value is not None:
-                    self.output_vars[name] = (var_type, new_value, is_watch)
+                    final_type = new_type if new_type is not None else var_type
+                    self.output_vars[name] = (final_type, new_value, is_watch)
 
             # OUTPUT EVENT
             elif name in self.output_events:
@@ -439,7 +441,8 @@ class FBInterface:
                     self.output_events[name] = (event_type, value, set_watch)
                 # Sets the event value
                 elif new_value is not None:
-                    self.output_events[name] = (event_type, new_value, is_watch)
+                    final_type = new_type if new_type is not None else event_type
+                    self.output_events[name] = (final_type, new_value, is_watch)
 
         finally:
             # Unlocks the dictionary usage

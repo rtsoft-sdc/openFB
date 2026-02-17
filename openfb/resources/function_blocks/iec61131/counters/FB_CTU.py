@@ -10,3 +10,4 @@ class FB_CTU:
                 self.cv += 1
             Q = self.cv >= PV
             return event_value, Q, self.cv
+        

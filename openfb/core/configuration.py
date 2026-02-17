@@ -3,6 +3,8 @@ from openfb.core import fb
 from openfb.core import fb_interface
 from xml.etree import ElementTree as ETree
 import logging
+import datetime
+import re
 import inspect
 
 
@@ -22,7 +24,7 @@ class Configuration:
     def get_fb(self, fb_name):
         fb_element = None
         try:
-            # fb_name = fb_name.replace('.', '-')
+            # fb_name = fb_name.replace('.', '-')           
             fb_element = self.fb_dictionary[fb_name]
         except KeyError as error:
             logging.error('can not find that fb {0} get_fb'.format(fb_name))
@@ -169,9 +171,14 @@ class Configuration:
         # Writes a hardcoded value
         else:
             value_to_set = self.convert_type(source_value, v_type)
-            logging.info(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {value_to_set} DST:{destination_name}")
-
-            destination_fb.set_attr(destination_name, value_to_set)
+            
+            if isinstance(value_to_set, tuple) and len(value_to_set) == 2:
+                conv_value, promoted_type = value_to_set
+                logging.info(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {conv_value} PromotedType:{promoted_type} DST:{destination_name}")
+                destination_fb.set_attr(destination_name, new_value=conv_value, new_type=promoted_type)
+            else:
+                logging.info(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {value_to_set} DST:{destination_name}")
+                destination_fb.set_attr(destination_name, new_value=value_to_set)
 
         logging.info('connection ({0}) configured with the value {1}'.format(destination, source_value))
 
@@ -214,46 +221,123 @@ class Configuration:
 
 
     @staticmethod
-    def convert_type(value, value_type):
+    def convert_type(value, value_type): # need to rework for WORD, DWORD, LWORD, maybe for time types AND LOGS
         converted_value = None
 
         try:
-            #fixme
             if value_type == 'ANY' or value_type == 'String':
-                # if "#" in value:
-                #     value_type = value.split("#")[0]
-                # else:
-                #     return None
+                return str(converted_value)
+
+            #value none ne rassmatrivaem
+
+            if isinstance(value, str) and "#" in value:
+                value = value.split("#", 1)[1]
+
+            def parse_int(v):
+                if isinstance(v, int):
+                    return v
+                if isinstance(v, bool):
+                    return int(v)
+                s = str(v).strip()
+                if s.lower().startswith('0x'):
+                    return int(s, 16)
+                if re.fullmatch(r'[0-9a-fA-F]+h', s):
+                    return int(s[:-1], 16)
+
+                if re.fullmatch(r'[0-9a-fA-F]+', s) and any(c.isalpha() for c in s):
+                    return int(s, 16)
+                return int(float(s))
+
+            def wrap_signed(val, bits):
+                mask = (1 << bits) - 1
+                v = val & mask
+                sign_bit = 1 << (bits - 1)
+                if v & sign_bit:
+                    return v - (1 << bits)
+                return v
+
+            def wrap_unsigned(val, bits):
+                mask = (1 << bits) - 1
+                return val & mask
+
+            # strs and time
+            if value_type in ('WSTRING', 'STRING', 'TIME', 'DATE', 'TIME_OF_DAY', 'DATE_AND_TIME'):
                 converted_value = value
-            else:
-                if "#" in value:
-                    value = value.split("#")[1]
+                return converted_value
 
-                # String variable
-                if value_type == 'WSTRING' or value_type == 'STRING' or value_type == 'TIME':
-                    converted_value = value
+            if value_type == 'BOOL':
+                if isinstance(value, bool):
+                    return value
+                if isinstance(value, str):
+                    s = value.strip()
+                    if s == 'TRUE':
+                        return True
+                    if s == 'FALSE':
+                        return False
+                return None #
 
-                # Boolean variable
-                elif value_type == 'BOOL':
-                    # Checks if is true
-                    if value == '1' or value == 'true' or value == 'True' or value == 'TRUE' or value == 't':
-                        converted_value = True
-                    # Checks if is false
-                    elif value == '0' or value == 'false' or value == 'False' or value == 'FALSE' or value == 'f':
-                        converted_value = False
+            if value_type in ('REAL', 'LREAL'):
+                return float(value)
 
-                # Integer variable
-                # elif value_type == 'UINT' or value_type == 'Event' or value_type == 'INT':
-                #     converted_value = int(value)
+            int_types = {
+                'SINT': (8, True), 'USINT': (8, False), 'BYTE': (8, False),
+                'INT': (16, True), 'UINT': (16, False), 'WORD': (16, False),
+                'DINT': (32, True), 'UDINT': (32, False), 'DWORD': (32, False),
+                'LINT': (64, True), 'ULINT': (64, False), 'LWORD': (64, False)
+            }
 
-                # Float variable
-                elif value_type == 'REAL' or value_type == 'LREAL':
-                    converted_value = float(value)
-                elif value_type == 'DWORD' or value_type == 'WORD' or value_type == 'BYTE':
-                    converted_value = int(value, 16)
+            if value_type in int_types:
+                bits, signed = int_types[value_type]
+                try:
+                    iv = parse_int(value)
+                except Exception: # mb remove 
+                    logging.error('cant parse int')
+                    ##### need return
+
+                if signed:
+                    minv = -(1 << (bits - 1))
+                    maxv = (1 << (bits - 1)) - 1
                 else:
-                    converted_value = int(value)
+                    minv = 0
+                    maxv = (1 << bits) - 1
+
+                if minv <= iv <= maxv:
+                    return wrap_signed(iv, bits) if signed else wrap_unsigned(iv, bits)
+
+                sizes = [8, 16, 32, 64]
+                start_idx = sizes.index(bits) if bits in sizes else 0
+
+                promoted = None
+                for b in sizes[start_idx:]:
+                    candidates = []
+                    if iv >= 0 and not signed:
+                        candidates = [(b, False), (b, True)]
+                    else:
+                        candidates = [(b, True), (b, False)]
+
+                    for (cb, csigned) in candidates:
+                        if csigned:
+                            cmin = -(1 << (cb - 1))
+                            cmax = (1 << (cb - 1)) - 1
+                        else:
+                            cmin = 0
+                            cmax = (1 << cb) - 1
+
+                        if cmin <= iv <= cmax:
+                            for tname, (tb, tsigned) in int_types.items():
+                                if tb == cb and tsigned == csigned:
+                                    promoted = tname
+                                    break
+                            if promoted:
+                                return iv, promoted
+
+                return wrap_signed(iv, bits) if signed else wrap_unsigned(iv, bits)
+
+            try:
+                return int(value)
+            except Exception:
+                logging.error('cant covert')
         except:
-            logging.error('can not convert the value {0} to {1}'.format(value, value_type))
+            logging.error('cant convert')
 
         return converted_value
