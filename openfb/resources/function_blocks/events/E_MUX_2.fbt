@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_MUX_2" Comment="Event multiplexer (generic FB)">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI1" Type="Event" Comment="Event to multiplex, K=0">
+			</Event>
+			<Event Name="EI2" Type="Event" Comment="Event to multiplex, K=1">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Event which was multiplexed">
+				<With Var="K"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="K" Type="UINT" Comment="Event index"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_E_MUX'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

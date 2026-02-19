@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_TOF" Comment="standard timer function block (off-delay timing)">
+
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+				<With Var="PT"/>
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BOOL" Comment="Input"/>
+			<VarDeclaration Name="PT" Type="TIME" Comment="Process time"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="E_SWITCH" Type="iec61499::events::E_SWITCH" x="-980" y="-986.67">
+		</FB>
+		<FB Name="E_DELAY" Type="iec61499::events::E_DELAY" x="220" y="-986.67">
+		</FB>
+		<FB Name="E_RS" Type="iec61499::events::E_RS" x="1373.33" y="-986.67">
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="E_SWITCH.EI" dx1="146.67"/>
+			<Connection Source="E_RS.EO" Destination="CNF" dx1="1033.33"/>
+			<Connection Source="E_DELAY.EO" Destination="E_RS.R" dx1="273.33"/>
+			<Connection Source="E_SWITCH.EO1" Destination="E_RS.S" dx1="273.33" dx2="273.33" dy="380"/>
+			<Connection Source="E_SWITCH.EO0" Destination="E_DELAY.START" dx1="146.67"/>
+			<Connection Source="E_SWITCH.EO1" Destination="E_DELAY.STOP" dx1="146.67"/>
+			<Connection Source="R" Destination="E_RS.R" dx1="180" dx2="180" dy="-213.33"/>
+			<Connection Source="R" Destination="E_DELAY.STOP" dx1="180" dx2="180" dy="-213.33"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="IN" Destination="E_SWITCH.G" dx1="186.67"/>
+			<Connection Source="PT" Destination="E_DELAY.DT" dx1="153.33" dx2="153.33" dy="333.33"/>
+			<Connection Source="E_RS.Q" Destination="Q" dx1="1066.67"/>
+		</DataConnections>
+	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

@@ -274,7 +274,6 @@ class Configuration:
                         return True
                     if s == 'FALSE':
                         return False
-                return None #
 
             if value_type in ('REAL', 'LREAL'):
                 return float(value)

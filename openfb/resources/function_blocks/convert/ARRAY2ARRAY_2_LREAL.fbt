@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="ARRAY2ARRAY_2_LREAL" Comment="Service Interface Function Block Type">
+	<CompilerInfo packageName="eclipse4diac::convert">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+				<With Var="IN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="LREAL" Comment="array input" ArraySize="2"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="LREAL" Comment="array output" ArraySize="2"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+	</Service>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_ARRAY2ARRAY'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

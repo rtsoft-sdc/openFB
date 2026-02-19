@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<FBType Comment="Reloadable delayed propagation of an event-Cancellable" Name="E_RDELAY">
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Begin/Reset Delay" Name="START" Type="Event">
+        <With Var="DT"/>
+      </Event>
+      <Event Comment="Cancel Delay" Name="STOP" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Delayed Event" Name="EO" Type="Event"/>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Delay Time" Name="DT" Type="TIME"/>
+    </InputVars>
+    <OutputVars/>
+  </InterfaceList>
+  <Service Comment="Reloadable delayed propagation of an event-Cancellable" LeftInterface="E_DELAY" RightInterface="RESOURCE">
+    <ServiceSequence Comment="" Name="event_delay">
+      <ServiceTransaction>
+        <InputPrimitive Event="START" Interface="E_DELAY" Parameters="DT"/>
+        <OutputPrimitive Event="EO" Interface="E_DELAY"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Comment="" Name="delay_canceled">
+      <ServiceTransaction>
+        <InputPrimitive Event="START" Interface="E_DELAY" Parameters="DT"/>
+      </ServiceTransaction>
+      <ServiceTransaction>
+        <InputPrimitive Event="STOP" Interface="E_DELAY"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+    <ServiceSequence Comment="" Name="no_multiple_delay">
+      <ServiceTransaction>
+        <InputPrimitive Event="START" Interface="E_DELAY" Parameters="DT"/>
+      </ServiceTransaction>
+      <ServiceTransaction>
+        <InputPrimitive Event="START" Interface="E_DELAY" Parameters="DT"/>
+      </ServiceTransaction>
+      <ServiceTransaction>
+        <OutputPrimitive Event="EO" Interface="E_DELAY"/>
+      </ServiceTransaction>
+    </ServiceSequence>
+  </Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

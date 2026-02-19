@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_TRAIN" Comment="Generate of a finite train of events seperated by the time DT">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event" Comment="Start event generation">
+				<With Var="DT"/>
+				<With Var="N"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Stop event generation">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Generated events">
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" Comment="Time by which the events should be seperated" />
+			<VarDeclaration Name="N" Type="UINT" Comment="Number of events to generate" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="CV" Type="UINT" Comment="count of the current event: EO index (0..N-1)" />
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="CTR" Type="iec61499::events::E_CTU" x="800" y="266.67">
+		</FB>
+		<FB Name="GATE" Type="iec61499::events::E_SWITCH" x="1500" y="266.67">
+		</FB>
+		<FB Name="DLY" Type="iec61499::events::E_DELAY" x="2400" y="266.67">
+		</FB>
+		<EventConnections>
+			<Connection Source="CTR.CUO" Destination="GATE.EI"/>
+			<Connection Source="CTR.RO" Destination="GATE.EI" dx1="153.33"/>
+			<Connection Source="START" Destination="CTR.R" dx1="360"/>
+			<Connection Source="GATE.EO0" Destination="DLY.START"/>
+			<Connection Source="STOP" Destination="DLY.STOP" dx1="1826.67"/>
+			<Connection Source="DLY.EO" Destination="EO" dx1="1500"/>
+			<Connection Source="DLY.EO" Destination="CTR.CU" dx1="80" dx2="80" dy="-386.67"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="N" Destination="CTR.PV" dx1="100"/>
+			<Connection Source="CTR.CV" Destination="CV" dx1="2246.67"/>
+			<Connection Source="DT" Destination="DLY.DT" dx1="1966.67"/>
+			<Connection Source="CTR.Q" Destination="GATE.G"/>
+		</DataConnections>
+	</FBNetwork>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
