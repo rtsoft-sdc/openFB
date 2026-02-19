@@ -8,6 +8,9 @@ from openfb.data_model_fboot import utils
 
 class FBResources:
 
+    class InvalidFbootState(Exception):
+       pass
+
     def __init__(self, fb_type):
         self.fb_type = fb_type
 
