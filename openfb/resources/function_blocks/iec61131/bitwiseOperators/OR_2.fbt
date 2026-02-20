@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OR_2" Comment="FB to calculate bitwise boolean OR (generic FB)">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN1"/>
+				<With Var="IN2"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN1" Type="ANY_BIT" Comment="OR input 1"/>
+			<VarDeclaration Name="IN2" Type="ANY_BIT" Comment="OR input 2"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="ANY_BIT" Comment="OR result"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_OR'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
