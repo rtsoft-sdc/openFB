@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<FBType Comment="maximum" Name="F_MAX">
-  <CompilerInfo packageName="iec61131::selection">
-	</CompilerInfo>
+<FBType Comment="concatenation" Name="F_CONCAT_DATE_TOD">
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">
@@ -16,11 +13,11 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="Input value 1" InitialValue="" Name="IN1" Type="ANY_ELEMENTARY"/>
-      <VarDeclaration Comment="Input value 2" InitialValue="" Name="IN2" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="date input" Name="IN1" Type="DATE"/>
+      <VarDeclaration Comment="time of day input" Name="IN2" Type="TIME_OF_DAY"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="maximum value" InitialValue="" Name="OUT" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="date + time of day" Name="OUT" Type="DATE_AND_TIME"/>
     </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

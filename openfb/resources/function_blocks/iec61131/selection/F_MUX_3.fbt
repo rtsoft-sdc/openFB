@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="F_MUX_3" Comment="multiplexer">
+	<CompilerInfo packageName="iec61131::selection">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+				<With Var="IN1"/>
+				<With Var="IN2"/>
+				<With Var="IN3"/>
+				<With Var="K"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="K" Type="ANY_INT" Comment="Select one of n inputs"/>
+			<VarDeclaration Name="IN1" Type="ANY" Comment="Input value 1"/>
+			<VarDeclaration Name="IN2" Type="ANY" Comment="Input value 2"/>
+			<VarDeclaration Name="IN3" Type="ANY" Comment="Input value 3"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="ANY" Comment="IN1 for K = 0, IN2 for K = 1, IN3 for K = 2"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_F_MUX'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

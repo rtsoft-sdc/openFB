@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<FBType Comment="maximum" Name="F_MAX">
-  <CompilerInfo packageName="iec61131::selection">
+<FBType Comment="greater than" Name="F_GT">
+  <CompilerInfo packageName="iec61131::comparison">
 	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
@@ -20,7 +20,7 @@
       <VarDeclaration Comment="Input value 2" InitialValue="" Name="IN2" Type="ANY_ELEMENTARY"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="maximum value" InitialValue="" Name="OUT" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="value 1 &gt; value2 = true" InitialValue="" Name="OUT" Type="BOOL"/>
     </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<FBType Comment="maximum" Name="F_MAX">
+<FBType Comment="limiter" Name="F_LIMIT">
   <CompilerInfo packageName="iec61131::selection">
 	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">
-        <With Var="IN1"/>
-        <With Var="IN2"/>
+        <With Var="MN"/>
+        <With Var="MX"/>
+        <With Var="IN"/>
       </Event>
     </EventInputs>
     <EventOutputs>
@@ -16,11 +17,12 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="Input value 1" InitialValue="" Name="IN1" Type="ANY_ELEMENTARY"/>
-      <VarDeclaration Comment="Input value 2" InitialValue="" Name="IN2" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="Minimum" InitialValue="" Name="MN" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="Input" InitialValue="" Name="IN" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="Maximum" InitialValue="" Name="MX" Type="ANY_ELEMENTARY"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="maximum value" InitialValue="" Name="OUT" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="Limited input" InitialValue="" Name="OUT" Type="ANY_ELEMENTARY"/>
     </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

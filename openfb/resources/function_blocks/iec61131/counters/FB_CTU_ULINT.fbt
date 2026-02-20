@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="FB_CTU" Comment="Up counter">
+<FBType Name="FB_CTU_ULINT" Comment="Up counter">
 	<CompilerInfo packageName="iec61131::counters">
 	</CompilerInfo>
 	<InterfaceList>
@@ -18,11 +18,11 @@
 		<InputVars>
 			<VarDeclaration Name="CU" Type="BOOL" Comment="Count up"/>
 			<VarDeclaration Name="R" Type="BOOL" Comment="Reset"/>
-			<VarDeclaration Name="PV" Type="INT" Comment="Preset value"/>
+			<VarDeclaration Name="PV" Type="ULINT" Comment="Preset value"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
-			<VarDeclaration Name="CV" Type="INT" Comment="Count value"/>
+			<VarDeclaration Name="CV" Type="ULINT" Comment="Count value"/>
 		</OutputVars>
 	</InterfaceList>
 	<SimpleFB>
@@ -30,7 +30,7 @@
 			<ST><![CDATA[ALGORITHM REQ
 IF R THEN
   CV := 0;
-ELSIF CU AND CV < 32767 THEN
+ELSIF CU AND CV < 18446744073709551615 THEN
   CV := CV + 1;
 END_IF;
 Q := CV>= PV;

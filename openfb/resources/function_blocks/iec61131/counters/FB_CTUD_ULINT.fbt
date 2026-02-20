@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="FB_CTU" Comment="Up counter">
+<FBType Name="FB_CTUD_ULINT" Comment="Up Down counter">
 	<CompilerInfo packageName="iec61131::counters">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
 				<With Var="CU"/>
+				<With Var="CD"/>
 				<With Var="R"/>
+				<With Var="LD"/>
+				<With Var="PV"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
-				<With Var="Q"/>
+				<With Var="QU"/>
+				<With Var="QD"/>
 				<With Var="CV"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
 			<VarDeclaration Name="CU" Type="BOOL" Comment="Count up"/>
+			<VarDeclaration Name="CD" Type="BOOL" Comment="Count down"/>
 			<VarDeclaration Name="R" Type="BOOL" Comment="Reset"/>
-			<VarDeclaration Name="PV" Type="INT" Comment="Preset value"/>
+			<VarDeclaration Name="LD" Type="BOOL" Comment="Load"/>
+			<VarDeclaration Name="PV" Type="ULINT" Comment="Preset value"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
-			<VarDeclaration Name="CV" Type="INT" Comment="Count value"/>
+			<VarDeclaration Name="QU" Type="BOOL" Comment="Output up"/>
+			<VarDeclaration Name="QD" Type="BOOL" Comment="Output down"/>
+			<VarDeclaration Name="CV" Type="ULINT" Comment="Count value"/>
 		</OutputVars>
 	</InterfaceList>
 	<SimpleFB>
@@ -30,10 +37,21 @@
 			<ST><![CDATA[ALGORITHM REQ
 IF R THEN
   CV := 0;
-ELSIF CU AND CV < 32767 THEN
-  CV := CV + 1;
+ELSE
+  IF LD THEN
+    CV := PV;
+  ELSE
+    IF NOT(CU AND CD) THEN
+      IF CU AND CV < 18446744073709551615 THEN
+        CV := CV + 1;
+      ELSIF CD AND CV> 0 THEN
+        CV := CV - 1;
+      END_IF;
+    END_IF;
+  END_IF;
 END_IF;
-Q := CV>= PV;
+QU := CV>= PV;
+QD := CV <= 0;
 END_ALGORITHM
 
 ]]></ST>

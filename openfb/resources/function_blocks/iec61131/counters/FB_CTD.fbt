@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="FB_CTU" Comment="Up counter">
+<FBType Name="FB_CTD" Comment="Down counter">
 	<CompilerInfo packageName="iec61131::counters">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
-				<With Var="CU"/>
-				<With Var="R"/>
+				<With Var="CD"/>
+				<With Var="PV"/>
+				<With Var="LD"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -16,8 +17,8 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="CU" Type="BOOL" Comment="Count up"/>
-			<VarDeclaration Name="R" Type="BOOL" Comment="Reset"/>
+			<VarDeclaration Name="CD" Type="BOOL" Comment="Count down"/>
+			<VarDeclaration Name="LD" Type="BOOL" Comment="Load"/>
 			<VarDeclaration Name="PV" Type="INT" Comment="Preset value"/>
 		</InputVars>
 		<OutputVars>
@@ -28,12 +29,12 @@
 	<SimpleFB>
 		<Algorithm Name="REQ" Comment="">
 			<ST><![CDATA[ALGORITHM REQ
-IF R THEN
-  CV := 0;
-ELSIF CU AND CV < 32767 THEN
-  CV := CV + 1;
+IF LD THEN
+  CV := PV;
+ELSIF CD AND CV> -32768 THEN
+  CV := CV - 1;
 END_IF;
-Q := CV>= PV;
+Q := CV <= 0;
 END_ALGORITHM
 
 ]]></ST>

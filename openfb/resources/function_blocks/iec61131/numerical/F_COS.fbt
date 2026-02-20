@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<FBType Comment="maximum" Name="F_MAX">
-  <CompilerInfo packageName="iec61131::selection">
+<FBType Comment="cosine in radians" Name="F_COS">
+  <CompilerInfo packageName="iec61131::numerical">
 	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">
-        <With Var="IN1"/>
-        <With Var="IN2"/>
+        <With Var="IN"/>
       </Event>
     </EventInputs>
     <EventOutputs>
@@ -16,11 +15,10 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="Input value 1" InitialValue="" Name="IN1" Type="ANY_ELEMENTARY"/>
-      <VarDeclaration Comment="Input value 2" InitialValue="" Name="IN2" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="Event Input Qualifier" Name="IN" Type="ANY_REAL"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="maximum value" InitialValue="" Name="OUT" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="Event Output Qualifier" Name="OUT" Type="ANY_REAL"/>
     </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>

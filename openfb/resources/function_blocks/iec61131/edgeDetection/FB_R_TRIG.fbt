@@ -1,39 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="FB_CTU" Comment="Up counter">
-	<CompilerInfo packageName="iec61131::counters">
+<FBType Name="FB_R_TRIG" Comment="Detect rising edge">
+	<CompilerInfo packageName="iec61131::edgeDetection">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
-				<With Var="CU"/>
-				<With Var="R"/>
+				<With Var="CLK"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
 				<With Var="Q"/>
-				<With Var="CV"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="CU" Type="BOOL" Comment="Count up"/>
-			<VarDeclaration Name="R" Type="BOOL" Comment="Reset"/>
-			<VarDeclaration Name="PV" Type="INT" Comment="Preset value"/>
+			<VarDeclaration Name="CLK" Type="BOOL" Comment="Clock"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
-			<VarDeclaration Name="CV" Type="INT" Comment="Count value"/>
 		</OutputVars>
 	</InterfaceList>
 	<SimpleFB>
+		<InternalVars>
+			<VarDeclaration Name="MEM" Type="BOOL" Comment=""/>
+		</InternalVars>
 		<Algorithm Name="REQ" Comment="">
 			<ST><![CDATA[ALGORITHM REQ
-IF R THEN
-  CV := 0;
-ELSIF CU AND CV < 32767 THEN
-  CV := CV + 1;
-END_IF;
-Q := CV>= PV;
+Q := CLK AND NOT MEM;
+MEM := CLK;
 END_ALGORITHM
 
 ]]></ST>

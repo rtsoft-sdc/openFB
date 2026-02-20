@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<FBType Comment="maximum" Name="F_MAX">
-  <CompilerInfo packageName="iec61131::selection">
-	</CompilerInfo>
+<FBType Comment="find the character position of the beginning of the first occurrence of IN2 in IN1, no occurrence returns 0" Name="F_FIND">
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">
@@ -16,11 +14,11 @@
       </Event>
     </EventOutputs>
     <InputVars>
-      <VarDeclaration Comment="Input value 1" InitialValue="" Name="IN1" Type="ANY_ELEMENTARY"/>
-      <VarDeclaration Comment="Input value 2" InitialValue="" Name="IN2" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="input string 1" Name="IN1" Type="ANY_STRING"/>
+      <VarDeclaration Comment="input string 2" Name="IN2" Type="ANY_STRING"/>
     </InputVars>
     <OutputVars>
-      <VarDeclaration Comment="maximum value" InitialValue="" Name="OUT" Type="ANY_ELEMENTARY"/>
+      <VarDeclaration Comment="number of occurrence" Name="OUT" Type="ANY_INT"/>
     </OutputVars>
   </InterfaceList>
 	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
