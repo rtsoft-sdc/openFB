@@ -15,7 +15,7 @@ class GET_STRUCT_VALUE:
                 
                 if value is None:
                     return event_value, False, None
-                
                 return event_value, True, value
             except Exception:
                 return event_value, False, None
+            
