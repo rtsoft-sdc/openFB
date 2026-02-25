@@ -592,12 +592,20 @@ class FBInterface:
             v_type, value, is_watch = self.read_attr(var_name)
             if is_watch and (value is not None):
                 port = ETree.Element('Port', {'name': var_name})
-                if v_type == 'ANY' and isinstance(value, str):
+                if v_type in ('ANY', 'ANY_ELEMENTARY') and isinstance(value, str):
                     if "STRING" in value or "WSTRING" in value:
                         v_arr = value.split('#')
                         value = v_arr[0] + "#'" + v_arr[1] + "'"
                 elif v_type == 'TIME':
-                    value = "T" + "#'" + (value.split('#')[1] if '#' in value else value) + "'"
+                    # Normalize TIME to "T#...s" string
+                    if isinstance(value, datetime.timedelta):
+                        total_seconds = value.total_seconds()
+                        value = f"T#'{total_seconds}s'"
+                    elif isinstance(value, datetime.datetime):
+                        # If accidentally passed datetime, convert to UNIX seconds
+                        value = f"T#'{value.timestamp()}s'"
+                    else:
+                        value = "T" + "#'" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value)) + "'"
                 elif v_type == 'WSTRING':
                     value = "\"" + value + "\""
                 else:

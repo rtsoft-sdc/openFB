@@ -159,7 +159,7 @@ class Configuration:
         v_type, value, is_watch = destination_fb.read_attr(destination_name)
 
         # Verifies if is to write an event
-        if source_value == '$e':
+        if source_value == '$e' or v_type=='Event':
             logging.info('writing an event...')
             if value is not None:
                 # If the value is not None increment
@@ -225,8 +225,8 @@ class Configuration:
         converted_value = None
 
         try:
-            if value_type == 'ANY' or value_type == 'String':
-                return str(converted_value)
+            if value_type == 'ANY' or value_type == 'String' or value_type == 'ANY_ELEMENTARY':
+                return str(value)
 
             #value none ne rassmatrivaem
 

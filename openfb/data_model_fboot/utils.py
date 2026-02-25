@@ -24,7 +24,9 @@ UA_TYPES = {'String': ua.VariantType.String,
             'USINT': ua.VariantType.Byte,
             'TIME': ua.VariantType.String,
             'WSTRING': ua.VariantType.String,
-            'ANY': ua.VariantType.String}
+            'ANY': ua.VariantType.String,
+            'ANY_ELEMENTARY': ua.VariantType.String,
+            'ANY_BIT': ua.VariantType.Byte}
 
 XML_4DIAC = {'String': 'String',
              'STRING': 'String',
