@@ -27,6 +27,7 @@ class Manager:
 
         # new opc-ua model variables
         self.requests = []
+        self.is_invalid_FB = False
 
     def get_config(self, config_id):
         fb_element = None
@@ -72,6 +73,11 @@ class Manager:
                     # self.config_dictionary = dict()
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
+                        if utils.get_fb_files_path(conf_type) == None:
+                            xml = ETree.Element('Response', {'ID': request_id, 'Reason': 'NO_SUCH_OBJECT'})
+                            response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
+                            self.is_invalid_FB = True
+                            return response
                         config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
                         self.set_config(conf_name, config)
                         # check the options for ua_integration
@@ -207,6 +213,7 @@ class Manager:
                     if utils.get_fb_files_path(conf_type) == None:
                         xml = ETree.Element('Response', {'ID': request_id, 'Reason': 'NO_SUCH_OBJECT'})
                         response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
+                        self.is_invalid_FB = True
                         return response
                 
                 # Create watch
@@ -228,6 +235,11 @@ class Manager:
             # check the options for ua_integration
             if self.ua_integration:
                 # saves the actual configuration on fboot file
+                if self.is_invalid_FB:
+                    response = self.build_response(request_id, None)
+                    self.requests = []
+                    self.is_invalid_FB = False
+                    return response
                 self.manager_ua_fboot.save_fboot(self.requests)
                 self.requests = []
                 self.manager_ua_fboot.from_fboot()

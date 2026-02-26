@@ -11,3 +11,5 @@ class OUT_ANY_CONSOLE:
         if event_name == 'REQ' and QI == True:
             logging.info(f"T#{time.time()}\tINFO: {LABEL}: {IN}")
             return event_value, 1
+        else:
+            return event_value, 0

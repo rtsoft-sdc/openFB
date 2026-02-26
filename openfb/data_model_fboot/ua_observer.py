@@ -12,12 +12,13 @@ class UaObserver:
         node = str(n)
         node = node.split("FunctionBlocks:")[-1]
         node = node.split(":")
-        return node[0] + "." + node[2]
+        return node[0], node[2]
 
     def datachange_notification(self, node, val, data):
         if self.is_class_instance_set():
             for _, conf in self.class_instance.items():
-                if conf.fb_dictionary.get(self.split_node(node)) is None:
+                block, input = self.split_node(node)
+                if conf.fb_dictionary.get(block) is None:
                     continue
                 else:
-                    conf.write_connection(val, self.split_node(node))
+                    conf.write_connection(val, block + '.' + input)
