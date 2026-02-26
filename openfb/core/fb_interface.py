@@ -277,13 +277,18 @@ class FBInterface:
                                 var_value = 0
                                 if var_type in ("STRING", "WSTRING", "CHAR", "WCHAR",
                                                 "ANY", "ANY_ELEMENTARY", "ANY_CHARS",
-                                                "ANY_CHAR", "ANY_STRING", "ANY_DATE"):
+                                                "ANY_CHAR", "ANY_STRING"):
                                     var_value = ""
                                 elif var_type == "TIME":
                                     var_value = "T#0s"
-                                elif var_type in ("DATE", "TIME_OF_DAY", "TOD",
-                                                  "DATE_AND_TIME", "DT"):
-                                    var_value = ""
+                                elif var_type == "DATE":
+                                    var_value = "D#1970-01-01"
+                                elif var_type in ("TIME_OF_DAY", "TOD"):
+                                    var_value = "TOD#00:00:00"
+                                elif var_type in ("DATE_AND_TIME", "DT", "ANY_DATE"):
+                                    var_value = "DT#1970-01-01-00:00:00"
+                                elif var_type in ("BOOL", "ANY_BIT"):
+                                    var_value = False
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:
@@ -308,9 +313,14 @@ class FBInterface:
                                     var_value = ""
                                 elif var_type == "TIME":
                                     var_value = "T#0s"
-                                elif var_type in ("DATE", "TIME_OF_DAY", "TOD",
-                                                  "DATE_AND_TIME", "DT"):
-                                    var_value = ""
+                                elif var_type == "DATE":
+                                    var_value = "D#1970-01-01"
+                                elif var_type in ("TIME_OF_DAY", "TOD"):
+                                    var_value = "TOD#00:00:00"
+                                elif var_type in ("DATE_AND_TIME", "DT", "ANY_DATE"):
+                                    var_value = "DT#1970-01-01-00:00:00"
+                                elif var_type in ("BOOL", "ANY_BIT"):
+                                    var_value = False
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:
@@ -592,62 +602,221 @@ class FBInterface:
                     connection.send_event(value)
 
     def read_watches(self, start_time):
-        # Creates the xml root element
         fb_root = ETree.Element('FB', {'name': self.fb_name})
 
-        # Mixes the vars in 1 dictionary
+        SIGNED_INT   = {'SINT', 'INT', 'DINT', 'LINT'}
+        UNSIGNED_INT = {'USINT', 'UINT', 'UDINT', 'ULINT'}
+        BITMASK      = {'BYTE', 'WORD', 'DWORD', 'LWORD'}
+        ALL_INT      = SIGNED_INT | UNSIGNED_INT | BITMASK
+        REAL_T       = {'REAL', 'LREAL'}
+        GENERIC_T    = {
+            'ANY', 'ANY_ELEMENTARY', 'ANY_MAGNITUDE', 'ANY_NUM',
+            'ANY_INTEGRAL', 'ANY_REAL', 'ANY_INT', 'ANY_UNSIGNED',
+            'ANY_SIGNED', 'ANY_BIT', 'ANY_CHARS', 'ANY_CHAR',
+            'ANY_STRING', 'ANY_DATE',
+        }
+
+        def _strip_prefix(s, prefix):
+            return s[len(prefix):] if s.startswith(prefix) else s
+
+        def _fmt_concrete(ctype, val):
+            if ctype == 'BOOL':
+                if isinstance(val, bool):
+                    return 'TRUE' if val else 'FALSE'
+                if isinstance(val, (int, float)):
+                    return 'TRUE' if val else 'FALSE'
+                s = str(val).strip().upper()
+                # Handle various boolean representations
+                if s in ('TRUE', '1', 'YES', 'T', 'Y', 'ON'):
+                    return 'TRUE'
+                if s in ('FALSE', '0', 'NO', 'F', 'N', 'OFF'):
+                    return 'FALSE'
+                # Default: treat non-empty/non-zero as TRUE
+                return 'TRUE' if s and s != '0' else 'FALSE'
+
+            if ctype in ALL_INT:
+                try:
+                    return str(int(val))
+                except (ValueError, TypeError):
+                    return str(val)
+
+            if ctype in REAL_T:
+                try:
+                    return str(float(val))
+                except (ValueError, TypeError):
+                    return str(val)
+
+            if ctype == 'STRING':
+                return "'{0}'".format(val)
+            if ctype == 'WSTRING':
+                return '"{0}"'.format(val)
+            if ctype == 'CHAR':
+                return "'{0}'".format(val)
+            if ctype == 'WCHAR':
+                return '"{0}"'.format(val)
+
+            if ctype == 'TIME':
+                if isinstance(val, datetime.timedelta):
+                    return 'T#{0}s'.format(val.total_seconds())
+                if isinstance(val, datetime.datetime):
+                    return 'T#{0}s'.format(val.timestamp())
+                return 'T#{0}'.format(_strip_prefix(str(val), 'T#'))
+
+            if ctype == 'DATE':
+                if isinstance(val, datetime.datetime):
+                    return 'D#{0:04d}-{1:02d}-{2:02d}'.format(val.year, val.month, val.day)
+                if isinstance(val, datetime.date):
+                    return 'D#{0:04d}-{1:02d}-{2:02d}'.format(val.year, val.month, val.day)
+                return 'D#{0}'.format(_strip_prefix(str(val), 'D#'))
+
+            if ctype in ('TIME_OF_DAY', 'TOD'):
+                if isinstance(val, datetime.datetime):
+                    return 'TOD#{0:02d}:{1:02d}:{2:02d}'.format(val.hour, val.minute, val.second)
+                if isinstance(val, datetime.time):
+                    return 'TOD#{0:02d}:{1:02d}:{2:02d}'.format(val.hour, val.minute, val.second)
+                return 'TOD#{0}'.format(_strip_prefix(str(val), 'TOD#'))
+
+            if ctype in ('DATE_AND_TIME', 'DT'):
+                if isinstance(val, datetime.datetime):
+                    # IEC 61131-3 format: DT#YYYY-MM-DD-HH:MM:SS[.mmm]
+                    dt_str = '{0:04d}-{1:02d}-{2:02d}-{3:02d}:{4:02d}:{5:02d}'.format(
+                        val.year, val.month, val.day,
+                        val.hour, val.minute, val.second
+                    )
+                    if val.microsecond:
+                        dt_str += '.{0:03d}'.format(val.microsecond // 1000)
+                    return 'DT#{0}'.format(dt_str)
+                s = str(val)
+                s = _strip_prefix(s, 'DT#')
+                s = _strip_prefix(s, 'DATE_AND_TIME#')
+                return 'DT#{0}'.format(s)
+
+            return "'{0}'".format(val) if isinstance(val, str) else str(val)
+
+        def _infer_concrete(val):
+            """Infer the narrowest concrete IEC type from a Python value."""
+            if isinstance(val, bool):
+                return 'BOOL'
+            # Check datetime types before numbers (datetime has numeric operations)
+            if isinstance(val, datetime.datetime):
+                return 'DATE_AND_TIME'
+            if isinstance(val, datetime.date):
+                return 'DATE'
+            if isinstance(val, datetime.time):
+                return 'TIME_OF_DAY'
+            if isinstance(val, datetime.timedelta):
+                return 'TIME'
+            if isinstance(val, float):
+                return 'LREAL'
+            if isinstance(val, int):
+                if -128 <= val <= 127:
+                    return 'SINT'
+                if 0 <= val <= 255:
+                    return 'USINT'
+                if -32768 <= val <= 32767:
+                    return 'INT'
+                if 0 <= val <= 65535:
+                    return 'UINT'
+                if -2147483648 <= val <= 2147483647:
+                    return 'DINT'
+                if 0 <= val <= 4294967295:
+                    return 'UDINT'
+                if val < 0:
+                    return 'LINT'
+                return 'ULINT'
+            #check prefix
+            s = str(val)
+            if '#' in s:
+                pfx = s.split('#', 1)[0].strip().upper()
+                if pfx == 'T':
+                    return 'TIME'
+                if pfx == 'D':
+                    return 'DATE'
+                if pfx == 'TOD':
+                    return 'TIME_OF_DAY'
+                if pfx == 'DT':
+                    return 'DATE_AND_TIME'
+            if len(s) == 1:
+                return 'CHAR'
+            return 'STRING'
+
+        def _infer_any_bit(val):
+            """Infer concrete IEC type for ANY_BIT (BOOL, BYTE, WORD, DWORD, LWORD)."""
+            if isinstance(val, bool):
+                return 'BOOL', val
+            if isinstance(val, int):
+                if 0 <= val <= 1:
+                    return 'BOOL', bool(val)
+                if 0 <= val <= 0xFF:
+                    return 'BYTE', val
+                if 0 <= val <= 0xFFFF:
+                    return 'WORD', val
+                if 0 <= val <= 0xFFFFFFFF:
+                    return 'DWORD', val
+                if 0 <= val <= 0xFFFFFFFFFFFFFFFF:
+                    return 'LWORD', val
+                return 'LWORD', (val & 0xFFFFFFFFFFFFFFFF)
+
+            s = str(val).strip()
+            su = s.upper()
+            if su in ('TRUE', 'FALSE'):
+                return 'BOOL', su
+
+            if '#' in su:
+                pfx, _, rest = su.partition('#')
+                if pfx in {'BOOL', 'BYTE', 'WORD', 'DWORD', 'LWORD'}:
+                    return pfx, rest
+                if pfx == '16':
+                    try:
+                        return _infer_any_bit(int(rest, 16))
+                    except ValueError:
+                        pass
+
+            try:
+                if su.startswith('0X'):
+                    return _infer_any_bit(int(su, 16))
+                return _infer_any_bit(int(su))
+            except ValueError:
+                return 'LWORD', s
+
+        def _format_value(vtype, val):
+            """Top-level formatter: concrete types go directly,
+            generic types get a ``CONCRETE_TYPE#literal`` prefix."""
+            if vtype == 'ANY_BIT':
+                concrete, norm_val = _infer_any_bit(val)
+                formatted = _fmt_concrete(concrete, norm_val)
+                return '{0}#{1}'.format(concrete, formatted)
+            if vtype not in GENERIC_T:
+                return _fmt_concrete(vtype, val)
+
+            concrete = _infer_concrete(val)
+            formatted = _fmt_concrete(concrete, val)
+
+            if concrete in ('TIME', 'DATE', 'TIME_OF_DAY', 'DATE_AND_TIME'):
+                return formatted
+
+            return '{0}#{1}'.format(concrete, formatted)
+
         var_mix = {**self.input_vars, **self.output_vars}
-        # Iterates over the mix dictionary
-        for index, var_name in enumerate(var_mix):
+        for var_name in var_mix:
             v_type, value, is_watch = self.read_attr(var_name)
-            if is_watch and (value is not None):
+            if is_watch and value is not None:
                 port = ETree.Element('Port', {'name': var_name})
-                if v_type in ('ANY', 'ANY_ELEMENTARY', 'ANY_MAGNITUDE', 'ANY_NUM',
-                              'ANY_INT', 'ANY_SIGNED', 'ANY_UNSIGNED', 'ANY_INTEGRAL',
-                              'ANY_REAL', 'ANY_CHARS', 'ANY_CHAR', 'ANY_STRING',
-                              'ANY_DATE', 'ANY_BIT') and isinstance(value, str):
-                    if "STRING" in value or "WSTRING" in value:
-                        v_arr = value.split('#')
-                        value = v_arr[0] + "#" + v_arr[1]
-                elif v_type == 'TIME':
-                    # Normalize TIME to "T#...s" string
-                    if isinstance(value, datetime.timedelta):
-                        total_seconds = value.total_seconds()
-                        value = f"T#{total_seconds}s"
-                    elif isinstance(value, datetime.datetime):
-                        # If accidentally passed datetime, convert to UNIX seconds
-                        value = f"T#{value.timestamp()}s"
-                    else:
-                        value = "T" + "#" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value))
-                elif v_type in ('DATE', 'ANY_DATE'):
-                    value = "D" + "#" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value))
-                elif v_type in ('TIME_OF_DAY', 'TOD'):
-                    value = "TOD" + "#" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value))
-                elif v_type in ('DATE_AND_TIME', 'DT'):
-                    value = "DT" + "#" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value))
-                elif v_type in ('WSTRING', 'WCHAR'):
-                    value = "\"" + str(value) + "\""
-                elif v_type == 'CHAR':
-                    value = f"'{value}'"
-                else:
-                    value = f"'{value}'" if isinstance(value, str) else str(value)
-                ETree.SubElement(port, 'Data', {'value': value,
-                                                'forced': 'false'})
+                ETree.SubElement(port, 'Data', {
+                    'value': _format_value(v_type, value),
+                    'forced': 'false',
+                })
                 fb_root.append(port)
 
-        # Mixes the vars in 1 dictionary
         event_mix = {**self.input_events, **self.output_events}
-        # Iterates over the mix dictionary
-        for index, event_name in enumerate(event_mix):
+        for event_name in event_mix:
             v_type, value, is_watch = self.read_attr(event_name)
-            if is_watch and (value is not None):
+            if is_watch and value is not None:
                 port = ETree.Element('Port', {'name': event_name})
                 ETree.SubElement(port, 'Data', {'value': str(value)})
                 fb_root.append(port)
 
-        # Gets the number of watches
         watches_len = len(fb_root.findall('Port'))
-
         return fb_root, watches_len
 
     ## Reset the monitoring statistics
