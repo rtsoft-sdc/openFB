@@ -2,7 +2,7 @@ class FB_CTD:
     def __init__(self):
         self.cv = 0
     
-    def schedule(self, event_name, event_value, CD, PV, LD):
+    def schedule(self, event_name, event_value, CD, LD, PV):
         if event_name == 'REQ':
             if LD:
                 self.cv = PV

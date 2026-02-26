@@ -4,55 +4,120 @@ import sys
 import logging
 from importlib.resources import files
 
-UA_TYPES = {'String': ua.VariantType.String,
-            'STRING': ua.VariantType.String,
-            'Double': ua.VariantType.Double,
-            'Integer': ua.VariantType.Int64,
-            'INT': ua.VariantType.Int64,
-            'UDINT': ua.VariantType.Int32,
-            'UINT': ua.VariantType.UInt64,
-            'Float': ua.VariantType.Float,
-            'REAL': ua.VariantType.Float,
-            'LREAL': ua.VariantType.Float,
+UA_TYPES = {
+            # Boolean
             'BOOL': ua.VariantType.Boolean,
             'Boolean': ua.VariantType.Boolean,
-            'BYTE': ua.VariantType.Byte,
-            'WORD': ua.VariantType.UInt16,
-            'DWORD': ua.VariantType.UInt32,
-            'DINT': ua.VariantType.Int32,
-            'SINT': ua.VariantType.Int16,
-            'USINT': ua.VariantType.Byte,
-            'TIME': ua.VariantType.String,
+            # Signed integers
+            'SINT': ua.VariantType.SByte,        # 8-bit signed (-128..127)
+            'INT': ua.VariantType.Int16,         # 16-bit signed (-32768..32767)
+            'DINT': ua.VariantType.Int32,        # 32-bit signed
+            'LINT': ua.VariantType.Int64,        # 64-bit signed
+            # Unsigned integers
+            'USINT': ua.VariantType.Byte,        # 8-bit unsigned (0..255)
+            'UINT': ua.VariantType.UInt16,       # 16-bit unsigned (0..65535)
+            'UDINT': ua.VariantType.UInt32,      # 32-bit unsigned
+            'ULINT': ua.VariantType.UInt64,      # 64-bit unsigned
+            # Bitmasks
+            'BYTE': ua.VariantType.Byte,         # 8-bit bitmask
+            'WORD': ua.VariantType.UInt16,       # 16-bit bitmask
+            'DWORD': ua.VariantType.UInt32,      # 32-bit bitmask
+            'LWORD': ua.VariantType.UInt64,      # 64-bit bitmask
+            # Floating point
+            'REAL': ua.VariantType.Float,        # 32-bit float
+            'LREAL': ua.VariantType.Double,      # 64-bit float
+            # Strings
+            'STRING': ua.VariantType.String,
             'WSTRING': ua.VariantType.String,
+            'CHAR': ua.VariantType.String,
+            'WCHAR': ua.VariantType.String,
+            # Time and date
+            'TIME': ua.VariantType.String,
+            'DATE': ua.VariantType.String,
+            'TIME_OF_DAY': ua.VariantType.String,
+            'TOD': ua.VariantType.String,
+            'DATE_AND_TIME': ua.VariantType.String,
+            'DT': ua.VariantType.String,
+            # Legacy / 4diac XML aliases
+            'String': ua.VariantType.String,
+            'Double': ua.VariantType.Double,
+            'Integer': ua.VariantType.Int64,
+            'Float': ua.VariantType.Float,
+            # generic types
             'ANY': ua.VariantType.String,
             'ANY_ELEMENTARY': ua.VariantType.String,
-            'ANY_BIT': ua.VariantType.Byte}
+            'ANY_MAGNITUDE': ua.VariantType.String,
+            'ANY_NUM': ua.VariantType.String,
+            'ANY_REAL': ua.VariantType.Double,
+            'ANY_INT': ua.VariantType.Int64,
+            'ANY_UNSIGNED': ua.VariantType.UInt64,
+            'ANY_SIGNED': ua.VariantType.Int64,
+            'ANY_INTEGRAL': ua.VariantType.Int64,
+            'ANY_BIT': ua.VariantType.Byte,
+            'ANY_CHARS': ua.VariantType.String,
+            'ANY_CHAR': ua.VariantType.String,
+            'ANY_STRING': ua.VariantType.String,
+            'ANY_DATE': ua.VariantType.String,
+            }
 
 XML_4DIAC = {'String': 'String',
              'STRING': 'String',
+             'WSTRING': 'String',
+             'CHAR': 'String',
+             'WCHAR': 'String',
              'Double': 'Double',
              'Integer': 'Integer',
+             'SINT': 'Integer',
              'INT': 'Integer',
+             'DINT': 'Integer',
+             'LINT': 'Integer',
+             'USINT': 'Integer',
              'UINT': 'Integer',
+             'UDINT': 'Integer',
+             'ULINT': 'Integer',
+             'BYTE': 'Integer',
+             'WORD': 'Integer',
+             'DWORD': 'Integer',
+             'LWORD': 'Integer',
              'Float': 'Float',
              'REAL': 'Float',
-             'LREAL': 'Float',
+             'LREAL': 'Double',
              'BOOL': 'Boolean',
-             'Boolean': 'Boolean'}
+             'Boolean': 'Boolean',
+             'TIME': 'String',
+             'DATE': 'String',
+             'TIME_OF_DAY': 'String',
+             'TOD': 'String',
+             'DATE_AND_TIME': 'String',
+             'DT': 'String'}
 
-UA_NODE = {ua.VariantType.String: ua.NodeId(ua.ObjectIds.String),
-           ua.VariantType.Double: ua.NodeId(ua.ObjectIds.Double),
+UA_NODE = {ua.VariantType.Boolean: ua.NodeId(ua.ObjectIds.Boolean),
+           ua.VariantType.SByte: ua.NodeId(ua.ObjectIds.SByte),
+           ua.VariantType.Byte: ua.NodeId(ua.ObjectIds.Byte),
+           ua.VariantType.Int16: ua.NodeId(ua.ObjectIds.Int16),
+           ua.VariantType.UInt16: ua.NodeId(ua.ObjectIds.UInt16),
+           ua.VariantType.Int32: ua.NodeId(ua.ObjectIds.Int32),
+           ua.VariantType.UInt32: ua.NodeId(ua.ObjectIds.UInt32),
            ua.VariantType.Int64: ua.NodeId(ua.ObjectIds.Int64),
            ua.VariantType.UInt64: ua.NodeId(ua.ObjectIds.UInt64),
            ua.VariantType.Float: ua.NodeId(ua.ObjectIds.Float),
-           ua.VariantType.Boolean: ua.NodeId(ua.ObjectIds.Boolean)}
+           ua.VariantType.Double: ua.NodeId(ua.ObjectIds.Double),
+           ua.VariantType.String: ua.NodeId(ua.ObjectIds.String),
+           ua.VariantType.DateTime: ua.NodeId(ua.ObjectIds.DateTime)}
 
-XML_NODE = {ua.ObjectIds.String: 'String',
-            ua.ObjectIds.Double: 'Double',
+XML_NODE = {ua.ObjectIds.Boolean: 'Boolean',
+            ua.ObjectIds.SByte: 'Integer',
+            ua.ObjectIds.Byte: 'Integer',
+            ua.ObjectIds.Int16: 'Integer',
+            ua.ObjectIds.UInt16: 'Integer',
+            ua.ObjectIds.Int32: 'Integer',
+            ua.ObjectIds.UInt32: 'Integer',
             ua.ObjectIds.Int64: 'Integer',
             ua.ObjectIds.UInt64: 'Integer',
             ua.ObjectIds.Float: 'Float',
-            ua.ObjectIds.Boolean: 'Boolean'}
+            ua.ObjectIds.Double: 'Double',
+            ua.ObjectIds.String: 'String',
+            ua.ObjectIds.DateTime: 'String'}
 
 # If openFB used as a package set env var OPENFB_LOCAL_DIR with to resources folder 
 if os.environ.get("OPENFB_LOCAL_DIR"):

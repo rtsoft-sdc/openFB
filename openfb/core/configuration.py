@@ -221,11 +221,12 @@ class Configuration:
 
 
     @staticmethod
-    def convert_type(value, value_type): # need to rework for WORD, DWORD, LWORD, maybe for time types AND LOGS
+    def convert_type(value, value_type):
         converted_value = None
 
         try:
-            if value_type == 'ANY' or value_type == 'String' or value_type == 'ANY_ELEMENTARY':
+            if value_type in ('ANY', 'String', 'ANY_ELEMENTARY', 'ANY_CHARS',
+                             'ANY_CHAR', 'ANY_STRING'):
                 return str(value)
 
             #value none ne rassmatrivaem
@@ -261,19 +262,24 @@ class Configuration:
                 return val & mask
 
             # strs and time
-            if value_type in ('WSTRING', 'STRING', 'TIME', 'DATE', 'TIME_OF_DAY', 'DATE_AND_TIME'):
+            if value_type in ('WSTRING', 'STRING', 'CHAR', 'WCHAR',
+                             'TIME', 'DATE', 'TIME_OF_DAY', 'TOD',
+                             'DATE_AND_TIME', 'DT'):
                 converted_value = value
                 return converted_value
 
             if value_type == 'BOOL':
                 if isinstance(value, bool):
                     return value
+                if isinstance(value, (int, float)):
+                    return bool(value)
                 if isinstance(value, str):
-                    s = value.strip()
-                    if s == 'TRUE':
+                    s = value.strip().upper()
+                    if s in ('TRUE'):
                         return True
-                    if s == 'FALSE':
+                    if s in ('FALSE'):
                         return False
+                return bool(value)
 
             if value_type in ('REAL', 'LREAL'):
                 return float(value)
@@ -331,6 +337,23 @@ class Configuration:
                                 return iv, promoted
 
                 return wrap_signed(iv, bits) if signed else wrap_unsigned(iv, bits)
+
+            # Generic numeric types
+            if value_type == 'ANY_REAL':
+                return float(value)
+
+            if value_type in ('ANY_INT', 'ANY_SIGNED', 'ANY_UNSIGNED',
+                             'ANY_INTEGRAL', 'ANY_BIT'):
+                return parse_int(value)
+
+            if value_type in ('ANY_NUM', 'ANY_MAGNITUDE'):
+                try:
+                    return parse_int(value)
+                except Exception:
+                    return float(value)
+
+            if value_type == 'ANY_DATE':
+                return str(value)
 
             try:
                 return int(value)

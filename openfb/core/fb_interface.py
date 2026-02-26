@@ -275,10 +275,15 @@ class FBInterface:
                                 var_name = var.attrib['Name']
                                 var_type = var.attrib['Type']
                                 var_value = 0
-                                if var_type == "STRING" or var_type == "WSTRING":
+                                if var_type in ("STRING", "WSTRING", "CHAR", "WCHAR",
+                                                "ANY", "ANY_ELEMENTARY", "ANY_CHARS",
+                                                "ANY_CHAR", "ANY_STRING", "ANY_DATE"):
                                     var_value = ""
                                 elif var_type == "TIME":
                                     var_value = "T#0s"
+                                elif var_type in ("DATE", "TIME_OF_DAY", "TOD",
+                                                  "DATE_AND_TIME", "DT"):
+                                    var_value = ""
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:
@@ -297,10 +302,15 @@ class FBInterface:
                                 var_name = var.attrib['Name']
                                 var_type = var.attrib['Type']
                                 var_value = 0
-                                if var_type == "STRING" or var_type == "WSTRING":
+                                if var_type in ("STRING", "WSTRING", "CHAR", "WCHAR",
+                                                "ANY", "ANY_ELEMENTARY", "ANY_CHARS",
+                                                "ANY_CHAR", "ANY_STRING", "ANY_DATE"):
                                     var_value = ""
                                 elif var_type == "TIME":
                                     var_value = "T#0s"
+                                elif var_type in ("DATE", "TIME_OF_DAY", "TOD",
+                                                  "DATE_AND_TIME", "DT"):
+                                    var_value = ""
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:
@@ -592,22 +602,33 @@ class FBInterface:
             v_type, value, is_watch = self.read_attr(var_name)
             if is_watch and (value is not None):
                 port = ETree.Element('Port', {'name': var_name})
-                if v_type in ('ANY', 'ANY_ELEMENTARY') and isinstance(value, str):
+                if v_type in ('ANY', 'ANY_ELEMENTARY', 'ANY_MAGNITUDE', 'ANY_NUM',
+                              'ANY_INT', 'ANY_SIGNED', 'ANY_UNSIGNED', 'ANY_INTEGRAL',
+                              'ANY_REAL', 'ANY_CHARS', 'ANY_CHAR', 'ANY_STRING',
+                              'ANY_DATE', 'ANY_BIT') and isinstance(value, str):
                     if "STRING" in value or "WSTRING" in value:
                         v_arr = value.split('#')
-                        value = v_arr[0] + "#'" + v_arr[1] + "'"
+                        value = v_arr[0] + "#" + v_arr[1]
                 elif v_type == 'TIME':
                     # Normalize TIME to "T#...s" string
                     if isinstance(value, datetime.timedelta):
                         total_seconds = value.total_seconds()
-                        value = f"T#'{total_seconds}s'"
+                        value = f"T#{total_seconds}s"
                     elif isinstance(value, datetime.datetime):
                         # If accidentally passed datetime, convert to UNIX seconds
-                        value = f"T#'{value.timestamp()}s'"
+                        value = f"T#{value.timestamp()}s"
                     else:
-                        value = "T" + "#'" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value)) + "'"
-                elif v_type == 'WSTRING':
-                    value = "\"" + value + "\""
+                        value = "T" + "#" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value))
+                elif v_type in ('DATE', 'ANY_DATE'):
+                    value = "D" + "#" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value))
+                elif v_type in ('TIME_OF_DAY', 'TOD'):
+                    value = "TOD" + "#" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value))
+                elif v_type in ('DATE_AND_TIME', 'DT'):
+                    value = "DT" + "#" + (value.split('#')[1] if isinstance(value, str) and '#' in value else str(value))
+                elif v_type in ('WSTRING', 'WCHAR'):
+                    value = "\"" + str(value) + "\""
+                elif v_type == 'CHAR':
+                    value = f"'{value}'"
                 else:
                     value = f"'{value}'" if isinstance(value, str) else str(value)
                 ETree.SubElement(port, 'Data', {'value': value,
