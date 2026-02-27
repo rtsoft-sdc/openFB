@@ -5,45 +5,44 @@ import logging
 from importlib.resources import files
 
 UA_TYPES = {
-            # Boolean
             'BOOL': ua.VariantType.Boolean,
             'Boolean': ua.VariantType.Boolean,
-            # Signed integers
-            'SINT': ua.VariantType.SByte,        # 8-bit signed (-128..127)
-            'INT': ua.VariantType.Int16,         # 16-bit signed (-32768..32767)
-            'DINT': ua.VariantType.Int32,        # 32-bit signed
-            'LINT': ua.VariantType.Int64,        # 64-bit signed
-            # Unsigned integers
-            'USINT': ua.VariantType.Byte,        # 8-bit unsigned (0..255)
-            'UINT': ua.VariantType.UInt16,       # 16-bit unsigned (0..65535)
-            'UDINT': ua.VariantType.UInt32,      # 32-bit unsigned
-            'ULINT': ua.VariantType.UInt64,      # 64-bit unsigned
-            # Bitmasks
-            'BYTE': ua.VariantType.Byte,         # 8-bit bitmask
-            'WORD': ua.VariantType.UInt16,       # 16-bit bitmask
-            'DWORD': ua.VariantType.UInt32,      # 32-bit bitmask
-            'LWORD': ua.VariantType.UInt64,      # 64-bit bitmask
-            # Floating point
-            'REAL': ua.VariantType.Float,        # 32-bit float
-            'LREAL': ua.VariantType.Double,      # 64-bit float
-            # Strings
+
+            'SINT': ua.VariantType.SByte,
+            'INT': ua.VariantType.Int16,
+            'DINT': ua.VariantType.Int32,
+            'LINT': ua.VariantType.Int64,
+
+            'USINT': ua.VariantType.Byte,
+            'UINT': ua.VariantType.UInt16,
+            'UDINT': ua.VariantType.UInt32,
+            'ULINT': ua.VariantType.UInt64,
+
+            'BYTE': ua.VariantType.Byte,
+            'WORD': ua.VariantType.UInt16,
+            'DWORD': ua.VariantType.UInt32,
+            'LWORD': ua.VariantType.UInt64,
+
+            'REAL': ua.VariantType.Float,
+            'LREAL': ua.VariantType.Double,
+
             'STRING': ua.VariantType.String,
             'WSTRING': ua.VariantType.String,
             'CHAR': ua.VariantType.String,
             'WCHAR': ua.VariantType.String,
-            # Time and date
+
             'TIME': ua.VariantType.String,
             'DATE': ua.VariantType.String,
             'TIME_OF_DAY': ua.VariantType.String,
             'TOD': ua.VariantType.String,
             'DATE_AND_TIME': ua.VariantType.String,
             'DT': ua.VariantType.String,
-            # Legacy / 4diac XML aliases
+
             'String': ua.VariantType.String,
             'Double': ua.VariantType.Double,
             'Integer': ua.VariantType.Int64,
             'Float': ua.VariantType.Float,
-            # generic types
+
             'ANY': ua.VariantType.String,
             'ANY_ELEMENTARY': ua.VariantType.String,
             'ANY_MAGNITUDE': ua.VariantType.String,

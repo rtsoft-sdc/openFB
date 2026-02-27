@@ -37,15 +37,3 @@ class E_TOF:
     def _set_false(self):
         self._timer = None
         self.Q = False
-
-# import asyncio
-# class E_TOFAsync(E_TOF):
-#     async def schedule(self, event_name, event_value, IN=None, PT=None, callback=None):
-#         if event_name == 'REQ':
-#             if IN:
-#                 self.Q = True
-#                 if callback: callback(event_value, self.Q)
-#             else:
-#                 await asyncio.sleep(PT)
-#                 self.Q = False
-#                 if callback: callback(event_value, self.Q)

@@ -2,12 +2,12 @@ import time
 import threading
 from datetime import timedelta
 
-class E_N_TABLE:
-    """Generation of a finite train of separate events using E_TABLE + E_DEMUX"""
+class E_TRAIN:
     def __init__(self):
         self._stop_event = threading.Event()
         self._thread = None
-        self._DT = []
+        self.CV = 0
+        self._DT = None
         self._N = 0
         self._on_event = None
 
@@ -17,14 +17,14 @@ class E_N_TABLE:
     def schedule(self, event_name, event_value, DT=None, N=None):
         if event_name == 'START':
             if DT is not None and N is not None:
-                self._DT = DT if isinstance(DT, (list, tuple)) else [DT]
+                self._DT = DT
                 self._N = N
                 self._stop_event.set()
                 if self._thread and self._thread.is_alive():
                     self._thread.join(timeout=0.5)
                 self._stop_event.clear()
                 self._thread = threading.Thread(
-                    target=self._generate_events,
+                    target=self._generate_train,
                     args=(event_value,),
                     daemon=True
                 )
@@ -35,20 +35,16 @@ class E_N_TABLE:
             if self._thread and self._thread.is_alive():
                 self._thread.join(timeout=0.5)
             return event_value
-        return None
 
-    def _generate_events(self, event_value):
-        """Generate N events with delays from DT array, demuxed to EO0-EO3"""
-        for i in range(min(self._N, 4)):  # E_N_TABLE has 4 outputs (EO0-EO3)
+    def _generate_train(self, event_value):
+        for i in range(self._N):
             if self._stop_event.is_set():
                 break
-            # Generate demuxed event output
-            output_name = f'EO{i}'
+            self.CV = i
             if self._on_event:
-                self._on_event(output_name, event_value, i)
-            # Wait for next event delay
-            if i < len(self._DT) - 1:
-                dt_val = self._DT[i]
+                self._on_event(event_value, self.CV)
+            if i < self._N - 1:
+                dt_val = self._DT
                 if isinstance(dt_val, timedelta):
                     delay = dt_val.total_seconds()
                 else:

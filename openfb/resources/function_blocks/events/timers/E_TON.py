@@ -29,20 +29,3 @@ class E_TON:
     def _set_true(self):
         self._timer = None
         self.Q = True
-
-
-# import asyncio
-# class E_TON:
-#     async def schedule(self, event_name, event_value, IN=None, PT=None, callback=None):
-#         if event_name == 'REQ':
-#             if IN:
-#                 if PT and PT>0:
-#                     await asyncio.sleep(PT)
-#                     self.Q = True
-#                     if callback: callback(event_value, self.Q)
-#                 else:
-#                     self.Q = True
-#                     if callback: callback(event_value, self.Q)
-#             else:
-#                 self.Q = False
-#                 if callback: callback(event_value, self.Q)

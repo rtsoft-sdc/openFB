@@ -2,8 +2,8 @@ import time
 import threading
 from datetime import timedelta
 
-class E_RTimeOut:
-    """Reloadable Timeout service - wraps E_RDELAY through ARTimeOut adapter interface"""
+class E_TimeOut:
+    """Timeout service - wraps E_DELAY through ATimeOut adapter interface"""
     def __init__(self):
         self._stop_event = threading.Event()
         self._timeout_thread = None
@@ -31,7 +31,6 @@ class E_RTimeOut:
             if self._timeout_thread and self._timeout_thread.is_alive():
                 self._timeout_thread.join(timeout=0.1)
             return event_value
-        return None
 
     def _wait_timeout(self, event_value, dt):
         if isinstance(dt, timedelta):

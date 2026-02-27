@@ -52,16 +52,3 @@ class E_TONOF:
     def _set_false(self):
         self._timer_off = None
         self.Q = False
-
-# import asyncio
-# class E_TONOFAsync(E_TONOF):
-#     async def schedule(self, event_name, event_value, IN=None, PT_ON=None, PT_OFF=None, callback=None):
-#         if event_name == 'REQ':
-#             if IN:
-#                 await asyncio.sleep(PT_ON)
-#                 self.Q = True
-#                 if callback: callback(event_value, self.Q)
-#             else:
-#                 await asyncio.sleep(PT_OFF)
-#                 self.Q = False
-#                 if callback: callback(event_value, self.Q)
