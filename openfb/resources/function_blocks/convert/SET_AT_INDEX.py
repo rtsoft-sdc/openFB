@@ -7,6 +7,6 @@ class SET_AT_INDEX:
                     OUT_ARRAY[INDEX] = VALUE
                     return event_value, True, OUT_ARRAY
                 else:
-                    return event_value, False, IN_ARRAY
+                    return event_value, False, None
             except Exception:
-                return event_value, False, IN_ARRAY
+                return None, False, None

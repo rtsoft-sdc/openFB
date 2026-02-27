@@ -1,12 +1,16 @@
 class STRUCT_DEMUX:
-    #need to remake 
-    def schedule(self, event_name, event_value, **kwargs):
+    def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
             try:
-                in_struct = kwargs.get('IN')
-                if in_struct is None:
+                if isinstance(IN, dict):
+                    values = list(IN.values())
+                elif hasattr(IN, '__dict__'):
+                    values = list(vars(IN).values())
+                elif isinstance(IN, (list, tuple)):
+                    values = list(IN)
+                else:
                     return event_value
-                
-                return event_value
+
+                return tuple([event_value] + values)
             except Exception:
-                return event_value
+                return None

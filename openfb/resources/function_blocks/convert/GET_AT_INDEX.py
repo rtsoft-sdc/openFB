@@ -7,4 +7,4 @@ class GET_AT_INDEX:
                 else:
                     return event_value, False, None
             except Exception:
-                return event_value, False, None
+                return None, False, None
