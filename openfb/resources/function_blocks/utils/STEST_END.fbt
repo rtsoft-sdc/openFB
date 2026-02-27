@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="STEST_END" Comment="Service Interface Function Block Type">
+	<CompilerInfo packageName="eclipse4diac::utils">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+			</Event>
+		</EventInputs>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+	</Service>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

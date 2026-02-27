@@ -3,7 +3,7 @@ from pathlib import Path
 import os
 
 
-class CSV_WRITER_1:
+class CSV_WRITER_2:
     def __init__(self):
         self.file = None
         self.writer = None
@@ -15,11 +15,11 @@ class CSV_WRITER_1:
             return os.strerror(exc.errno)
         return str(exc)
     
-    def schedule(self, event_name, event_value, QI, FILE_NAME, SD_1):
+    def schedule(self, event_name, event_value, QI, FILE_NAME, SD_1, SD_2):
         if event_name == 'INIT':
             try:
                 if QI:
-
+                    # Open file
                     if self.file is not None and not self.file.closed:
                         return event_value, None, False, "File already opened"
                     
@@ -29,6 +29,7 @@ class CSV_WRITER_1:
                     self.writer = csv.writer(self.file)
                     return event_value, None, True, "OK"
                 else:
+                    # Close file
                     if self.file is not None and not self.file.closed:
                         self.file.close()
                     self.file = None
@@ -45,7 +46,7 @@ class CSV_WRITER_1:
                     if self.writer is None:
                         return None, event_value, False, "File not opened"
                     
-                    row = [SD_1]
+                    row = [SD_1, SD_2]
                     self.writer.writerow(row)
                     self.file.flush()
                     return None, event_value, True, "OK"
@@ -56,8 +57,3 @@ class CSV_WRITER_1:
             except Exception as e:
                 return None, event_value, False, str(e)
         
-        return None, None, False, "OK"
-    
-    def __del__(self):
-        if self.file and not self.file.closed:
-            self.file.close()

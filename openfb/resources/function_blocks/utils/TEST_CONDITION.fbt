@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<FBType Comment="Service Interface Function Block Type" Name="TEST_CONDITION">
+	<CompilerInfo packageName="eclipse4diac::utils">
+	</CompilerInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="Request Test" Name="REQ" Type="Event">
+        <With Var="check"/>
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="Test finished" Name="CNF" Type="Event"/>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Comment="Test fails if check == 0, passes otherwise" Name="check" Type="BOOL"/>
+    </InputVars>
+  </InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

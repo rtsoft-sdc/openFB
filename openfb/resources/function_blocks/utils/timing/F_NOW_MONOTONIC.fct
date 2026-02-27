@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="F_NOW_MONOTONIC" Comment="returns current monotonic clock value">
+
+	<CompilerInfo packageName="eclipse4diac::utils::timing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="" Type="TIME" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[PACKAGE utils::timing;
+
+(* returns current monotonic clock value *)
+FUNCTION F_NOW_MONOTONIC : TIME
+F_NOW_MONOTONIC := NOW_MONOTONIC();
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</Function>
