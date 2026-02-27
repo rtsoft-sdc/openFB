@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="AND_3" Comment="FB to calculate bitwise boolean AND (generic FB)">
-	<CompilerInfo packageName="iec61131::arithmetic">
+	<CompilerInfo packageName="iec61131::bitwiseOperators">
 	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>

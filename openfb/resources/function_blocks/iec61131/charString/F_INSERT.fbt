@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <FBType Comment="insert IN2 into IN1 after the P-th character position" Name="F_INSERT">
+	<CompilerInfo packageName="iec61131::charString">
+	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">

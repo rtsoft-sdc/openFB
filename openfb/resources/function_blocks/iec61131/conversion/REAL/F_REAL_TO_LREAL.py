@@ -1,4 +1,8 @@
 class F_REAL_TO_LREAL:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
-            return event_value, float(IN) 
+            try:
+                return event_value, float(IN)
+            except:
+                return event_value, None
+        return event_value, None 

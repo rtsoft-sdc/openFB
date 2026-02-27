@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <FBType Comment="concatenation" Name="F_CONCAT">
+ 	<CompilerInfo packageName="iec61131::charString">
+	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">

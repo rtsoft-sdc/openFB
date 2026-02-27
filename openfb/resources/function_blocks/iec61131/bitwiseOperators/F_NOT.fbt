@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <FBType Comment="standard bitwise boolean NOT function" Name="F_NOT">
-	<CompilerInfo packageName="iec61131::arithmetic">
+	<CompilerInfo packageName="iec61131::bitwiseOperators">
 	</CompilerInfo>
   <InterfaceList>
     <EventInputs>

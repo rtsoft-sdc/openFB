@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <FBType Comment="delete L characters of IN beginning at the P-th character position" Name="F_DELETE">
+	<CompilerInfo packageName="iec61131::charString">
+	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <FBType Comment="find the character position of the beginning of the first occurrence of IN2 in IN1, no occurrence returns 0" Name="F_FIND">
+	<CompilerInfo packageName="iec61131::charString">
+	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <FBType Comment="bitwise rotate left function" Name="F_ROL">
-	<CompilerInfo packageName="iec61131::arithmetic">
+	<CompilerInfo packageName="iec61131::bitwiseOperators">
 	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
