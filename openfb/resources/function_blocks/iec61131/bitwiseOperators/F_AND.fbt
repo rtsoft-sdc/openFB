@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <FBType Comment="standard bitwise boolean AND function" Name="F_AND">
+	<CompilerInfo packageName="iec61131::arithmetic">
+	</CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Comment="Service Request" Name="REQ" Type="Event">

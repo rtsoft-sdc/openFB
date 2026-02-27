@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="OR_3" Comment="FB to calculate bitwise boolean OR (generic FB)">
+	<CompilerInfo packageName="iec61131::arithmetic">
+	</CompilerInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
