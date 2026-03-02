@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_CYCLE" Comment="Peroidic event generator">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event" Comment="Start the perodic generation of events">
+				<With Var="DT"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Stop the generation of events">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Periodically triggered output event">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" Comment="cycle time"/>
+		</InputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>
