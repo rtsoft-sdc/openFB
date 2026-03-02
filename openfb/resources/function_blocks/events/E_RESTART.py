@@ -14,3 +14,6 @@ class E_RESTART:
         elif event_name == 'STOP':
             return 'STOP'
         return None
+    
+    def __del__(self):
+        print('E_RESTART class destroyed')

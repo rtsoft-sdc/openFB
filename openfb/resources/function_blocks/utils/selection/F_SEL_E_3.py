@@ -6,3 +6,6 @@ class F_SEL_E_3:
             return event_value, IN2
         elif event_name == 'REQ3':
             return event_value, IN3
+
+    def __del__(self):
+        print('class destroyed')

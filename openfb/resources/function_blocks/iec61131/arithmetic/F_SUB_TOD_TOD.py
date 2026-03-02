@@ -31,6 +31,9 @@ class F_SUB_TOD_TOD:
             tod1 = _parse_tod(IN1)
             tod2 = _parse_tod(IN2)
             if tod1 is None or tod2 is None:
-                return event_value, None
+                return None, None
             diff = _tod_seconds(tod1) - _tod_seconds(tod2)
             return event_value, datetime.timedelta(seconds=diff)
+
+    def __del__(self):
+        print('F_SUB_TOD_TOD class destroyed')

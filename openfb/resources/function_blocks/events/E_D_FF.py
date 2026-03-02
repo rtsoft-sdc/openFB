@@ -6,3 +6,6 @@ class E_D_FF:
         if event_name == 'CLK':
             self.Q = D
             return event_value, self.Q
+    
+    def __del__(self):
+        print('E_D_FF class destroyed')

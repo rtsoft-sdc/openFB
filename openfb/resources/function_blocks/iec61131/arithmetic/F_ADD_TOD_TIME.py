@@ -78,5 +78,8 @@ class F_ADD_TOD_TIME:
             tod = _parse_tod(IN1)
             delta = _parse_time(IN2)
             if tod is None or delta is None:
-                return event_value, None
+                return None, None
             return event_value, _apply_tod_delta(tod, delta)
+
+    def __del__(self):
+        print('F_ADD_TOD_TIME class destroyed')

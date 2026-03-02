@@ -5,3 +5,6 @@ class F_TIME_IN_S_TO_LINT:
         if event_name == 'REQ':
             td = IN if isinstance(IN, timedelta) else timedelta(milliseconds=int(IN))
             return event_value, int(td.total_seconds())
+
+    def __del__(self):
+        print('F_TIME_IN_S_TO_LINT class destroyed')

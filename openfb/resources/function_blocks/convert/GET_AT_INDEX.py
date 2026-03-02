@@ -8,3 +8,6 @@ class GET_AT_INDEX:
                     return event_value, False, None
             except Exception:
                 return None, False, None
+    
+    def __del__(self):
+        print('GET_AT_INDEX class destroyed')

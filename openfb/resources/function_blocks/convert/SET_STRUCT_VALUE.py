@@ -34,3 +34,6 @@ class SET_STRUCT_VALUE:
                 return event_value, True, out_struct
             except Exception:
                 return None, False, None
+    
+    def __del__(self):
+        print('SET_STRUCT_VALUE class destroyed')

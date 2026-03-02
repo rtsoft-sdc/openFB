@@ -6,3 +6,6 @@ class F_BYTE_TO_SINT:
             if val >= 128:
                 val = val - 256
             return event_value, val
+
+    def __del__(self):
+        print('F_BYTE_TO_SINT class destroyed')

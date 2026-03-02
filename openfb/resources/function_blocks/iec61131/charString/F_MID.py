@@ -14,3 +14,6 @@ class F_MID:
             if l <= 0:
                 return event_value, ''
             return event_value, s[start:start + l]
+
+    def __del__(self):
+        print('F_MID class destroyed')

@@ -18,4 +18,6 @@ class E_TABLE_CTRL:
                 self.CV += 1
                 self.DTO = self.DT[self.CV] if self.CV < len(self.DT) else None
                 return event_value, self.DTO, self.CV
-
+    
+    def __del__(self):
+        print('E_TABLE_CTRL class destroyed')

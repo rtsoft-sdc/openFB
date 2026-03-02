@@ -46,5 +46,8 @@ class E_CYCLE:
                 self._fb_interface.push_event('EO', self._event_value)
     
     def __del__(self):
+        print('E_CYCLE class destroyed')
         if hasattr(self, '_stop_event'):
             self._stop_event.set()
+        if hasattr(self, '_cycle_thread') and self._cycle_thread and self._cycle_thread.is_alive():
+            self._cycle_thread.join(timeout=0.1)

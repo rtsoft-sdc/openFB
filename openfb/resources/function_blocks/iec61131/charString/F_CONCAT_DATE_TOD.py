@@ -9,3 +9,6 @@ class F_CONCAT_DATE_TOD:
             except Exception:
                 pass
             return event_value, ('' if IN1 is None else str(IN1)) + ' ' + ('' if IN2 is None else str(IN2))
+
+    def __del__(self):
+        print('F_CONCAT_DATE_TOD class destroyed')

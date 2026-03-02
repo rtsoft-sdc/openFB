@@ -14,3 +14,6 @@ class VALUES_TO_ARRAY:
                 return event_value, out_array
             except Exception:
                 return None, []
+    
+    def __del__(self):
+        print('VALUES_TO_ARRAY class destroyed')

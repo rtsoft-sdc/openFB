@@ -56,4 +56,8 @@ class CSV_WRITER_2:
                 return None, event_value, False, self._get_error_message(e)
             except Exception as e:
                 return None, event_value, False, str(e)
+
+    def __del__(self):
+        if self.file and not self.file.closed:
+            self.file.close()
         

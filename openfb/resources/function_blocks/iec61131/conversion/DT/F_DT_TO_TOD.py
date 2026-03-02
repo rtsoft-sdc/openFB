@@ -34,3 +34,6 @@ class F_DT_TO_TOD:
             if dt is None:
                 return None, None
             return event_value, dt.time()
+
+    def __del__(self):
+        print('F_DT_TO_TOD class destroyed')

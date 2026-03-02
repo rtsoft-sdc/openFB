@@ -7,3 +7,6 @@ class F_FIND:
                 return event_value, 1 if s != '' else 0
             idx = s.find(sub)
             return event_value, 0 if idx == -1 else idx + 1
+
+    def __del__(self):
+        print('F_FIND class destroyed')

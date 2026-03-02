@@ -5,4 +5,6 @@ class F_NOW:
         if event_name == 'REQ':
             current_datetime = datetime.datetime.now()
             return event_value, current_datetime
-        return event_value, None
+
+    def __del__(self):
+        print('class destroyed')

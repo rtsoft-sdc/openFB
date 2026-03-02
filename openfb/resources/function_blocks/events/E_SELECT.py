@@ -5,3 +5,6 @@ class E_SELECT:
         elif event_name == 'EI1' and G:
             return event_value
         return None
+    
+    def __del__(self):
+        print('E_SELECT class destroyed')

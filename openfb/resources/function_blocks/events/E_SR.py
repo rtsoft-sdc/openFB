@@ -10,3 +10,6 @@ class E_SR:
             self.Q = False
             return event_value, self.Q
         return None
+    
+    def __del__(self):
+        print('E_SR class destroyed')

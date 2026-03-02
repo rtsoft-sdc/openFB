@@ -18,3 +18,6 @@ class E_DELAY:
         elif event_name == 'STOP':
             self._stop_requested = True
             return None
+    
+    def __del__(self):
+        print('E_DELAY class destroyed')

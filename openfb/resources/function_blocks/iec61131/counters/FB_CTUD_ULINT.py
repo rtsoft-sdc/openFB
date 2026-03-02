@@ -17,3 +17,6 @@ class FB_CTUD_ULINT:
             QU = self.cv >= PV
             QD = self.cv <= 0 
             return event_value, QU, QD, self.cv & 0xFFFFFFFFFFFFFFFF
+
+    def __del__(self):
+        print('FB_CTUD_ULINT class destroyed')

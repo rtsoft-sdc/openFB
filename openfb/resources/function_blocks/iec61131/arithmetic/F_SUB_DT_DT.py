@@ -34,5 +34,8 @@ class F_SUB_DT_DT:
             dt1 = _parse_dt(IN1)
             dt2 = _parse_dt(IN2)
             if dt1 is None or dt2 is None:
-                return event_value, None
+                return None, None
             return event_value, dt1 - dt2
+
+    def __del__(self):
+        print('F_SUB_DT_DT class destroyed')

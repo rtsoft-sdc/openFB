@@ -57,3 +57,10 @@ class E_N_TABLE:
                     continue
                 else:
                     break
+    
+    def __del__(self):
+        print('E_N_TABLE class destroyed')
+        if hasattr(self, '_stop_event'):
+            self._stop_event.set()
+        if hasattr(self, '_thread') and self._thread and self._thread.is_alive():
+            self._thread.join(timeout=0.5)

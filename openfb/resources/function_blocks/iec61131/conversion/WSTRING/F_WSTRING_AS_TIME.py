@@ -25,3 +25,6 @@ class F_WSTRING_AS_TIME:
                     td += timedelta(microseconds=int(re.search(r'(\d+)NS', time_str).group(1)) / 1000)
                 return event_value, td
             return event_value, timedelta()
+
+    def __del__(self):
+        print('F_WSTRING_AS_TIME class destroyed')

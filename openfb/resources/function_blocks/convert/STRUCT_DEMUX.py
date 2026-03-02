@@ -14,3 +14,6 @@ class STRUCT_DEMUX:
                 return tuple([event_value] + values)
             except Exception:
                 return None
+    
+    def __del__(self):
+        print('STRUCT_DEMUX class destroyed')

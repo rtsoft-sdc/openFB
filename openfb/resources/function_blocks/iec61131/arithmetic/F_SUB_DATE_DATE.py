@@ -24,5 +24,8 @@ class F_SUB_DATE_DATE:
             d1 = _parse_date(IN1)
             d2 = _parse_date(IN2)
             if d1 is None or d2 is None:
-                return event_value, None
+                return None, None
             return event_value, d1 - d2
+
+    def __del__(self):
+        print('F_SUB_DATE_DATE class destroyed')

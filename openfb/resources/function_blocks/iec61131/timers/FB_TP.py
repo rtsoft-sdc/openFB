@@ -60,11 +60,9 @@ class FB_TP:
             
             self.prev_in = IN
             
-            # check pulse active
             if self.pulse_active and self.start_time is not None:
                 elapsed = now - self.start_time
                 if elapsed < PT_seconds:
-                    # still active
                     self.q = True
                     ET = timedelta(seconds=elapsed)
                 else:
@@ -76,3 +74,6 @@ class FB_TP:
                 ET = timedelta(0)
             
             return event_value, self.q, ET
+
+    def __del__(self):
+        print('FB_TP class destroyed')

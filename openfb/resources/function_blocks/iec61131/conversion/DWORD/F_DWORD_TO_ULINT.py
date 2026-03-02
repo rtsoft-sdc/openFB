@@ -3,3 +3,6 @@ class F_DWORD_TO_ULINT:
         if event_name == 'REQ':
             val = int(IN) if not isinstance(IN, int) else IN
             return event_value, val & 0xFFFFFFFF
+
+    def __del__(self):
+        print('F_DWORD_TO_ULINT class destroyed')

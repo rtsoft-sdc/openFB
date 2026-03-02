@@ -9,4 +9,6 @@ class E_TRIG:
                 self.resource.trigger_events_by_type(EVENTTYPE)
             return event_value
         
-        return None
+        return None    
+    def __del__(self):
+        print('E_TRIG class destroyed')

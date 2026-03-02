@@ -15,3 +15,6 @@ class F_ULINT_TO_BCD_LWORD:
                 return event_value, result
             except Exception:
                 return None, 0
+
+    def __del__(self):
+        print('F_ULINT_TO_BCD_LWORD class destroyed')

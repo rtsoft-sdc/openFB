@@ -6,3 +6,6 @@ class F_REAL_TO_LREAL:
             except:
                 return event_value, None
         return event_value, None 
+
+    def __del__(self):
+        print('F_REAL_TO_LREAL class destroyed')

@@ -7,3 +7,6 @@ class E_T_FF:
             self.Q = not self.Q
             return event_value, self.Q
         return None
+    
+    def __del__(self):
+        print('E_T_FF class destroyed')

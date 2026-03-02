@@ -5,3 +5,6 @@ class F_DINT_TO_LINT:
             if val >= 2147483648:
                 val = val - 4294967296
             return event_value, val
+
+    def __del__(self):
+        print('F_DINT_TO_LINT class destroyed')

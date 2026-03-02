@@ -5,4 +5,6 @@ class F_NOW_MONOTONIC:
         if event_name == 'REQ':
             monotonic_time = int(time.monotonic() * 1000)
             return event_value, monotonic_time
-        return event_value, None
+        
+    def __del__(self):
+        print('class destroyed')

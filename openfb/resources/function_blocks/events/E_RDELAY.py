@@ -39,3 +39,8 @@ class E_RDELAY:
         if self._on_timeout:
             self._on_timeout(self._event_value)
         self._timer = None
+    
+    def __del__(self):
+        print('E_RDELAY class destroyed')
+        if hasattr(self, '_timer') and self._timer:
+            self._timer.cancel()

@@ -10,3 +10,6 @@ class FB_CTU_LINT:
                 self.cv += 1
             Q = self.cv >= PV
             return event_value, Q, self.cv
+
+    def __del__(self):
+        print('FB_CTU_LINT class destroyed')

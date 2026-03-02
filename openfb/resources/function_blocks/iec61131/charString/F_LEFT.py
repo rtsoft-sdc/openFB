@@ -5,7 +5,10 @@ class F_LEFT:
             try:
                 n = int(L)
             except Exception:
-                return event_value, ''
+                return None, ''
             if n <= 0:
-                return event_value, ''
+                return None, ''
             return event_value, s[:n]
+
+    def __del__(self):
+        print('F_LEFT class destroyed')

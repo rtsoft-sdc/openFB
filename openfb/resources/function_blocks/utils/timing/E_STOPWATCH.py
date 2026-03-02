@@ -26,4 +26,6 @@ class E_STOPWATCH:
             self.td = 0
             return None, None, event_value, self.td
             
-        return None, None, None, self.td
+
+    def __del__(self):
+        print('class destroyed')

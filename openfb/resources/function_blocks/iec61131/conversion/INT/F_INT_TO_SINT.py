@@ -3,3 +3,6 @@ class F_INT_TO_SINT:
         if event_name == 'REQ':
             byte_val = int(IN) & 0xFF
             return event_value, byte_val - 256 if byte_val >= 128 else byte_val 
+
+    def __del__(self):
+        print('F_INT_TO_SINT class destroyed')

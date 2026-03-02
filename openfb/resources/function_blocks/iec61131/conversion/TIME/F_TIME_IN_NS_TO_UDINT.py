@@ -5,3 +5,6 @@ class F_TIME_IN_NS_TO_UDINT:
         if event_name == 'REQ':
             td = IN if isinstance(IN, timedelta) else timedelta(milliseconds=int(IN))
             return event_value, int(td.total_seconds() * 1000000000) & 0xFFFFFFFF
+
+    def __del__(self):
+        print('F_TIME_IN_NS_TO_UDINT class destroyed')

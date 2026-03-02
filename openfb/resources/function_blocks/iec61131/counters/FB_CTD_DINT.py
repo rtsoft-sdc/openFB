@@ -10,3 +10,6 @@ class FB_CTD_DINT:
                 self.cv -= 1
             Q = self.cv <= 0
             return event_value, Q, self.cv
+
+    def __del__(self):
+        print('FB_CTD_DINT class destroyed')

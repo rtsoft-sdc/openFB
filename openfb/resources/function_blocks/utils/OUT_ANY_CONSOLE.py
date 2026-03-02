@@ -6,3 +6,6 @@ class OUT_ANY_CONSOLE:
             else:
                 print(IN)
             return event_value, True
+
+    def __del__(self):
+        print('class destroyed')

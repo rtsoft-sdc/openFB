@@ -15,3 +15,6 @@ class F_REPLACE:
             before = s[:idx]
             after = s[idx + max(0, l):]
             return event_value, before + rep + after
+
+    def __del__(self):
+        print('F_REPLACE class destroyed')

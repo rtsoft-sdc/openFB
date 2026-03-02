@@ -7,3 +7,6 @@ class F_MUX_3:
                 return event_value, IN2
             else: 
                 return event_value, IN3
+
+    def __del__(self):
+        print('F_MUX_3 class destroyed')

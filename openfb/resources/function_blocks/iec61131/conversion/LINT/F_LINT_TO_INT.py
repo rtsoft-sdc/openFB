@@ -3,3 +3,6 @@ class F_LINT_TO_INT:
         if event_name == 'REQ':
             val = int(IN) & 0xFFFF
             return event_value, val if val < 32768 else val - 65536
+
+    def __del__(self):
+        print('F_LINT_TO_INT class destroyed')

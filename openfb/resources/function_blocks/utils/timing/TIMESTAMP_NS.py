@@ -20,4 +20,6 @@ class TIMESTAMP_NS:
             timestamp_ns = int(time_diff.total_seconds() * 1_000_000_000)
             
             return event_value, timestamp_ns
-        return event_value, 0
+
+    def __del__(self):
+        print('class destroyed')

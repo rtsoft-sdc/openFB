@@ -75,3 +75,6 @@ class FB_TOF:
                         ET = pt_delta
             
             return event_value, self.q, ET
+
+    def __del__(self):
+        print('FB_TOF class destroyed')

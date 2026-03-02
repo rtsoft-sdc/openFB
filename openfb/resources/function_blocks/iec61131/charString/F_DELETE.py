@@ -14,3 +14,6 @@ class F_DELETE:
             if l <= 0:
                 return event_value, s
             return event_value, s[:start] + s[start + l:]
+
+    def __del__(self):
+        print('F_DELETE class destroyed')

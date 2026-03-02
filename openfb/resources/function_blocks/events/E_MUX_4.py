@@ -8,4 +8,7 @@ class E_MUX_4:
         }
         if event_name in mapping:
             return event_value, mapping[event_name]
+    
+    def __del__(self):
+        print('E_MUX_4 class destroyed')
         

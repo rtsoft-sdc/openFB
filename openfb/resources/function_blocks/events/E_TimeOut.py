@@ -39,4 +39,10 @@ class E_TimeOut:
             delay = float(dt) / 1000.0 if isinstance(dt, (int, float)) else 0.001
         if not self._stop_event.wait(timeout=delay):
             if self._on_timeout:
-                self._on_timeout(event_value)
+                self._on_timeout(event_value)    
+    def __del__(self):
+        print('E_TimeOut class destroyed')
+        if hasattr(self, '_stop_event'):
+            self._stop_event.set()
+        if hasattr(self, '_timeout_thread') and self._timeout_thread and self._timeout_thread.is_alive():
+            self._timeout_thread.join(timeout=0.1)

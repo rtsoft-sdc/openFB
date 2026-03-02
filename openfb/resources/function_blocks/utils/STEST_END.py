@@ -3,3 +3,6 @@ class STEST_END:
         if event_name == 'REQ':
             pass
         return tuple()
+
+    def __del__(self):
+        print('class destroyed')

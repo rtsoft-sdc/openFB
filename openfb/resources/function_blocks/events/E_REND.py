@@ -17,3 +17,6 @@ class E_REND:
             self.ei2 = False
             return event_value
         return None
+    
+    def __del__(self):
+        print('E_REND class destroyed')

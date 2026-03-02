@@ -12,4 +12,7 @@ class E_CTU:
             self.CV = 0
             self.Q = False
             return event_value, self.Q, self.CV
+    
+    def __del__(self):
+        print('E_CTU class destroyed')
         

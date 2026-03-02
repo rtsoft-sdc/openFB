@@ -14,3 +14,6 @@ class STRUCT_MUX:
                 return event_value, out_struct
             except Exception:
                 return None, {}
+    
+    def __del__(self):
+        print('STRUCT_MUX class destroyed')

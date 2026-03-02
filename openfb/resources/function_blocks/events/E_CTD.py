@@ -13,3 +13,6 @@ class E_CTD:
             self.CV = PV
             self.Q = (self.CV == 0)
             return event_value, self.Q, self.CV
+    
+    def __del__(self):
+        print('E_CTD class destroyed')

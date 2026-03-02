@@ -1,7 +1,8 @@
 class F_OR:
     def schedule(self, event_name, event_value, IN1, IN2):
         if event_name == 'REQ':
-            try:
-                return event_value, int(IN1) | int(IN2)
-            except Exception:
-                return event_value, 0
+            return event_value, int(IN1) | int(IN2)
+ 
+
+    def __del__(self):
+        print('F_OR class destroyed')

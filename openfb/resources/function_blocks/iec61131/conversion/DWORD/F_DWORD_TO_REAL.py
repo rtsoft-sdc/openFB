@@ -11,3 +11,6 @@ class F_DWORD_TO_REAL:
                 return event_value, result
             except Exception:
                 return None, 0.0
+
+    def __del__(self):
+        print('F_DWORD_TO_REAL class destroyed')

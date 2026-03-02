@@ -16,3 +16,6 @@ class F_WORD_BCD_TO_UINT:
                 return event_value, result
             except Exception:
                 return None, 0
+
+    def __del__(self):
+        print('F_WORD_BCD_TO_UINT class destroyed')

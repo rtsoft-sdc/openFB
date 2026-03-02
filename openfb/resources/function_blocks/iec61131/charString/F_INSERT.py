@@ -11,3 +11,6 @@ class F_INSERT:
             if idx >= len(s):
                 return event_value, s + ins
             return event_value, s[:idx] + ins + s[idx:]
+
+    def __del__(self):
+        print('F_INSERT class destroyed')

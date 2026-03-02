@@ -4,3 +4,6 @@ class F_CONCAT:
             a = '' if IN1 is None else str(IN1)
             b = '' if IN2 is None else str(IN2)
             return event_value, a + b
+
+    def __del__(self):
+        print('F_CONCAT class destroyed')

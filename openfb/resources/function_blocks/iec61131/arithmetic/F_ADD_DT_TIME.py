@@ -74,5 +74,8 @@ class F_ADD_DT_TIME:
             dt = _parse_dt(IN1)
             delta = _parse_time(IN2)
             if dt is None or delta is None:
-                return event_value, None
+                return None, None
             return event_value, dt + delta
+
+    def __del__(self):
+        print('F_ADD_DT_TIME class destroyed')

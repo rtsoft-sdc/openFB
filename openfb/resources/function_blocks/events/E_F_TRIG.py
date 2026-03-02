@@ -8,4 +8,6 @@ class E_F_TRIG:
                 self.last = QI
                 return event_value
             self.last = QI
-        return None
+    
+    def __del__(self):
+        print('E_F_TRIG class destroyed')

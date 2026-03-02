@@ -7,3 +7,6 @@ class FB_F_TRIG:
             Q = (not CLK) and (not self.mem)
             self.mem = not CLK
             return event_value, Q
+
+    def __del__(self):
+        print('FB_F_TRIG class destroyed')

@@ -60,5 +60,8 @@ class F_MULTIME:
             td = _parse_time(IN1)
             n = _parse_number(IN2)
             if td is None or n is None:
-                return event_value, datetime.timedelta(0)
+                return None, datetime.timedelta(0)
             return event_value, datetime.timedelta(seconds=td.total_seconds() * n)
+
+    def __del__(self):
+        print('F_MULTIME class destroyed')

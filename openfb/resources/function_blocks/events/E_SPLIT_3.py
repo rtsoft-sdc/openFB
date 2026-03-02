@@ -3,3 +3,6 @@ class E_SPLIT_3:
         if event_name == 'EI':
             return [event_value, event_value, event_value]
         return None
+    
+    def __del__(self):
+        print('E_SPLIT_3 class destroyed')

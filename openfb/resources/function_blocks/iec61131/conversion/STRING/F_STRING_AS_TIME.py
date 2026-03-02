@@ -31,3 +31,6 @@ class F_STRING_AS_TIME:
             td = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds, 
                           milliseconds=milliseconds, microseconds=microseconds)
             return event_value, td
+
+    def __del__(self):
+        print('F_STRING_AS_TIME class destroyed')

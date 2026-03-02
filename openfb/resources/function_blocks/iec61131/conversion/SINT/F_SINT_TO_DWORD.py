@@ -3,3 +3,6 @@ class F_SINT_TO_DWORD:
         if event_name == 'REQ':
             val = int(IN)
             return event_value, val & 0xFF if val >= 0 else (val + 256) & 0xFFFFFFFF
+
+    def __del__(self):
+        print('F_SINT_TO_DWORD class destroyed')

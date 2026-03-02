@@ -14,3 +14,6 @@ class F_BYTE_BCD_TO_USINT:
                 return event_value, result
             except Exception:
                 return None, 0
+
+    def __del__(self):
+        print('F_BYTE_BCD_TO_USINT class destroyed')

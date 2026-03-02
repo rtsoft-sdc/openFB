@@ -28,3 +28,6 @@ class E_CTUD:
             self.QD = (self.CV == 0)
             return event_value, self.QU, self.QD, self.CV
         return None
+    
+    def __del__(self):
+        print('E_CTUD class destroyed')

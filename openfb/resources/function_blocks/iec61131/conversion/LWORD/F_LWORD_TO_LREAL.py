@@ -5,3 +5,6 @@ class F_LWORD_TO_LREAL:
         if event_name == 'REQ':
             val = int(IN) & 0xFFFFFFFFFFFFFFFF
             return event_value, struct.unpack('d', struct.pack('Q', val))[0]
+
+    def __del__(self):
+        print('F_LWORD_TO_LREAL class destroyed')

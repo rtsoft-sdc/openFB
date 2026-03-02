@@ -65,3 +65,6 @@ class FB_TON:
                 ET = timedelta(0)
             
             return event_value, self.q, ET
+
+    def __del__(self):
+        print('FB_TON class destroyed')

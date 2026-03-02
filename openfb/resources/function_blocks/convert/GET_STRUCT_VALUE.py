@@ -16,4 +16,7 @@ class GET_STRUCT_VALUE:
                 return event_value, True, value
             except Exception:
                 return None, False, None
+    
+    def __del__(self):
+        print('GET_STRUCT_VALUE class destroyed')
             

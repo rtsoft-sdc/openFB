@@ -4,4 +4,6 @@ class E_SWITCH:
             if not G:
                 return event_value, None
             else:
-                return None, event_value
+                return None, event_value    
+    def __del__(self):
+        print('E_SWITCH class destroyed')

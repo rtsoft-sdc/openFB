@@ -52,4 +52,10 @@ class E_TRAIN:
                 if not self._stop_event.wait(timeout=delay):
                     continue
                 else:
-                    break
+                    break    
+    def __del__(self):
+        print('E_TRAIN class destroyed')
+        if hasattr(self, '_stop_event'):
+            self._stop_event.set()
+        if hasattr(self, '_thread') and self._thread and self._thread.is_alive():
+            self._thread.join(timeout=0.5)

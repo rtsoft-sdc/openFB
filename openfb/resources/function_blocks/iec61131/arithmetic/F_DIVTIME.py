@@ -60,5 +60,8 @@ class F_DIVTIME:
             td = _parse_time(IN1)
             n = _parse_number(IN2)
             if td is None or n in (None, 0):
-                return event_value, datetime.timedelta(0)
+                return None, datetime.timedelta(0)
             return event_value, datetime.timedelta(seconds=td.total_seconds() / n)
+
+    def __del__(self):
+        print('F_DIVTIME class destroyed')

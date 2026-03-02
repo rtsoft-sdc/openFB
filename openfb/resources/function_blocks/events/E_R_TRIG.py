@@ -8,3 +8,6 @@ class E_R_TRIG:
                 self.last = QI
                 return event_value, None
             self.last = QI
+    
+    def __del__(self):
+        print('E_R_TRIG class destroyed')

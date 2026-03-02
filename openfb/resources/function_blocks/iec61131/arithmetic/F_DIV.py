@@ -3,7 +3,10 @@ class F_DIV:
         if event_name == 'REQ':
             try:
                 if IN2 == 0:
-                    return event_value, 0
+                    return None, 0
                 return event_value, IN1 / IN2
             except Exception:
-                return event_value, 0
+                return None, 0
+
+    def __del__(self):
+        print('F_DIV class destroyed')

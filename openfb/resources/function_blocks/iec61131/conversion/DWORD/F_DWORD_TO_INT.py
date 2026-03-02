@@ -6,3 +6,6 @@ class F_DWORD_TO_INT:
             if val >= 32768:
                 val = val - 65536
             return event_value, val
+
+    def __del__(self):
+        print('F_DWORD_TO_INT class destroyed')

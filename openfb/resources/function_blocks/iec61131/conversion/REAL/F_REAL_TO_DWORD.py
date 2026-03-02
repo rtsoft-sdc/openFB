@@ -5,3 +5,6 @@ class F_REAL_TO_DWORD:
         if event_name == 'REQ':
             f = float(IN)
             return event_value, struct.unpack('I', struct.pack('f', f))[0]
+
+    def __del__(self):
+        print('F_REAL_TO_DWORD class destroyed')

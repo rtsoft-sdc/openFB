@@ -18,4 +18,6 @@ class FB_RANDOM:
         elif event_name == 'REQ':
             val = random.random()
             return None, event_value, val        
-        return None, None, 0.0
+
+    def __del__(self):
+        print('class destroyed')
