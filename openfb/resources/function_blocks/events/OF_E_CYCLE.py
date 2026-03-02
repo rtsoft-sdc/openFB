@@ -30,13 +30,12 @@ class E_CYCLE:
             )
             self._cycle_thread.start()
             
-            return event_value
+            return (event_value,)
             
         elif event_name == 'STOP':
             self._stop_event.set()
-            return None
+            return (None,)
             
-        return None
     
     def _cycle_loop(self, delay_seconds):
         while not self._stop_event.is_set():

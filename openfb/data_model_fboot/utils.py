@@ -177,7 +177,7 @@ class TypeRegistry:
         if value_type == target_type:
             return True
 
-        if target_type in cls._GENERIC_IMPLIED:
+        if target_type in cls.GENERIC_IMPLIED:
             implied = cls.get_implied_types(target_type, recursive=True)
             return value_type in implied
         
@@ -212,6 +212,15 @@ class TypeRegistry:
             if mapping.ua_variant_type not in result:
                 result[mapping.ua_variant_type] = mapping.get_ua_node_id()
         return result
+
+    @classmethod
+    def get_canonical_name(cls, type_name: str) -> Optional[str]:
+        if type_name in cls.TYPES:
+            return type_name
+        for canonical_name, mapping in cls.TYPES.items():
+            if type_name in mapping.aliases:
+                return canonical_name
+        return None
 
 
 class IntegerConverter:
@@ -349,30 +358,100 @@ class TypeConverter:
     _string_converter = StringConverter()
     _timedate_converter = TimeDateConverter()
     
+    @staticmethod
+    def _parse_iec_literal(value: Any) -> Tuple[Optional[str], Any]:
+  
+        s = str(value).strip()
+        if '#' not in s:
+            return None, value
+        
+        parts = s.split('#', 1)
+        if len(parts) != 2:
+            return None, value
+        
+        type_prefix = parts[0].strip().upper()
+        literal_value = parts[1].strip()
+        
+        prefix_map = {
+            'BOOL': 'BOOL',
+            'SINT': 'SINT', 'INT': 'INT', 'DINT': 'DINT', 'LINT': 'LINT',
+            'USINT': 'USINT', 'UINT': 'UINT', 'UDINT': 'UDINT', 'ULINT': 'ULINT',
+            'BYTE': 'BYTE', 'WORD': 'WORD', 'DWORD': 'DWORD', 'LWORD': 'LWORD',
+            'REAL': 'REAL', 'LREAL': 'LREAL',
+            'STRING': 'STRING', 'WSTRING': 'STRING',
+            'CHAR': 'CHAR', 'WCHAR': 'CHAR',
+            'TIME': 'TIME', 'T': 'TIME',
+            'DATE': 'DATE', 'D': 'DATE',
+            'TIME_OF_DAY': 'TIME_OF_DAY', 'TOD': 'TIME_OF_DAY',
+            'DATE_AND_TIME': 'DATE_AND_TIME', 'DT': 'DATE_AND_TIME',
+        }
+        
+        inferred_type = prefix_map.get(type_prefix)
+        if inferred_type:
+            return inferred_type, literal_value
+        
+        return None, value
+    
     @classmethod
     def convert(cls, value: Any, target_type: str, source_type: Optional[str] = None) -> Union[Any, Tuple[Any, str]]:
+        inferred_source_type, extracted_value = cls._parse_iec_literal(value)
+        working_value = extracted_value
+        source_type = source_type or inferred_source_type
+        
         mapping = TypeRegistry.resolve_type(target_type)
         if not mapping:
             logging.error(f"Unknown type: {target_type}")
-            return value
-        canonical_type = mapping.iec_name
+            return working_value
+        
+        canonical_target = TypeRegistry.get_canonical_name(target_type) or target_type
+        
+        if TypeRegistry.is_generic_type(canonical_target):
+            if source_type and TypeRegistry.is_type_compatible(source_type, canonical_target):
+                source_category = TypeRegistry.get_category(source_type)
+                if source_category == 'integer':
+                    return cls._int_converter.convert_to_int(working_value, source_type)
+                elif source_category == 'float':
+                    return cls._float_converter.convert_to_float(working_value, source_type)
+                elif source_category == 'bool':
+                    return cls._bool_converter.convert_to_bool(working_value)
+                elif source_category == 'string':
+                    return cls._string_converter.convert_to_string(working_value)
+                elif source_category == 'time_date':
+                    return cls._timedate_converter.convert_to_time_date(working_value, source_type)
+            
+            if isinstance(working_value, bool):
+                return working_value
+            if isinstance(working_value, int):
+                return working_value
+            if isinstance(working_value, float):
+                return working_value
+            if isinstance(working_value, str):
+                try:
+                    if '.' in working_value:
+                        return float(working_value)
+                    return int(working_value)
+                except (ValueError, TypeError):
+                    return working_value
+            
+            return TypeRegistry.get_default_value(canonical_target)
+        
         try:
-            if TypeRegistry.is_bool_type(canonical_type):
-                return cls._bool_converter.convert_to_bool(value)
-            elif TypeRegistry.is_integer_type(canonical_type):
-                return cls._int_converter.convert_to_int(value, canonical_type)
-            elif TypeRegistry.is_float_type(canonical_type):
-                return cls._float_converter.convert_to_float(value, canonical_type)
-            elif TypeRegistry.is_string_type(canonical_type):
-                return cls._string_converter.convert_to_string(value)
-            elif TypeRegistry.is_time_date_type(canonical_type):
-                return cls._timedate_converter.convert_to_time_date(value, canonical_type)
+            if TypeRegistry.is_bool_type(canonical_target):
+                return cls._bool_converter.convert_to_bool(working_value)
+            elif TypeRegistry.is_integer_type(canonical_target):
+                return cls._int_converter.convert_to_int(working_value, canonical_target)
+            elif TypeRegistry.is_float_type(canonical_target):
+                return cls._float_converter.convert_to_float(working_value, canonical_target)
+            elif TypeRegistry.is_string_type(canonical_target):
+                return cls._string_converter.convert_to_string(working_value)
+            elif TypeRegistry.is_time_date_type(canonical_target):
+                return cls._timedate_converter.convert_to_time_date(working_value, canonical_target)
             else:
                 logging.warning(f"No converter for category: {mapping.category}")
-                return value
+                return working_value
         except Exception as e:
-            logging.error(f"Error converting value={value!r} to {target_type}: {e}", exc_info=True)
-            return TypeRegistry.get_default_value(canonical_type)
+            logging.error(f"Error converting value={working_value!r} to {target_type}: {e}", exc_info=True)
+            return TypeRegistry.get_default_value(canonical_target)
     
     @classmethod
     def batch_convert(cls, values: Dict[str, Any], type_map: Dict[str, str]) -> Dict[str, Any]:
