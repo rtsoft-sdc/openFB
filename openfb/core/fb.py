@@ -1,7 +1,6 @@
 import threading
 import logging
 from openfb.core import fb_interface
-from openfb.core import sniffer
 import os
 from openfb.data_model_fboot import utils
 import queue
@@ -27,8 +26,6 @@ class FB(threading.Thread, fb_interface.FBInterface):
             py_path = os.path.join(root_path, fb_type + '.py')
             message_queue = queue.Queue()
             self.message_queue = message_queue
-            self.sniffer_thread = sniffer.Sniffer(fb_type, py_path, message_queue)
-            self.sniffer_thread.start()  
 
     def run(self):
         logging.info('fb {0} started.'.format(self.fb_name))
@@ -48,8 +45,6 @@ class FB(threading.Thread, fb_interface.FBInterface):
             self.wait_event()
 
             if self.kill_event.is_set():
-                if self.fb_type != 'TEST_FB':
-                    self.sniffer_thread.kill()
                 break
 
             inputs = self.read_inputs()
@@ -109,6 +104,3 @@ class FB(threading.Thread, fb_interface.FBInterface):
             logging.warning(exc)
 
         logging.info('fb {0} stopped.'.format(self.fb_name))
-
-        if self.fb_type != 'TEST_FB':
-            self.sniffer_thread.kill()
