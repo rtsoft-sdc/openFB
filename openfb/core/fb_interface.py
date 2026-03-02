@@ -1,6 +1,7 @@
 import threading
 from collections import OrderedDict
 from xml.etree import ElementTree as ETree
+from openfb.data_model_fboot.utils import TypeRegistry
 import logging
 import time
 import datetime
@@ -274,21 +275,7 @@ class FBInterface:
                             try:
                                 var_name = var.attrib['Name']
                                 var_type = var.attrib['Type']
-                                var_value = 0
-                                if var_type in ("STRING", "WSTRING", "CHAR", "WCHAR",
-                                                "ANY", "ANY_ELEMENTARY", "ANY_CHARS",
-                                                "ANY_CHAR", "ANY_STRING"):
-                                    var_value = ""
-                                elif var_type == "TIME":
-                                    var_value = "T#0s"
-                                elif var_type == "DATE":
-                                    var_value = "D#1970-01-01"
-                                elif var_type in ("TIME_OF_DAY", "TOD"):
-                                    var_value = "TOD#00:00:00"
-                                elif var_type in ("DATE_AND_TIME", "DT", "ANY_DATE"):
-                                    var_value = "DT#1970-01-01-00:00:00"
-                                elif var_type in ("BOOL", "ANY_BIT"):
-                                    var_value = False
+                                var_value = TypeRegistry.get_default_value(var_type)
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:
@@ -306,21 +293,7 @@ class FBInterface:
                             try:
                                 var_name = var.attrib['Name']
                                 var_type = var.attrib['Type']
-                                var_value = 0
-                                if var_type in ("STRING", "WSTRING", "CHAR", "WCHAR",
-                                                "ANY", "ANY_ELEMENTARY", "ANY_CHARS",
-                                                "ANY_CHAR", "ANY_STRING", "ANY_DATE"):
-                                    var_value = ""
-                                elif var_type == "TIME":
-                                    var_value = "T#0s"
-                                elif var_type == "DATE":
-                                    var_value = "D#1970-01-01"
-                                elif var_type in ("TIME_OF_DAY", "TOD"):
-                                    var_value = "TOD#00:00:00"
-                                elif var_type in ("DATE_AND_TIME", "DT", "ANY_DATE"):
-                                    var_value = "DT#1970-01-01-00:00:00"
-                                elif var_type in ("BOOL", "ANY_BIT"):
-                                    var_value = False
+                                var_value = TypeRegistry.get_default_value(var_type)
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:
