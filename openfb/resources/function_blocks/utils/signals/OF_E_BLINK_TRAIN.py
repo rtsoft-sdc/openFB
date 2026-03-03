@@ -1,6 +1,7 @@
 import threading
 import time
 import logging
+from ...datetime_parsing import parse_time_value_simple
 
 class OF_E_BLINK_TRAIN:
     def __init__(self):
@@ -15,8 +16,8 @@ class OF_E_BLINK_TRAIN:
     def schedule(self, event_name, event_value, TIMELOW, TIMEHIGH, N):
         if event_name == 'START':
             self.stop_flag = False
-            self.timelow = self._parse_time(TIMELOW)
-            self.timehigh = self._parse_time(TIMEHIGH)
+            self.timelow = parse_time_value_simple(TIMELOW)
+            self.timehigh = parse_time_value_simple(TIMEHIGH)
             self.n_events = int(N)
             self.current_state = False
             
@@ -37,17 +38,6 @@ class OF_E_BLINK_TRAIN:
             return event_value, self.current_state
             
         return event_value, self.current_state
-    
-    def _parse_time(self, time_value):
-        if isinstance(time_value, (int, float)):
-            return time_value / 1000.0
-        elif isinstance(time_value, str):
-            time_str = time_value.upper().replace('T#', '').replace('MS', '').replace('S', '')
-            try:
-                return float(time_str) / 1000.0
-            except:
-                return 1.0
-        return 1.0
     
     def _blink_loop(self):
         count = 0

@@ -120,3 +120,54 @@ def apply_tod_delta(tod, delta):
     total = total % 86400
     base = datetime.datetime(2000, 1, 1) + datetime.timedelta(seconds=total)
     return base.time()
+
+
+def parse_time_value_simple(time_value):
+    if isinstance(time_value, datetime.timedelta):
+        return time_value.total_seconds()
+    if isinstance(time_value, (int, float)):
+        return time_value / 1000.0 if time_value > 100 else time_value
+    if isinstance(time_value, str):
+        s = time_value.upper().strip()
+        if s.startswith('T#'):
+            s = s[2:]
+        
+        matches = _TIME_RE.findall(s)
+        if matches:
+            seconds = 0.0
+            for num, unit in matches:
+                n = float(num)
+                u = unit.upper()
+                if u == 'MS':
+                    seconds += n / 1000.0
+                elif u == 'S':
+                    seconds += n
+                elif u == 'M':
+                    seconds += n * 60.0
+                elif u == 'H':
+                    seconds += n * 3600.0
+                elif u == 'D':
+                    seconds += n * 86400.0
+            return seconds
+        
+        try:
+            val = float(s)
+            return val / 1000.0 if val > 100 else val
+        except ValueError:
+            return 1.0
+    
+    return 1.0
+
+
+
+def parse_number(value):
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        try:
+            return float(value.strip())
+        except ValueError:
+            return None
+    return None

@@ -1,6 +1,6 @@
 import logging
 import datetime
-from .datetime_parsing import parse_time_interval
+from ...datetime_parsing import parse_time_interval
 
 
 def _parse_number(value):
