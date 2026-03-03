@@ -1,5 +1,5 @@
 import logging
-from ...datetime_parsing import parse_time_of_day, parse_time_interval, apply_tod_delta
+from openfb.data_model_fboot.datetime_parser import parse_time_of_day, parse_time_interval, apply_tod_delta
 
 
 class F_ADD_TOD_TIME:

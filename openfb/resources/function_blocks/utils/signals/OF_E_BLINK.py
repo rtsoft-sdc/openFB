@@ -1,7 +1,7 @@
 import threading
 import time
 import logging
-from ...datetime_parsing import parse_time_value_simple
+from openfb.data_model_fboot.datetime_parser import parse_time_value_simple
 
 class OF_E_BLINK:
     def __init__(self):

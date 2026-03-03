@@ -1,7 +1,7 @@
 import logging
 import time
 from datetime import timedelta
-from ...datetime_parsing import parse_time_interval
+from openfb.data_model_fboot.datetime_parser import parse_time_interval
 
 
 class FB_TON:

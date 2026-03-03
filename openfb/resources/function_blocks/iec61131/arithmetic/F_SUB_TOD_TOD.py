@@ -1,6 +1,6 @@
 import logging
 import datetime
-from ...datetime_parsing import parse_time_of_day, tod_seconds
+from openfb.data_model_fboot.datetime_parser import parse_time_of_day, tod_seconds
 
 
 class F_SUB_TOD_TOD:

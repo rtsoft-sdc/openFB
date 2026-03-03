@@ -1,5 +1,5 @@
 import logging
-from ...datetime_parsing import parse_date_value
+from openfb.data_model_fboot.datetime_parser import parse_date_value
 
 
 class F_SUB_DATE_DATE:

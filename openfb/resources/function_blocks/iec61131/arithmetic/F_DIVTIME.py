@@ -1,6 +1,6 @@
 import logging
 import datetime
-from ...datetime_parsing import parse_time_interval
+from openfb.data_model_fboot.datetime_parser import parse_time_interval
 
 
 def _parse_number(value):
