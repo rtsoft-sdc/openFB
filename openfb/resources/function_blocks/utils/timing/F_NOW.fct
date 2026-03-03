@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function Name="F_NOW" Comment="returns current local date and time">
+	<CompilerInfo packageName="eclipse4diac::utils::timing">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+				<With Var=""/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="" Type="DATE_AND_TIME" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<FunctionBody>
+		<ST><![CDATA[PACKAGE utils::timing;
+
+(* returns current local date and time *)
+FUNCTION F_NOW : DATE_AND_TIME
+F_NOW := NOW();
+END_FUNCTION
+
+]]></ST>
+	</FunctionBody>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</Function>

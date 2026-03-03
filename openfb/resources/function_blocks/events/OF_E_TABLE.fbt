@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OF_E_TABLE" Comment="Composite Function Block Type">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event" Comment="Start table driven event generation">
+				<With Var="DT"/>
+				<With Var="N"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Stop table driven event generation">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Generated events: N events at periods DT, starting at DT[0] after START">
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" Comment="Periods between events" ArraySize="4"/>
+			<VarDeclaration Name="N" Type="UINT" Comment="Number of events to generate"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="CV" Type="UINT" Comment="Current event index, 0..N-1"/>
+		</OutputVars>
+	</InterfaceList>
+	
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

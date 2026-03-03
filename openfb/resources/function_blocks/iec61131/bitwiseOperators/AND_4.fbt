@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="AND_4" Comment="FB to calculate bitwise boolean AND (generic FB)">
+	<CompilerInfo packageName="iec61131::bitwiseOperators">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN1"/>
+				<With Var="IN2"/>
+				<With Var="IN3"/>
+				<With Var="IN4"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN1" Type="ANY_BIT" Comment="AND input 1"/>
+			<VarDeclaration Name="IN2" Type="ANY_BIT" Comment="AND input 2"/>
+			<VarDeclaration Name="IN3" Type="ANY_BIT" Comment="AND input 3"/>
+			<VarDeclaration Name="IN4" Type="ANY_BIT" Comment="AND input 4"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="ANY_BIT" Comment="AND result"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_AND'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

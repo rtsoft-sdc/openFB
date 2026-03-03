@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OF_E_R_TRIG" Comment="Boolean rising edge detection">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI" Type="Event" Comment="check for rising edge">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="confirmation that an rising edge was detected">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="value to check for a rising edge"/>
+		</InputVars>
+	</InterfaceList>
+	
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

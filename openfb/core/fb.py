@@ -19,6 +19,9 @@ class FB(threading.Thread, fb_interface.FBInterface):
         self.update_variables_fboot = None
         self.fb_type = fb_type
 
+        #if hasattr(fb_obj, 'set_fb_interface'):
+            #fb_obj.set_fb_interface(self)
+
         if fb_type != 'TEST_FB' and fb_name != 'START':
             # Gets the dir path to the py and fbt files
             root_path = utils.get_fb_files_path(fb_type)

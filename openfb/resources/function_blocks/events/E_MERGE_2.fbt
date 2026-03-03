@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_MERGE_2" Comment="Merge (OR) of two input events (generic FB)">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI1" Type="Event" Comment="First input event">
+			</Event>
+			<Event Name="EI2" Type="Event" Comment="Second input event">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Output Event">
+			</Event>
+		</EventOutputs>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_E_MERGE'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

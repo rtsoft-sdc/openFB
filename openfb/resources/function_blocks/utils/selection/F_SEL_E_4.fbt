@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="F_SEL_E_4" Comment="selection event-based selection) (generic FB)">
+	<CompilerInfo packageName="eclipse4diac::utils::selection">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ1" Type="Event">
+				<With Var="IN1"/>
+			</Event>
+			<Event Name="REQ2" Type="Event">
+				<With Var="IN2"/>
+			</Event>
+			<Event Name="REQ3" Type="Event">
+				<With Var="IN3"/>
+			</Event>
+			<Event Name="REQ4" Type="Event">
+				<With Var="IN4"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN1" Type="ANY" Comment="Selectable input variable"/>
+			<VarDeclaration Name="IN2" Type="ANY" Comment="Selectable input variable"/>
+			<VarDeclaration Name="IN3" Type="ANY" Comment="Selectable input variable"/>
+			<VarDeclaration Name="IN4" Type="ANY" Comment="Selectable input variable"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="ANY" Comment="Selected input"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_F_SEL_E'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

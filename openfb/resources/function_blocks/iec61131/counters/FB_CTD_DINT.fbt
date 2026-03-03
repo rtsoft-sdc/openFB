@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="FB_CTD_DINT" Comment="Down counter">
+	<CompilerInfo packageName="iec61131::counters">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="CD"/>
+				<With Var="PV"/>
+				<With Var="LD"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="CD" Type="BOOL" Comment="Count down"/>
+			<VarDeclaration Name="LD" Type="BOOL" Comment="Load"/>
+			<VarDeclaration Name="PV" Type="DINT" Comment="Preset value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
+			<VarDeclaration Name="CV" Type="DINT" Comment="Count value"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<Algorithm Name="REQ" Comment="">
+			<ST><![CDATA[ALGORITHM REQ
+IF LD THEN
+  CV := PV;
+ELSIF CD AND CV> -2147483648 THEN
+  CV := CV - 1;
+END_IF;
+Q := CV <= 0;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

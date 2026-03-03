@@ -1,6 +1,7 @@
 import threading
 from collections import OrderedDict
 from xml.etree import ElementTree as ETree
+from openfb.data_model_fboot.utils import TypeRegistry, format_value_for_watch
 import logging
 import time
 import datetime
@@ -274,11 +275,7 @@ class FBInterface:
                             try:
                                 var_name = var.attrib['Name']
                                 var_type = var.attrib['Type']
-                                var_value = 0
-                                if var_type == "STRING" or var_type == "WSTRING":
-                                    var_value = ""
-                                elif var_type == "TIME":
-                                    var_value = "T#0s"
+                                var_value = TypeRegistry.get_default_value(var_type)
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:
@@ -296,11 +293,7 @@ class FBInterface:
                             try:
                                 var_name = var.attrib['Name']
                                 var_type = var.attrib['Type']
-                                var_value = 0
-                                if var_type == "STRING" or var_type == "WSTRING":
-                                    var_value = ""
-                                elif var_type == "TIME":
-                                    var_value = "T#0s"
+                                var_value = TypeRegistry.get_default_value(var_type)
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:
@@ -397,7 +390,7 @@ class FBInterface:
 
             #############################################
 
-    def set_attr(self, name, new_value=None, set_watch=None):
+    def set_attr(self, name, new_value=None, set_watch=None, new_type=None):
         # Locks the dictionary usage
         self.lock.acquire()
         try:
@@ -409,7 +402,8 @@ class FBInterface:
                     self.input_vars[name] = (v_type, value, set_watch)
                 # Sets the var value
                 elif new_value is not None:
-                    self.input_vars[name] = (v_type, new_value, is_watch)
+                    final_type = new_type if new_type is not None else v_type
+                    self.input_vars[name] = (final_type, new_value, is_watch)
 
             # INPUT EVENT
             elif name in self.input_events:
@@ -429,7 +423,8 @@ class FBInterface:
                     self.output_vars[name] = (var_type, value, set_watch)
                 # Sets the var value
                 elif new_value is not None:
-                    self.output_vars[name] = (var_type, new_value, is_watch)
+                    final_type = new_type if new_type is not None else var_type
+                    self.output_vars[name] = (final_type, new_value, is_watch)
 
             # OUTPUT EVENT
             elif name in self.output_events:
@@ -439,7 +434,8 @@ class FBInterface:
                     self.output_events[name] = (event_type, value, set_watch)
                 # Sets the event value
                 elif new_value is not None:
-                    self.output_events[name] = (event_type, new_value, is_watch)
+                    final_type = new_type if new_type is not None else event_type
+                    self.output_events[name] = (final_type, new_value, is_watch)
 
         finally:
             # Unlocks the dictionary usage
@@ -579,43 +575,28 @@ class FBInterface:
                     connection.send_event(value)
 
     def read_watches(self, start_time):
-        # Creates the xml root element
         fb_root = ETree.Element('FB', {'name': self.fb_name})
 
-        # Mixes the vars in 1 dictionary
         var_mix = {**self.input_vars, **self.output_vars}
-        # Iterates over the mix dictionary
-        for index, var_name in enumerate(var_mix):
+        for var_name in var_mix:
             v_type, value, is_watch = self.read_attr(var_name)
-            if is_watch and (value is not None):
+            if is_watch and value is not None:
                 port = ETree.Element('Port', {'name': var_name})
-                if v_type == 'ANY' and isinstance(value, str):
-                    if "STRING" in value or "WSTRING" in value:
-                        v_arr = value.split('#')
-                        value = v_arr[0] + "#'" + v_arr[1] + "'"
-                elif v_type == 'TIME':
-                    value = "T" + "#'" + (value.split('#')[1] if '#' in value else value) + "'"
-                elif v_type == 'WSTRING':
-                    value = "\"" + value + "\""
-                else:
-                    value = f"'{value}'" if isinstance(value, str) else str(value)
-                ETree.SubElement(port, 'Data', {'value': value,
-                                                'forced': 'false'})
+                ETree.SubElement(port, 'Data', {
+                    'value': format_value_for_watch(v_type, value),
+                    'forced': 'false',
+                })
                 fb_root.append(port)
 
-        # Mixes the vars in 1 dictionary
         event_mix = {**self.input_events, **self.output_events}
-        # Iterates over the mix dictionary
-        for index, event_name in enumerate(event_mix):
+        for event_name in event_mix:
             v_type, value, is_watch = self.read_attr(event_name)
-            if is_watch and (value is not None):
+            if is_watch and value is not None:
                 port = ETree.Element('Port', {'name': event_name})
                 ETree.SubElement(port, 'Data', {'value': str(value)})
                 fb_root.append(port)
 
-        # Gets the number of watches
         watches_len = len(fb_root.findall('Port'))
-
         return fb_root, watches_len
 
     ## Reset the monitoring statistics

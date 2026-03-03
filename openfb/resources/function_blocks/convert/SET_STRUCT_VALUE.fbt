@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="SET_STRUCT_VALUE" Comment="Service Interface Function Block Type">
+	<CompilerInfo packageName="eclipse4diac::convert">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Set Value out of structure">
+				<With Var="member"/>
+				<With Var="in_struct"/>
+				<With Var="element_value"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="REQ event finished">
+				<With Var="out_struct"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="in_struct" Type="ANY" Comment="Structure to look into"/>
+			<VarDeclaration Name="member" Type="STRING" Comment="Member of the strucuture to retrieve. Inner members are access using the dot (.) operator"/>
+			<VarDeclaration Name="element_value" Type="ANY" Comment="new value for the element"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="out_struct" Type="ANY" Comment="TRUE if no errors ocurred, FALSE otherwise"/>
+		</OutputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

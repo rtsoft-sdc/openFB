@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_SR" Comment="Event-driven bistable">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="S" Type="Event" Comment="Set output Q">
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset output Q">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Output Q has changed">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="value of flip flop"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="500" y="385">
+			</ECState>
+			<ECState Name="SET" Comment="" x="1200" y="400">
+				<ECAction Algorithm="SET" Output="EO"/>
+			</ECState>
+			<ECState Name="RESET" Comment="" x="1165" y="845">
+				<ECAction Algorithm="RESET" Output="EO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="SET" Condition="S" Comment="" x="995" y="455"/>
+			<ECTransition Source="SET" Destination="RESET" Condition="R" Comment="" x="1205" y="685"/>
+			<ECTransition Source="RESET" Destination="SET" Condition="S" Comment="" x="1460" y="675"/>
+		</ECC>
+		<Algorithm Name="SET" Comment="SET algorithm">
+			<ST><![CDATA[Q := TRUE;]]></ST>
+		</Algorithm>
+		<Algorithm Name="RESET" Comment="RESET algorithm">
+			<ST><![CDATA[Q := FALSE;]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OF_E_N_TABLE" Comment="Generation of a finite train of sperate events">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event">
+				<With Var="DT"/>
+				<With Var="N"/>
+			</Event>
+			<Event Name="STOP" Type="Event">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO0" Type="Event">
+			</Event>
+			<Event Name="EO1" Type="Event">
+			</Event>
+			<Event Name="EO2" Type="Event">
+			</Event>
+			<Event Name="EO3" Type="Event">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" ArraySize="4"/>
+			<VarDeclaration Name="N" Type="UINT"/>
+		</InputVars>
+	</InterfaceList>
+	
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

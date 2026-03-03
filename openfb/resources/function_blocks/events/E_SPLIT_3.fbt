@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_SPLIT_3" Comment="Split an event (generic FB)">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI" Type="Event" Comment="Input event">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO1" Type="Event" Comment="First output event">
+			</Event>
+			<Event Name="EO2" Type="Event" Comment="Second output event">
+			</Event>
+			<Event Name="EO3" Type="Event">
+			</Event>
+		</EventOutputs>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_E_SPLIT'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

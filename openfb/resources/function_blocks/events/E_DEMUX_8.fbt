@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_DEMUX_8" Comment="Event demultiplexer (generic FB)">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI" Type="Event" Comment="Event to demultiplex">
+				<With Var="K"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO1" Type="Event" Comment="Output, demultiplexed from EI when K=0">
+			</Event>
+			<Event Name="EO2" Type="Event" Comment="Output, demultiplexed from EI when K=1">
+			</Event>
+			<Event Name="EO3" Type="Event" Comment="Output, demultiplexed from EI when K=2">
+			</Event>
+			<Event Name="EO4" Type="Event" Comment="Output, demultiplexed from EI when K=3">
+			</Event>
+			<Event Name="EO5" Type="Event" Comment="Output, demultiplexed from EI when K=4">
+			</Event>
+			<Event Name="EO6" Type="Event" Comment="Output, demultiplexed from EI when K=5">
+			</Event>
+			<Event Name="EO7" Type="Event" Comment="Output, demultiplexed from EI when K=6">
+			</Event>
+			<Event Name="EO8" Type="Event" Comment="Output, demultiplexed from EI when K=7">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="K" Type="UINT" Comment="Event index"/>
+		</InputVars>
+	</InterfaceList>
+	<Attribute Name="eclipse4diac::core::GenericClassName" Value="'GEN_E_DEMUX'"/>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

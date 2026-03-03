@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_CTD" Comment="Event-Driven Down Counter">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CD" Type="Event" Comment="Count Down">
+			</Event>
+			<Event Name="LD" Type="Event" Comment="Load counter value">
+				<With Var="PV"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CDO" Type="Event" Comment="Count Down Output Event">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+			<Event Name="LDO" Type="Event" Comment="Reset Output Event">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PV" Type="UINT" Comment="Preset Value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="CV &lt;= 0"/>
+			<VarDeclaration Name="CV" Type="UINT" Comment="Counter Value"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" x="240" y="90">
+			</ECState>
+			<ECState Name="CD" x="865" y="90">
+				<ECAction Algorithm="CD" Output="CDO"/>
+			</ECState>
+			<ECState Name="LD" x="450" y="610">
+				<ECAction Algorithm="LOAD" Output="LDO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CD" Condition="CD[(CV &gt; 0)]" Comment="" x="1035" y="460"/>
+			<ECTransition Source="CD" Destination="START" Condition="1" Comment="" x="630" y="90"/>
+			<ECTransition Source="START" Destination="LD" Condition="LD" Comment="" x="395" y="510"/>
+			<ECTransition Source="LD" Destination="START" Condition="1" Comment="" x="240" y="610"/>
+		</ECC>
+		<Algorithm Name="CD">
+			<ST><![CDATA[ALGORITHM CD
+CV := CV - 1;
+Q := (CV = 0);
+
+
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="LOAD">
+			<ST><![CDATA[
+
+ALGORITHM LOAD
+CV := PV;
+Q:= (CV = 0);
+
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

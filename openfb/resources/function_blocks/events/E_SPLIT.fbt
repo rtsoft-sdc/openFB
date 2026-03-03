@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_SPLIT" Comment="Split one event into two events">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="EI" Type="Event" Comment="Input event">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO1" Type="Event" Comment="First output event">
+			</Event>
+			<Event Name="EO2" Type="Event" Comment="Second output event">
+			</Event>
+		</EventOutputs>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State"  x="550" y="425">
+			</ECState>
+			<ECState Name="State" Comment="Output events"  x="1755" y="280">
+				<ECAction Output="EO1"/>
+				<ECAction Output="EO2"/>
+			</ECState>
+			<ECTransition Source="START" Destination="State" Condition="EI" Comment="" x="1270" y="395"/>
+			<ECTransition Source="State" Destination="START" Condition="1" Comment="" x="1265" y="605"/>
+		</ECC>
+	</BasicFB>
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

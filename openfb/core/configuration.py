@@ -1,8 +1,11 @@
 from openfb.core import fb_resources
 from openfb.core import fb
 from openfb.core import fb_interface
+from openfb.data_model_fboot.utils import TypeConverter
 from xml.etree import ElementTree as ETree
 import logging
+import datetime
+import re
 import inspect
 
 
@@ -22,7 +25,7 @@ class Configuration:
     def get_fb(self, fb_name):
         fb_element = None
         try:
-            # fb_name = fb_name.replace('.', '-')
+            # fb_name = fb_name.replace('.', '-')           
             fb_element = self.fb_dictionary[fb_name]
         except KeyError as error:
             logging.error('can not find that fb {0} get_fb'.format(fb_name))
@@ -153,12 +156,12 @@ class Configuration:
         destination_attr = destination.split(sep='.')
         destination_fb = self.get_fb(destination_attr[0]) if len(destination_attr) == 2 else self.get_fb('.'.join(destination_attr[:-1]))
         destination_name = destination_attr[1] if len(destination_attr) == 2 else destination_attr[-1]
-
+    
         v_type, value, is_watch = destination_fb.read_attr(destination_name)
 
         # Verifies if is to write an event
-        if source_value == '$e':
-            logging.info('writing an event...')
+        if source_value == '$e' or v_type=='Event':
+            logging.debug('writing an event...')
             if value is not None:
                 # If the value is not None increment
                 destination_fb.push_event(destination_name, value + 1)
@@ -169,9 +172,12 @@ class Configuration:
         # Writes a hardcoded value
         else:
             value_to_set = self.convert_type(source_value, v_type)
-            logging.info(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {value_to_set} DST:{destination_name}")
-
-            destination_fb.set_attr(destination_name, value_to_set)
+            
+            if isinstance(value_to_set, tuple) and len(value_to_set) == 2:
+                conv_value, promoted_type = value_to_set
+                destination_fb.set_attr(destination_name, new_value=conv_value, new_type=promoted_type)
+            else:
+                destination_fb.set_attr(destination_name, new_value=value_to_set)
 
         logging.info('connection ({0}) configured with the value {1}'.format(destination, source_value))
 
@@ -215,48 +221,9 @@ class Configuration:
 
     @staticmethod
     def convert_type(value, value_type):
-        converted_value = None
-
         try:
-            #fixme
-            if value_type == 'ANY' or value_type == 'String':
-                # if "#" in value:
-                #     value_type = value.split("#")[0]
-                # else:
-                #     return None
-                converted_value = value
-            else:
-                if type(value) == str:
-                    if "#" in value:
-                        value = value.split("#")[1]
-
-                # String variable
-                if value_type == 'WSTRING' or value_type == 'STRING' or value_type == 'TIME':
-                    converted_value = value
-
-                # Boolean variable
-                elif value_type == 'BOOL':
-                    # Checks if is true
-                    if value == '1' or value == 'true' or value == 'True' or value == 'TRUE' or value == 't':
-                        converted_value = True
-                    # Checks if is false
-                    elif value == '0' or value == 'false' or value == 'False' or value == 'FALSE' or value == 'f':
-                        converted_value = False
-                    else:
-                        converted_value = value
-
-                # Integer variable
-                # elif value_type == 'UINT' or value_type == 'Event' or value_type == 'INT':
-                #     converted_value = int(value)
-
-                # Float variable
-                elif value_type == 'REAL' or value_type == 'LREAL':
-                    converted_value = float(value)
-                elif value_type == 'DWORD' or value_type == 'WORD' or value_type == 'BYTE':
-                    converted_value = int(value, 16) if type(value) == str else value
-                else:
-                    converted_value = int(value)
-        except:
-            logging.error('can not convert the value {0} to {1}'.format(value, value_type))
-
-        return converted_value
+            result = TypeConverter.convert(value, value_type)
+            return result
+        except Exception as e:
+            logging.error(f'Cannot convert value={value!r} to type={value_type}: {e}')
+            return None
