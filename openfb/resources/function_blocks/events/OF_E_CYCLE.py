@@ -2,7 +2,7 @@ import logging
 import time
 import threading
 
-class E_CYCLE:
+class OF_E_CYCLE:
 
     def __init__(self):
         self._stop_event = threading.Event()

@@ -12,6 +12,7 @@ import os
 import logging
 from importlib.resources import files
 import re
+import datetime
 
 @dataclass
 class TypeDef:
@@ -581,3 +582,199 @@ class UaInterface:
 
     def save_xml(self, xml_set):
         raise NotImplementedError
+
+SIGNED_INT = {'SINT', 'INT', 'DINT', 'LINT'}
+UNSIGNED_INT = {'USINT', 'UINT', 'UDINT', 'ULINT'}
+BITMASK = {'BYTE', 'WORD', 'DWORD', 'LWORD'}
+ALL_INT = SIGNED_INT | UNSIGNED_INT | BITMASK
+REAL_T = {'REAL', 'LREAL'}
+GENERIC_T = {
+    'ANY', 'ANY_ELEMENTARY', 'ANY_MAGNITUDE', 'ANY_NUM',
+    'ANY_INTEGRAL', 'ANY_REAL', 'ANY_INT', 'ANY_UNSIGNED',
+    'ANY_SIGNED', 'ANY_BIT', 'ANY_CHARS', 'ANY_CHAR',
+    'ANY_STRING', 'ANY_DATE',
+}
+
+
+def strip_prefix(s: str, prefix: str) -> str:
+    return s[len(prefix):] if s.startswith(prefix) else s
+
+
+def format_concrete_value(ctype: str, val: Any) -> str:
+    if ctype == 'BOOL':
+        if isinstance(val, bool):
+            return 'TRUE' if val else 'FALSE'
+        if isinstance(val, (int, float)):
+            return 'TRUE' if val else 'FALSE'
+        s = str(val).strip().upper()
+        # Handle various boolean representations
+        if s in ('TRUE', '1', 'YES', 'T', 'Y', 'ON'):
+            return 'TRUE'
+        if s in ('FALSE', '0', 'NO', 'F', 'N', 'OFF'):
+            return 'FALSE'
+        # Default: treat non-empty/non-zero as TRUE
+        return 'TRUE' if s and s != '0' else 'FALSE'
+
+    if ctype in ALL_INT:
+        try:
+            return str(int(val))
+        except (ValueError, TypeError):
+            return str(val)
+
+    if ctype in REAL_T:
+        try:
+            return str(float(val))
+        except (ValueError, TypeError):
+            return str(val)
+
+    if ctype == 'STRING':
+        return "'{0}'".format(val)
+    if ctype == 'WSTRING':
+        return '"{0}"'.format(val)
+    if ctype == 'CHAR':
+        return "'{0}'".format(val)
+    if ctype == 'WCHAR':
+        return '"{0}"'.format(val)
+
+    if ctype == 'TIME':
+        if isinstance(val, datetime.timedelta):
+            return 'T#{0}s'.format(val.total_seconds())
+        if isinstance(val, datetime.datetime):
+            return 'T#{0}s'.format(val.timestamp())
+        return 'T#{0}'.format(strip_prefix(str(val), 'T#'))
+
+    if ctype == 'DATE':
+        if isinstance(val, datetime.datetime):
+            return 'D#{0:04d}-{1:02d}-{2:02d}'.format(val.year, val.month, val.day)
+        if isinstance(val, datetime.date):
+            return 'D#{0:04d}-{1:02d}-{2:02d}'.format(val.year, val.month, val.day)
+        return 'D#{0}'.format(strip_prefix(str(val), 'D#'))
+
+    if ctype in ('TIME_OF_DAY', 'TOD'):
+        if isinstance(val, datetime.datetime):
+            return 'TOD#{0:02d}:{1:02d}:{2:02d}'.format(val.hour, val.minute, val.second)
+        if isinstance(val, datetime.time):
+            return 'TOD#{0:02d}:{1:02d}:{2:02d}'.format(val.hour, val.minute, val.second)
+        return 'TOD#{0}'.format(strip_prefix(str(val), 'TOD#'))
+
+    if ctype in ('DATE_AND_TIME', 'DT'):
+        if isinstance(val, datetime.datetime):
+            # IEC 61131-3 format: DT#YYYY-MM-DD-HH:MM:SS[.mmm]
+            dt_str = '{0:04d}-{1:02d}-{2:02d}-{3:02d}:{4:02d}:{5:02d}'.format(
+                val.year, val.month, val.day,
+                val.hour, val.minute, val.second
+            )
+            if val.microsecond:
+                dt_str += '.{0:03d}'.format(val.microsecond // 1000)
+            return 'DT#{0}'.format(dt_str)
+        s = str(val)
+        s = strip_prefix(s, 'DT#')
+        s = strip_prefix(s, 'DATE_AND_TIME#')
+        return 'DT#{0}'.format(s)
+
+    return "'{0}'".format(val) if isinstance(val, str) else str(val)
+
+
+def infer_concrete_type(val: Any) -> str:
+    if isinstance(val, bool):
+        return 'BOOL'
+    # Check datetime types before numbers (datetime has numeric operations)
+    if isinstance(val, datetime.datetime):
+        return 'DATE_AND_TIME'
+    if isinstance(val, datetime.date):
+        return 'DATE'
+    if isinstance(val, datetime.time):
+        return 'TIME_OF_DAY'
+    if isinstance(val, datetime.timedelta):
+        return 'TIME'
+    if isinstance(val, float):
+        return 'LREAL'
+    if isinstance(val, int):
+        if -128 <= val <= 127:
+            return 'SINT'
+        if 0 <= val <= 255:
+            return 'USINT'
+        if -32768 <= val <= 32767:
+            return 'INT'
+        if 0 <= val <= 65535:
+            return 'UINT'
+        if -2147483648 <= val <= 2147483647:
+            return 'DINT'
+        if 0 <= val <= 4294967295:
+            return 'UDINT'
+        if val < 0:
+            return 'LINT'
+        return 'ULINT'
+    # Check prefix
+    s = str(val)
+    if '#' in s:
+        pfx = s.split('#', 1)[0].strip().upper()
+        if pfx == 'T':
+            return 'TIME'
+        if pfx == 'D':
+            return 'DATE'
+        if pfx == 'TOD':
+            return 'TIME_OF_DAY'
+        if pfx == 'DT':
+            return 'DATE_AND_TIME'
+    if len(s) == 1:
+        return 'CHAR'
+    return 'STRING'
+
+
+def infer_any_bit_type(val: Any) -> Tuple[str, Any]:
+    if isinstance(val, bool):
+        return 'BOOL', val
+    if isinstance(val, int):
+        if 0 <= val <= 1:
+            return 'BOOL', bool(val)
+        if 0 <= val <= 0xFF:
+            return 'BYTE', val
+        if 0 <= val <= 0xFFFF:
+            return 'WORD', val
+        if 0 <= val <= 0xFFFFFFFF:
+            return 'DWORD', val
+        if 0 <= val <= 0xFFFFFFFFFFFFFFFF:
+            return 'LWORD', val
+        return 'LWORD', (val & 0xFFFFFFFFFFFFFFFF)
+
+    s = str(val).strip()
+    su = s.upper()
+    if su in ('TRUE', 'FALSE'):
+        return 'BOOL', su
+
+    if '#' in su:
+        pfx, _, rest = su.partition('#')
+        if pfx in {'BOOL', 'BYTE', 'WORD', 'DWORD', 'LWORD'}:
+            return pfx, rest
+        if pfx == '16':
+            try:
+                return infer_any_bit_type(int(rest, 16))
+            except ValueError:
+                pass
+
+    try:
+        if su.startswith('0X'):
+            return infer_any_bit_type(int(su, 16))
+        return infer_any_bit_type(int(su))
+    except ValueError:
+        return 'LWORD', s
+
+
+def format_value_for_watch(vtype: str, val: Any) -> str:
+ 
+    if vtype == 'ANY_BIT':
+        concrete, norm_val = infer_any_bit_type(val)
+        formatted = format_concrete_value(concrete, norm_val)
+        return '{0}#{1}'.format(concrete, formatted)
+    
+    if vtype not in GENERIC_T:
+        return format_concrete_value(vtype, val)
+
+    concrete = infer_concrete_type(val)
+    formatted = format_concrete_value(concrete, val)
+
+    if concrete in ('TIME', 'DATE', 'TIME_OF_DAY', 'DATE_AND_TIME'):
+        return formatted
+
+    return '{0}#{1}'.format(concrete, formatted)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="E_CYCLE" Comment="Peroidic event generator">
+<FBType Name="OF_E_CYCLE" Comment="Peroidic event generator">
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="START" Type="Event" Comment="Start the perodic generation of events">
