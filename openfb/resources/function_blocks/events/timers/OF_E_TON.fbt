@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OF_E_TON" Comment="standard timer function block (on-delay timing)">
+
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN"/>
+				<With Var="PT"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="Q"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN" Type="BOOL" Comment="Input"/>
+			<VarDeclaration Name="PT" Type="TIME" Comment="Process time"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="Output"/>
+		</OutputVars>
+	</InterfaceList>
+
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

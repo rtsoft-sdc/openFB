@@ -1,3 +1,4 @@
+import logging
 import time
 from datetime import timedelta
 import re
@@ -47,24 +48,28 @@ class FB_TON:
     
     def schedule(self, event_name, event_value, IN, PT):
         if event_name == 'REQ':
-            now = time.monotonic()
-            pt_delta = _parse_time(PT)
-            PT_seconds = pt_delta.total_seconds()
-            
-            if IN:
-                if self.start_time is None:
-                    self.start_time = now
+            try:
+                now = time.monotonic()
+                pt_delta = _parse_time(PT)
+                PT_seconds = pt_delta.total_seconds()
                 
-                elapsed = now - self.start_time
-                ET = timedelta(seconds=min(elapsed, PT_seconds))
+                if IN:
+                    if self.start_time is None:
+                        self.start_time = now
+                    
+                    elapsed = now - self.start_time
+                    ET = timedelta(seconds=min(elapsed, PT_seconds))
+                    
+                    self.q = elapsed >= PT_seconds
+                else:
+                    self.start_time = None
+                    self.q = False
+                    ET = timedelta(0)
                 
-                self.q = elapsed >= PT_seconds
-            else:
-                self.start_time = None
-                self.q = False
-                ET = timedelta(0)
-            
-            return event_value, self.q, ET
+                return event_value, self.q, ET
 
+            except Exception as e:
+                logging.error("Error in FB_TON: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('FB_TON class destroyed')
+        logging.info('FB_TON class destroyed')

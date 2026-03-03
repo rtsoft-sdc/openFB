@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 class F_NOW:
     def schedule(self, event_name, event_value):
@@ -7,4 +8,4 @@ class F_NOW:
             return event_value, current_datetime
 
     def __del__(self):
-        print('class destroyed')
+        logging.info('class destroyed')

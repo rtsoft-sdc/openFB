@@ -1,3 +1,4 @@
+import logging
 class STRUCT_MUX:
     def schedule(self, event_name, event_value, *inputs, **kwargs):
         if event_name == 'REQ':
@@ -13,7 +14,7 @@ class STRUCT_MUX:
 
                 return event_value, out_struct
             except Exception:
-                return None, {}
+                return event_value, {}
     
     def __del__(self):
-        print('STRUCT_MUX class destroyed')
+        logging.info('STRUCT_MUX class destroyed')

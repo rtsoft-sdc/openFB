@@ -1,3 +1,5 @@
+import logging
+
 class STEST_END:
     def schedule(self, event_name, event_value):
         if event_name == 'REQ':
@@ -5,4 +7,4 @@ class STEST_END:
         return tuple()
 
     def __del__(self):
-        print('class destroyed')
+        logging.info('class destroyed')

@@ -1,3 +1,4 @@
+import logging
 class E_CTUD:
     def __init__(self):
         self.CV = 0
@@ -6,10 +7,15 @@ class E_CTUD:
 
     def schedule(self, event_name, event_value, PV=None):
         if event_name == 'CU':
-            self.CV += 1
-            self.QU = (self.CV >= PV) if PV is not None else False
-            self.QD = (self.CV == 0)
-            return event_value, self.QU, self.CV, self.QD
+            try:
+                self.CV += 1
+                self.QU = (self.CV >= PV) if PV is not None else False
+                self.QD = (self.CV == 0)
+                return event_value, self.QU, self.CV, self.QD
+            except Exception as e:
+                logging.error("Error in E_CTUD: %s", str(e))
+                return event_value, None
+
         elif event_name == 'CD':
             if self.CV > 0:
                 self.CV -= 1
@@ -30,4 +36,4 @@ class E_CTUD:
         return None
     
     def __del__(self):
-        print('E_CTUD class destroyed')
+        logging.info('E_CTUD class destroyed')

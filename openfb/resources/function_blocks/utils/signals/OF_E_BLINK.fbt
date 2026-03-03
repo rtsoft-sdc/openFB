@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OF_E_BLINK" Comment="Simulates a blinking signal (turning on and off for specific durations)">
+	<CompilerInfo packageName="eclipse4diac::utils::signals">
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event" Comment="Start the perodic generation of events">
+				<With Var="TIMELOW"/>
+				<With Var="TIMEHIGH"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Stop the generation of events">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="TIMELOW" Type="TIME" Comment="Time for OUT to be FALSE"/>
+			<VarDeclaration Name="TIMEHIGH" Type="TIME" Comment="Time for OUT to be TRUE"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="BOOL" Comment="Output value, starts with FALSE and switches between TRUE and FALSE for the given high and low times"/>
+		</OutputVars>
+	</InterfaceList>
+
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

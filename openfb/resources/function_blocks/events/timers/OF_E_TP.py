@@ -1,0 +1,35 @@
+import logging
+import threading
+
+class OF_E_TP:
+    def __init__(self):
+        self._timer = None
+        self.Q = False
+
+    def schedule(self, event_name, event_value, IN, PT):
+        """Pulse: on REQ with IN True -> set Q True and start PT to reset; R resets immediately."""
+        if event_name == 'REQ':
+            if IN:
+                if self._timer:
+                    self._timer.cancel()
+                self.Q = True
+                if PT and PT > 0:
+                    self._timer = threading.Timer(PT, self._set_false)
+                    self._timer.start()
+                else:
+                    self._set_false()
+                return event_value, self.Q
+        elif event_name == 'R':
+            if self._timer:
+                self._timer.cancel()
+                self._timer = None
+            if self.Q:
+                self.Q = False
+                return event_value, self.Q
+
+    def _set_false(self):
+        self._timer = None
+        self.Q = False
+
+    def __del__(self):
+        logging.info('OF_E_TP class destroyed')

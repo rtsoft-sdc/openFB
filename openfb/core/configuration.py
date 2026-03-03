@@ -161,7 +161,7 @@ class Configuration:
 
         # Verifies if is to write an event
         if source_value == '$e' or v_type=='Event':
-            logging.info('writing an event...')
+            logging.debug('writing an event...')
             if value is not None:
                 # If the value is not None increment
                 destination_fb.push_event(destination_name, value + 1)
@@ -175,10 +175,8 @@ class Configuration:
             
             if isinstance(value_to_set, tuple) and len(value_to_set) == 2:
                 conv_value, promoted_type = value_to_set
-                logging.info(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {conv_value} PromotedType:{promoted_type} DST:{destination_name}")
                 destination_fb.set_attr(destination_name, new_value=conv_value, new_type=promoted_type)
             else:
-                logging.info(f"Data conversion:\n SRC: {source_value}\nType:{v_type}\n Converted value: {value_to_set} DST:{destination_name}")
                 destination_fb.set_attr(destination_name, new_value=value_to_set)
 
         logging.info('connection ({0}) configured with the value {1}'.format(destination, source_value))

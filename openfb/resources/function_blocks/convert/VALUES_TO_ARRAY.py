@@ -1,3 +1,4 @@
+import logging
 class VALUES_TO_ARRAY:
     def schedule(self, event_name, event_value, *inputs, **kwargs):
         if event_name == 'REQ':
@@ -13,7 +14,7 @@ class VALUES_TO_ARRAY:
 
                 return event_value, out_array
             except Exception:
-                return None, []
+                return event_value, []
     
     def __del__(self):
-        print('VALUES_TO_ARRAY class destroyed')
+        logging.info('VALUES_TO_ARRAY class destroyed')

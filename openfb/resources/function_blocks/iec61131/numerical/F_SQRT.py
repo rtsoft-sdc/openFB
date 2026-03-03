@@ -1,9 +1,14 @@
+import logging
 import math
 
 class F_SQRT:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
-            return event_value, math.sqrt(IN)
+            try:
+                return event_value, math.sqrt(IN)
 
+            except Exception as e:
+                logging.error("Error in F_SQRT: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('F_SQRT class destroyed')
+        logging.info('F_SQRT class destroyed')

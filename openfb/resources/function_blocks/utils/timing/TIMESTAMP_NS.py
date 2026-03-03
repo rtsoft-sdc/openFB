@@ -1,4 +1,5 @@
 import datetime
+import logging
 import time
 
 class TIMESTAMP_NS:
@@ -9,11 +10,12 @@ class TIMESTAMP_NS:
                 try:
                     start_dt = datetime.datetime.strptime(date_str, '%Y-%m-%d-%H:%M:%S')
                 except:
-                    start_dt = datetime.datetime(1970, 1, 1, 0, 0, 0)
+                    logging.error("Invalid date format for startDate: %s", startDate)
+                    return event_value, None
             elif isinstance(startDate, datetime.datetime):
                 start_dt = startDate
             else:
-                start_dt = datetime.datetime(1970, 1, 1, 0, 0, 0)
+                return event_value, None
             
             current_time = datetime.datetime.now()
             time_diff = current_time - start_dt
@@ -22,4 +24,4 @@ class TIMESTAMP_NS:
             return event_value, timestamp_ns
 
     def __del__(self):
-        print('class destroyed')
+        logging.info('class destroyed')

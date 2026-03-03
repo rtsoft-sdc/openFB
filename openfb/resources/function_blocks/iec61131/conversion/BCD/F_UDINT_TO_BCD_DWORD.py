@@ -1,3 +1,4 @@
+import logging
 class F_UDINT_TO_BCD_DWORD:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
@@ -13,8 +14,10 @@ class F_UDINT_TO_BCD_DWORD:
                     val //= 10
                 
                 return event_value, result
-            except Exception:
-                return None, 0
+            
+            except Exception as e:
+                logging.error("Error in F_UDINT_TO_BCD_DWORD: %s", str(e))
+                return event_value, 0
 
     def __del__(self):
-        print('F_UDINT_TO_BCD_DWORD class destroyed')
+        logging.info('F_UDINT_TO_BCD_DWORD class destroyed')

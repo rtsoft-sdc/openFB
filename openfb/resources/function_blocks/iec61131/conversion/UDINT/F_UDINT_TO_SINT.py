@@ -1,8 +1,13 @@
+import logging
 class F_UDINT_TO_SINT:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
-            val = int(IN) & 0xFF
-            return event_value, val if val < 128 else val - 256
+            try:
+                val = int(IN) & 0xFF
+                return event_value, val if val < 128 else val - 256
 
+            except Exception as e:
+                logging.error("Error in F_UDINT_TO_SINT: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('F_UDINT_TO_SINT class destroyed')
+        logging.info('F_UDINT_TO_SINT class destroyed')

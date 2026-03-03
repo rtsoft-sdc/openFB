@@ -1,3 +1,4 @@
+import logging
 import threading
 import time
 from datetime import timedelta
@@ -14,20 +15,25 @@ class E_RDELAY:
 
     def schedule(self, event_name, event_value, DT=None):
         if event_name == 'START':
-            if DT is not None:
-                self._event_value = event_value
-                # Cancel any existing timer
-                if self._timer:
-                    self._timer.cancel()
-                # Convert DT to seconds
-                if isinstance(DT, timedelta):
-                    delay = DT.total_seconds()
-                else:
-                    delay = float(DT) / 1000.0 if isinstance(DT, (int, float)) else 0.001
-                # Start new timer
-                self._timer = threading.Timer(delay, self._on_delay_complete)
-                self._timer.start()
-            return event_value
+            try:
+                if DT is not None:
+                    self._event_value = event_value
+                    # Cancel any existing timer
+                    if self._timer:
+                        self._timer.cancel()
+                    # Convert DT to seconds
+                    if isinstance(DT, timedelta):
+                        delay = DT.total_seconds()
+                    else:
+                        delay = float(DT) / 1000.0 if isinstance(DT, (int, float)) else 0.001
+                    # Start new timer
+                    self._timer = threading.Timer(delay, self._on_delay_complete)
+                    self._timer.start()
+                return event_value
+            except Exception as e:
+                logging.error("Error in E_RDELAY: %s", str(e))
+                return None
+
         elif event_name == 'STOP':
             if self._timer:
                 self._timer.cancel()
@@ -41,6 +47,6 @@ class E_RDELAY:
         self._timer = None
     
     def __del__(self):
-        print('E_RDELAY class destroyed')
+        logging.info('E_RDELAY class destroyed')
         if hasattr(self, '_timer') and self._timer:
             self._timer.cancel()

@@ -1,8 +1,12 @@
+import logging
 class E_MERGE_2:
     def schedule(self, event_name, event_value):
         if event_name in ['EI1', 'EI2']:
-            return event_value
-        return None
+            try:
+                return event_value
     
+            except Exception as e:
+                logging.error("Error in E_MERGE_2: %s", str(e))
+                return None
     def __del__(self):
-        print('E_MERGE_2 class destroyed')
+        logging.info('E_MERGE_2 class destroyed')

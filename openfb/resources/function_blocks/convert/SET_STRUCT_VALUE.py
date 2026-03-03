@@ -1,3 +1,4 @@
+import logging
 class SET_STRUCT_VALUE:
     def schedule(self, event_name, event_value, member, in_struct, element_value):
         if event_name == 'REQ':
@@ -33,7 +34,7 @@ class SET_STRUCT_VALUE:
                 
                 return event_value, True, out_struct
             except Exception:
-                return None, False, None
+                return event_value, False, None
     
     def __del__(self):
-        print('SET_STRUCT_VALUE class destroyed')
+        logging.info('SET_STRUCT_VALUE class destroyed')

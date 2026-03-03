@@ -1,3 +1,4 @@
+import logging
 import time
 from datetime import timedelta
 import re
@@ -48,33 +49,37 @@ class FB_TOF:
     
     def schedule(self, event_name, event_value, IN, PT):
         if event_name == 'REQ':
-            now = time.monotonic()
-            pt_delta = _parse_time(PT)
-            PT_seconds = pt_delta.total_seconds()
-            
-            if IN and not self.prev_in:
-                self.q = True
-                self.start_time = None
-            if not IN and self.prev_in:
-                self.start_time = now
-            
-            self.prev_in = IN
-            
-            if IN:
-                ET = timedelta(0)
-            else:
-                if self.start_time is None:
+            try:
+                now = time.monotonic()
+                pt_delta = _parse_time(PT)
+                PT_seconds = pt_delta.total_seconds()
+                
+                if IN and not self.prev_in:
+                    self.q = True
+                    self.start_time = None
+                if not IN and self.prev_in:
+                    self.start_time = now
+                
+                self.prev_in = IN
+                
+                if IN:
                     ET = timedelta(0)
                 else:
-                    elapsed_seconds = now - self.start_time
-                    if elapsed_seconds < PT_seconds:
-                        self.q = True
-                        ET = timedelta(seconds=elapsed_seconds)
+                    if self.start_time is None:
+                        ET = timedelta(0)
                     else:
-                        self.q = False
-                        ET = pt_delta
-            
-            return event_value, self.q, ET
+                        elapsed_seconds = now - self.start_time
+                        if elapsed_seconds < PT_seconds:
+                            self.q = True
+                            ET = timedelta(seconds=elapsed_seconds)
+                        else:
+                            self.q = False
+                            ET = pt_delta
+                
+                return event_value, self.q, ET
 
+            except Exception as e:
+                logging.error("Error in FB_TOF: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('FB_TOF class destroyed')
+        logging.info('FB_TOF class destroyed')

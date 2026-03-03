@@ -1,3 +1,4 @@
+import logging
 class F_INSERT:
     def schedule(self, event_name, event_value, IN1, IN2, P):
         if event_name == 'REQ':
@@ -13,4 +14,4 @@ class F_INSERT:
             return event_value, s[:idx] + ins + s[idx:]
 
     def __del__(self):
-        print('F_INSERT class destroyed')
+        logging.info('F_INSERT class destroyed')

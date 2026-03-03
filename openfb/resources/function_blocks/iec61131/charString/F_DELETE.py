@@ -1,3 +1,4 @@
+import logging
 class F_DELETE:
     def schedule(self, event_name, event_value, IN, L, P):
         if event_name == 'REQ':
@@ -16,4 +17,4 @@ class F_DELETE:
             return event_value, s[:start] + s[start + l:]
 
     def __del__(self):
-        print('F_DELETE class destroyed')
+        logging.info('F_DELETE class destroyed')

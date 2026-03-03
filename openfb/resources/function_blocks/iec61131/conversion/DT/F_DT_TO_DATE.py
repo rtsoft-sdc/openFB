@@ -1,3 +1,4 @@
+import logging
 import datetime
 
 def _parse_dt(value):
@@ -30,10 +31,14 @@ def _parse_dt(value):
 class F_DT_TO_DATE:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
-            dt = _parse_dt(IN)
-            if dt is None:
-                return None, None
-            return event_value, dt.date()
+            try:
+                dt = _parse_dt(IN)
+                if dt is None:
+                    return None, None
+                return event_value, dt.date()
 
+            except Exception as e:
+                logging.error("Error in F_DT_TO_DATE: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('F_DT_TO_DATE class destroyed')
+        logging.info('F_DT_TO_DATE class destroyed')

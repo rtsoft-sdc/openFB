@@ -1,3 +1,4 @@
+import logging
 import random
 import time
 
@@ -20,4 +21,4 @@ class FB_RANDOM:
             return None, event_value, val        
 
     def __del__(self):
-        print('class destroyed')
+        logging.info('class destroyed')

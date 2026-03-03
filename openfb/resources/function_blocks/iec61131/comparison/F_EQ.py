@@ -1,7 +1,13 @@
+import logging
 class F_EQ:
     def schedule(self, event_name, event_value, IN1, IN2):
         if event_name == 'REQ':
-            return event_value, IN1 == IN2
+            try:
+                return event_value, IN1 == IN2
 
+            except Exception as e:
+                logging.error("Error in F_EQ: %s", str(e))
+                return event_value, None
+            
     def __del__(self):
-        print('F_EQ class destroyed')
+        logging.info('F_EQ class destroyed')

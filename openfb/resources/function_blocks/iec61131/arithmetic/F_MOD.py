@@ -1,3 +1,4 @@
+import logging
 class F_MOD:
     def schedule(self, event_name, event_value, IN1, IN2):
         if event_name == 'REQ':
@@ -9,4 +10,4 @@ class F_MOD:
                 return None, 0
 
     def __del__(self):
-        print('F_MOD class destroyed')
+        logging.info('F_MOD class destroyed')

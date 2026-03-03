@@ -1,8 +1,13 @@
+import logging
 class XOR_4:
     def schedule(self, event_name, event_value, IN1, IN2, IN3, IN4):
         if event_name == 'REQ':
-            return event_value, int(IN1) ^ int(IN2) ^ int(IN3) ^ int(IN4)
+            try:
+                return event_value, int(IN1) ^ int(IN2) ^ int(IN3) ^ int(IN4)
 
-
+            except Exception as e:
+                logging.error("Error in XOR_4: %s", str(e))
+                return event_value, None
+            
     def __del__(self):
-        print('XOR_4 class destroyed')
+        logging.info('XOR_4 class destroyed')

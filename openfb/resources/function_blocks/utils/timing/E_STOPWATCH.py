@@ -1,3 +1,4 @@
+import logging
 import time
 
 
@@ -28,4 +29,4 @@ class E_STOPWATCH:
             
 
     def __del__(self):
-        print('class destroyed')
+        logging.info('class destroyed')

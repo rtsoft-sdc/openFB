@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 import os
-
+import logging
 
 class CSV_WRITER_1:
     def __init__(self):
@@ -55,9 +55,8 @@ class CSV_WRITER_1:
                 return None, event_value, False, self._get_error_message(e)
             except Exception as e:
                 return None, event_value, False, str(e)
-        
-        return None, None, False, "OK"
-    
+            
     def __del__(self):
+        logging.info('CSV_WRITER_1 class destroyed')
         if self.file and not self.file.closed:
             self.file.close()

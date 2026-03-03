@@ -1,3 +1,6 @@
+import logging
+
+
 class GetInstancePath:
     def __init__(self):
         self.instance_path = "openfb.default.path"
@@ -12,4 +15,4 @@ class GetInstancePath:
         
 
     def __del__(self):
-        print('class destroyed')
+        logging.info('class destroyed')

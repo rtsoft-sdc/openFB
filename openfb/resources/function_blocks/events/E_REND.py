@@ -1,3 +1,4 @@
+import logging
 class E_REND:
     def __init__(self):
         self.ei1 = False
@@ -5,7 +6,12 @@ class E_REND:
 
     def schedule(self, event_name, event_value):
         if event_name == 'EI1':
-            self.ei1 = True
+            try:
+                self.ei1 = True
+            except Exception as e:
+                logging.error("Error in E_REND: %s", str(e))
+                return None
+
         elif event_name == 'EI2':
             self.ei2 = True
         elif event_name == 'R':
@@ -19,4 +25,4 @@ class E_REND:
         return None
     
     def __del__(self):
-        print('E_REND class destroyed')
+        logging.info('E_REND class destroyed')

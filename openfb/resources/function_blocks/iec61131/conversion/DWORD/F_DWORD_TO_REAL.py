@@ -1,3 +1,4 @@
+import logging
 import struct
 
 
@@ -10,7 +11,7 @@ class F_DWORD_TO_REAL:
                 result = struct.unpack('f', struct.pack('I', val))[0]
                 return event_value, result
             except Exception:
-                return None, 0.0
+                return event_value, 0.0
 
     def __del__(self):
-        print('F_DWORD_TO_REAL class destroyed')
+        logging.info('F_DWORD_TO_REAL class destroyed')

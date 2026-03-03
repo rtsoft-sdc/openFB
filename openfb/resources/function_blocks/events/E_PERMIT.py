@@ -1,8 +1,12 @@
+import logging
 class E_PERMIT:
     def schedule(self, event_name, event_value, PERMIT):
         if event_name == 'EI' and PERMIT:
-            return event_value
-        return None
+            try:
+                return event_value
     
+            except Exception as e:
+                logging.error("Error in E_PERMIT: %s", str(e))
+                return None
     def __del__(self):
-        print('E_PERMIT class destroyed')
+        logging.info('E_PERMIT class destroyed')

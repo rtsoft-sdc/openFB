@@ -1,3 +1,4 @@
+import logging
 class GET_AT_INDEX:
     def schedule(self, event_name, event_value, IN_ARRAY, INDEX):
         if event_name == 'REQ':
@@ -7,7 +8,7 @@ class GET_AT_INDEX:
                 else:
                     return event_value, False, None
             except Exception:
-                return None, False, None
+                return event_value, False, None
     
     def __del__(self):
-        print('GET_AT_INDEX class destroyed')
+        logging.info('GET_AT_INDEX class destroyed')

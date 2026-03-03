@@ -1,3 +1,4 @@
+import logging
 class F_USINT_TO_BCD_BYTE:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
@@ -11,8 +12,9 @@ class F_USINT_TO_BCD_BYTE:
                 result = (high << 4) | low
                 
                 return event_value, result
-            except Exception:
-                return None, 0
+            except Exception as e:
+                logging.error("Error in F_USINT_TO_BCD_BYTE: %s", str(e))
+                return event_value, 0
 
     def __del__(self):
-        print('F_USINT_TO_BCD_BYTE class destroyed')
+        logging.info('F_USINT_TO_BCD_BYTE class destroyed')

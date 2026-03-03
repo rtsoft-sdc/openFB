@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OF_E_TRAIN" Comment="Generate of a finite train of events seperated by the time DT">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="START" Type="Event" Comment="Start event generation">
+				<With Var="DT"/>
+				<With Var="N"/>
+			</Event>
+			<Event Name="STOP" Type="Event" Comment="Stop event generation">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Generated events">
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DT" Type="TIME" Comment="Time by which the events should be seperated" />
+			<VarDeclaration Name="N" Type="UINT" Comment="Number of events to generate" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="CV" Type="UINT" Comment="count of the current event: EO index (0..N-1)" />
+		</OutputVars>
+	</InterfaceList>
+	
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

@@ -1,3 +1,4 @@
+import logging
 class STRUCT_DEMUX:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
@@ -13,7 +14,7 @@ class STRUCT_DEMUX:
 
                 return tuple([event_value] + values)
             except Exception:
-                return None
+                return event_value
     
     def __del__(self):
-        print('STRUCT_DEMUX class destroyed')
+        logging.info('STRUCT_DEMUX class destroyed')

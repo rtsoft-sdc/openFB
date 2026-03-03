@@ -1,7 +1,12 @@
+import logging
 class F_LWORD_TO_BYTE:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
-            return event_value, int(IN) & 0xFF
+            try:
+                return event_value, int(IN) & 0xFF
 
+            except Exception as e:
+                logging.error("Error in F_LWORD_TO_BYTE: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('F_LWORD_TO_BYTE class destroyed')
+        logging.info('F_LWORD_TO_BYTE class destroyed')

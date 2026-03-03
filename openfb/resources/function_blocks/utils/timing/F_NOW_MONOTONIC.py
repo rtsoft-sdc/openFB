@@ -1,3 +1,4 @@
+import logging
 import time
 
 class F_NOW_MONOTONIC:
@@ -7,4 +8,4 @@ class F_NOW_MONOTONIC:
             return event_value, monotonic_time
         
     def __del__(self):
-        print('class destroyed')
+        logging.info('class destroyed')

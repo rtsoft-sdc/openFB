@@ -1,11 +1,17 @@
+import logging
 class E_T_FF_SR:
     def __init__(self):
         self.Q = False
 
     def schedule(self, event_name, event_value):
         if event_name == 'S':
-            self.Q = True
-            return event_value, self.Q
+            try:
+                self.Q = True
+                return event_value, self.Q
+            except Exception as e:
+                logging.error("Error in E_T_FF_SR: %s", str(e))
+                return event_value, None
+
         elif event_name == 'R':
             self.Q = False
             return event_value, self.Q
@@ -15,4 +21,4 @@ class E_T_FF_SR:
         return None
     
     def __del__(self):
-        print('E_T_FF_SR class destroyed')
+        logging.info('E_T_FF_SR class destroyed')

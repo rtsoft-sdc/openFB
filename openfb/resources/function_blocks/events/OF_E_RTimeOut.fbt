@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="OF_E_RTimeOut" Comment="Simple implementation of the timeout services">
+	<InterfaceList>
+		<Sockets>
+			<AdapterDeclaration Name="TimeOutSocket" Type="iec61499::events::ARTimeOut" x="190" y="380"/>
+		</Sockets>
+	</InterfaceList>
+	
+	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
+</FBType>

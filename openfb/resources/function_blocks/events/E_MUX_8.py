@@ -1,3 +1,4 @@
+import logging
 class E_MUX_8:
     def schedule(self, event_name, event_value):
         mapping = {
@@ -14,4 +15,4 @@ class E_MUX_8:
             return event_value, mapping[event_name]
     
     def __del__(self):
-        print('E_MUX_8 class destroyed')
+        logging.info('E_MUX_8 class destroyed')

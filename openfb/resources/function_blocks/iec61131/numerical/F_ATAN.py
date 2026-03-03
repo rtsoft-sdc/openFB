@@ -1,9 +1,14 @@
+import logging
 import math
 
 class F_ATAN:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
-            return event_value, math.atan(IN)
+            try:
+                return event_value, math.atan(IN)
 
+            except Exception as e:
+                logging.error("Error in F_ATAN: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('F_ATAN class destroyed')
+        logging.info('F_ATAN class destroyed')

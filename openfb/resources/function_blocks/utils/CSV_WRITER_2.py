@@ -1,6 +1,7 @@
 import csv
 from pathlib import Path
 import os
+import logging
 
 
 class CSV_WRITER_2:
@@ -19,7 +20,6 @@ class CSV_WRITER_2:
         if event_name == 'INIT':
             try:
                 if QI:
-                    # Open file
                     if self.file is not None and not self.file.closed:
                         return event_value, None, False, "File already opened"
                     
@@ -29,7 +29,6 @@ class CSV_WRITER_2:
                     self.writer = csv.writer(self.file)
                     return event_value, None, True, "OK"
                 else:
-                    # Close file
                     if self.file is not None and not self.file.closed:
                         self.file.close()
                     self.file = None
@@ -58,6 +57,7 @@ class CSV_WRITER_2:
                 return None, event_value, False, str(e)
 
     def __del__(self):
+        logging.info('CSV_WRITER class destroyed')
         if self.file and not self.file.closed:
             self.file.close()
         

@@ -1,7 +1,12 @@
+import logging
 class F_WSTRING_AS_SINT:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
-            return event_value, int(str(IN))
+            try:
+                return event_value, int(str(IN))
 
+            except Exception as e:
+                logging.error("Error in F_WSTRING_AS_SINT: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('F_WSTRING_AS_SINT class destroyed')
+        logging.info('F_WSTRING_AS_SINT class destroyed')

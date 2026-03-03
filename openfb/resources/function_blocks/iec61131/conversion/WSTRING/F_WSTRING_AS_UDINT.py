@@ -1,7 +1,12 @@
+import logging
 class F_WSTRING_AS_UDINT:
     def schedule(self, event_name, event_value, IN):
         if event_name == 'REQ':
-            return event_value, int(str(IN)) & 0xFFFFFFFF
+            try:
+                return event_value, int(str(IN)) & 0xFFFFFFFF
 
+            except Exception as e:
+                logging.error("Error in F_WSTRING_AS_UDINT: %s", str(e))
+                return event_value, None
     def __del__(self):
-        print('F_WSTRING_AS_UDINT class destroyed')
+        logging.info('F_WSTRING_AS_UDINT class destroyed')
