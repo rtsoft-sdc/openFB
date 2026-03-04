@@ -1,169 +1,192 @@
-# Среда исполнения IEC 61499 для ML задач
+**IEC 61499 Runtime for ML related tasks**
 
-OpenFB - это платформа для выполнения функциональных блоков в соответствии со стандартом IEC 61499. OpenFB базируется на открытом исходном коде и позволяет разработчикам:
+OpenFB is a platform for executing function blocks according to the IEC 61499 standard. OpenFB is based on open source code and allows developers to:
 
-1. Создавать пользовательские функциональные блоки без привязки к конкретному производителю оборудования
-2. Разворачивать приложения на любой платформе, поддерживающей Python 3 (Linux, Windows, встраиваемые OS, RTOS)
-3. Комбинировать компоненты, написанные на Python, C++, промышленных языках IEC 61131-3 в единую систему с использованием стандартизированных сетевых протоколов (OPC UA, MQTT и др.)
-4. Избежать технологической зависимости от одного поставщика
+- Create custom function blocks without binding to specific hardware manufacturers
+- Deploy applications on any platform supporting Python 3 (Linux, Windows, embedded OS, RTOS)
+- Combine components written in Python, C++, and industrial IEC 61131-3 languages into a unified system using standardized network protocols (OPC UA, MQTT, etc.)
+- Avoid technological dependence on a single vendor
 
-Среда исполнения OpenFB совместима с [FORGELOGIC](https://it.severstal.com/products/oasu-tp/#downloads), [4diac IDE 3](https://eclipse.dev/4diac/4diac_ide/).
-Проект основан на базе проекта [DINASORE](https://github.com/DIGI2-FEUP/dinasore)
+The OpenFB runtime environment is compatible with [FORGELOGIC](https://it.severstal.com/products/oasu-tp/#downloads), [4diac IDE 3](https://eclipse.dev/4diac/4diac_ide/). The project is based on the [DINASORE](https://github.com/DIGI2-FEUP/dinasore) project.
 
-## Лицензия
+**License**
 
-[EPL 2.0](LICENSE.md).
+[EPL 2.0](https://github.com/rtsoft-sdc/openFB/blob/master/LICENSE.md).
 
-## Contributing
+**Contributing**
 
-We use [contribution policy](CONTRIBUTING.md), which means we can only accept contributions under
-the terms of [Eclipse Contributor Agreement](http://www.eclipse.org/legal/ECA.php).
+We use [contribution policy](https://github.com/rtsoft-sdc/openFB/blob/master/CONTRIBUTING.md), which means we can only accept contributions under the terms of [Eclipse Contributor Agreement](http://www.eclipse.org/legal/ECA.php).
 
-# Запуск OpenFB
+**Running OpenFB**
 
-### 1. Клонировать репозиторий
+**1. Clone repository**
 
-``` bash
 git clone https://gitverse.ru/rtsoft/OpenFB.git
+
 cd OpenFB
-```
 
-### 2. Установить Python и зависимости
+**2. Install Python and dependencies**
 
-1.  Убедиться, что Python3 установлен.
-2.  Создать виртуальное окружение:
+1. Ensure Python3 is installed.
+1. Create a virtual environment:
 
-``` bash
 python3 -m venv .venv
+
 source .venv/bin/activate   # unix
+
 .venv\Scripts\activate      # windows
-```
 
-3.  Установить зависимости:
+3. Install dependecies:
 
-``` bash
 pip install -r requirements.txt
-```
 
-### 3. Запустить OpenFB
+**3. Run OpenFB**
 
-``` bash
 python3 core/main.py
-```
 
-### 4. Подключение через ide
+**4. Connect via IDE**
 
-Поддерживаются [FORGELOGIC](https://it.severstal.com/products/oasu-tp/#downloads), [4diac IDE 3](https://eclipse.dev/4diac/4diac_ide/).
-Важно настроить соединение на порт OpenFB по умолчанию 61499, так же можно подключится по opcua к порту 4840 (по умолчанию)
+[FORGELOGIC](https://it.severstal.com/products/oasu-tp/#downloads), [4diac IDE 3](https://eclipse.dev/4diac/4diac_ide/). are supported. It is important to configure the connection to the default OpenFB port 61499. You can also connect via OPC UA to port 4840 (default).
 
-------------------------------------------------------------------------
+-----
+**How to create a new function block**
 
-# **Как создать новый функциональный блок**
+**1. Create .fbt file**
 
-### 1. Создать .fbt файл
-Необходимо создать файл с ТОЧНЫМ названием фукционального блока и расширением .fbt\
-Необходимо описать в структуре xml все входы и выходы блока и их связи\
-Сам блок можно создать в 4diac-ide, а потом найти и скопировать сгенерированый файл.
-``` xml
+You need to create a file with the EXACT name of the function block and the .fbt extension. You need to describe all inputs and outputs of the block and their connections in the XML structure. The block itself can be created in 4diac-ide, then find and copy the generated file.
+
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<FBType Name="Hello_FB" OpcUa="SERVICE">
-  <InterfaceList>
-    <EventInputs>
-      <Event Name="INIT" Type="Event"/>
-      <Event Name="REQ" Type="Event">
-        <With Var="IN1"/>
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Name="INIT_O" Type="Event"/>
-      <Event Name="CNF" Type="Event">
-        <With Var="OUT1"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Name="IN1" Type="STRING"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Name="OUT1" Type="STRING"/>
-    </OutputVars>
-  </InterfaceList>
+
+<FBType Name="Hello\_FB" OpcUa="SERVICE">
+
+`  `<InterfaceList>
+
+`    `<EventInputs>
+
+`      `<Event Name="INIT" Type="Event"/>
+
+`      `<Event Name="REQ" Type="Event">
+
+`        `<With Var="IN1"/>
+
+`      `</Event>
+
+`    `</EventInputs>
+
+`    `<EventOutputs>
+
+`      `<Event Name="INIT\_O" Type="Event"/>
+
+`      `<Event Name="CNF" Type="Event">
+
+`        `<With Var="OUT1"/>
+
+`      `</Event>
+
+`    `</EventOutputs>
+
+`    `<InputVars>
+
+`      `<VarDeclaration Name="IN1" Type="STRING"/>
+
+`    `</InputVars>
+
+`    `<OutputVars>
+
+`      `<VarDeclaration Name="OUT1" Type="STRING"/>
+
+`    `</OutputVars>
+
+`  `</InterfaceList>
+
 </FBType>
-```
 
-### 2. Реализовать Python логику
-Необходимо создать файл с ТОЧНЫМ названием фукционального блока и расширением .py\
-Далее создаем класс с названием функционального блока и реализуем всю основную логику в функции ```def schedule()```, так как она будет вызываться при любом ивенте, который прийдет на блок.
+**2. Implement Python logic**
 
-``` python
-class Hello_FB:
+You need to create a file with the EXACT name of the function block and the .py extension. Then create a class with the name of the function block and implement all main logic in the def schedule() function, as it will be called for any event that comes to the block.
 
-    def schedule(self, event_input_name, event_input_value, input_var1):
-        if event_input_name == 'INIT':
-            return event_input_value, None, "initialized"
-        elif event_input_name == 'REQ':
-            out = "hello " + input_var1
-            return None, event_input_value, out
-```
+class Hello\_FB:
 
-### 3. Разместить файлы
+`    `def schedule(self, event\_input\_name, event\_input\_value, input\_var1):
 
-- Папка OpenFB: `resources/function_blocks/...`
-- Папка 4diac-ide: `workspace/typelibrary/...`
+`        `if event\_input\_name == 'INIT':
 
-------------------------------------------------------------------------
+`            `return event\_input\_value, None, "initialized"
 
-### **ВАЖНО**
+`        `elif event\_input\_name == 'REQ':
 
-- После добавления блока перезапустить OpenFB
-- Проверить наличие .fbt файла в TypeLibrary ide
+`            `out = "hello " + input\_var1
 
-------------------------------------------------------------------------
+`            `return None, event\_input\_value, out
 
-# Примеры
+**3. Place the files**
 
-***Все актуальные системы примеров лежат в папке  4diac_sys***
-## Поиск шайб(Общее описание)
+- OpenFB folder: resources/function\_blocks/...
+- 4diac-ide folder: workspace/typelibrary/...
+-----
+**IMPORTANT**
 
- Пример адаптирован под плату OrangePi с RK3588s (на текущий момент на других платформах **работать не будет**). В примере используется yolo v7 для детекции: 
- - шайб
- - бракованных шайб 
- - мусор  
+- Restart OpenFB after adding a block
+- Check for the .fbt file in the IDE TypeLibrary
+-----
+**Examples**
 
-## Пример 1. washer_detector
-### Смешанная система OpenFB + forte
-В примере собрана система с разными средами исполнения:
+All current example systems are located in the 4diac\_sys folder.
+
+
+**Washer Detection (General Description)**
+
+The example is adapted for the OrangePi board with RK3588s (currently will not work on other platforms). The example uses YOLO v7 for detection of:
+
+- Washers
+- Defective washers
+- Trash
+
+**Example 1. washer\_detector**
+
+**Mixed system система OpenFB + forte**
+
+The example demonstrates a system with different runtime environments:
+
 - Python
 - C++
-В данном примере среда под С++ публикует сообщения по MQQT, а среда под Python ожидает сообщение и запускает цикл обработки изображения для поиска шайб, их дефектов и прочих объектов (мусора).
 
-## Пример 2. washer_detector_py
-### Cистема исполнения OpenFB 
-В примере реализовано детектирование брака шайб.
+In this example, the C++ runtime publishes messages via MQTT, while the Python runtime waits for messages and launches an image processing cycle to search for washers, their defects, and other objects (trash).
 
-## Пример 3. washer_detector_relay
-### Cистема исполнения OpenFB 
-В примере реализовано детектирование брака шайб. Обнаружение брака приводит к переключению USB-реле, которое комммутирует линиию питания конвейера.
-В этом примере доступен мониторинг блока *PY_RELAY_CTRL* через OPC UA. Для мониторинга доступны события и переменные блока.
+**Example 2. washer\_detector\_py**
 
-#### Тонкости использования
-Необходимо дать права на управление устройствами группе пользователя, который будет запускать среду исполнения.
-Пример:   
-`SUBSYSTEM=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="05df", MODE:="0660", GROUP="dialout"`
+**OpenFB Runtime**
 
-Строку записывать в файл (Запись только с правами администратора): /etc/udev/rules.d/90-hidusb-relay.rules
+The example implements detection of defective washers.
 
-# **Примечание! У систем одинковые имена, поэтому при открытие новой системы удаляйте из дерева проектов предыдущую.**
+**Example 3. washer\_detector\_relay**
 
-# Подготовка
-1. Скачать и установить IDE FL (https://it.severstal.com/products/oasu-tp/#downloads)
-2. Скачать репозиторий  https://gitverse.ru/rtsoft/OpenFB.git
-3. Запустить IDE
-4. Импортировать систему из репозитория  4diac_sys: *demo_whashers*
-5. Заменить пути к файлам у блока *Detector_N_Drawer*
+**OpenFB Runtime**
 
-# Системные требования
+The example implements detection of defective washers. Detection of defects leads to switching of a USB relay, which switches the conveyor power line. In this example, monitoring of the PY\_RELAY\_CTRL block is available via OPC UA. Events and variables of the block are available for monitoring.
 
-- python3.10 
+**Usage Nuances** 
+
+You need to grant device control permissions to the user group that will run the runtime environment. Example:
+
+\
+SUBSYSTEM=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="05df", MODE:="0660", GROUP="dialout"
+
+Write this line to a file (write only with administrator privileges): /etc/udev/rules.d/90-hidusb-relay.rules
+
+Note! Systems have identical names, so when opening a new system, delete the previous one from the project tree.
+
+**Preparation**
+
+1. Download and install IDE FL (<https://it.severstal.com/products/oasu-tp/#downloads>)
+1. Download repository  <https://gitverse.ru/rtsoft/OpenFB.git>
+1. Launch the IDE
+1. Import the system from the repository 4diac\_sys: demo\_whashers
+1. Replace file paths for the Detector\_N\_Drawer block
+
+**System requirements**
+
+- python3.10
 - python3-pip
 - libgl1
 - libxrender1
@@ -171,6 +194,9 @@ class Hello_FB:
 - libgl1-mesa-glx
 - libqt5widgets5
 - libqt5gui5
-- libqt5core5a 
-### Python 
-Все необходимые библиотеки описаны в файле: **docker/requirements.txt**
+- libqt5core5a
+
+**Python**
+
+All required libraries are described in the file: **docker/requirements.txt**
+
