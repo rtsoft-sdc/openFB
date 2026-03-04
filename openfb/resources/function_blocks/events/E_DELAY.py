@@ -49,11 +49,8 @@ class E_DELAY:
     
     def _delay_loop(self, delay_seconds):
         if not self._stop_event.wait(timeout=delay_seconds):
-            logging.info(f'E_DELAY: Delay completed, sending event')
             if self._on_event:
                 self._on_event('EO', self._event_value)
-        else:
-            logging.info('E_DELAY: Delay was cancelled')
     
     def __del__(self):
         logging.info('E_DELAY class destroyed')
