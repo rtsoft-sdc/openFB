@@ -19,8 +19,8 @@ class FB(threading.Thread, fb_interface.FBInterface):
         self.update_variables_fboot = None
         self.fb_type = fb_type
 
-        #if hasattr(fb_obj, 'set_fb_interface'):
-            #fb_obj.set_fb_interface(self)
+        if hasattr(fb_obj, 'set_on_event_callback'):
+            fb_obj.set_on_event_callback(self._trigger_event)
 
         if fb_type != 'TEST_FB' and fb_name != 'START':
             # Gets the dir path to the py and fbt files
@@ -92,6 +92,39 @@ class FB(threading.Thread, fb_interface.FBInterface):
 
                 # sends a signal when ends execution
                 self.execution_end.set()
+
+    def _trigger_event(self, *args):
+        """
+        Callback for async event generators (OF_E_CYCLE, OF_E_TRAIN, OF_E_N_TABLE, etc.)
+        Triggers output event from background thread.
+        
+        Different FB types call with different argument patterns:
+        - OF_E_CYCLE: callback('EO', event_value)
+        - OF_E_TRAIN, OF_E_TABLE: callback(event_value, output_var) 
+        - OF_E_N_TABLE: callback('EO0', event_value, index)
+        - OF_E_BLINK: callback('CNF', event_value, output_var)
+        """
+        if len(args) == 0:
+            logging.warning("_trigger_event called with no arguments")
+            return
+        
+        # Determine if first argument is an event name (string) or event value
+        first_arg = args[0]
+        
+        if isinstance(first_arg, str):
+            # Pattern: callback(event_name, event_value, ...)
+            event_name = first_arg
+            event_value = args[1] if len(args) > 1 else 1
+        else:
+            # Pattern: callback(event_value, ...)
+            # Default event name is 'EO' for OF_E_CYCLE, OF_E_TRAIN, OF_E_TABLE
+            event_name = 'EO'
+            event_value = first_arg
+        
+        # Send event to all connected FBs
+        if event_name in self.output_connections:
+            for connection in self.output_connections[event_name]:
+                connection.send_event(event_value)
 
     def stop(self):
 
