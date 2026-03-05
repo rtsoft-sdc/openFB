@@ -21,9 +21,10 @@ We use [contribution policy](https://github.com/rtsoft-sdc/openFB/blob/master/C
 
 ### 1. Clone repository
 
+``` bash
 git clone https://github.com/rtsoft-sdc/openFB.git
-
 cd OpenFB
+```
 
 ### 2. Install Python and dependencies
 
