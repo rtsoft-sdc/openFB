@@ -24,7 +24,7 @@ the terms of [Eclipse Contributor Agreement](http://www.eclipse.org/legal/ECA.ph
 ### 1. Клонировать репозиторий
 
 ``` bash
-git clone https://gitverse.ru/rtsoft/OpenFB.git
+git clone https://github.com/rtsoft-sdc/openFB.git
 cd OpenFB
 ```
 
@@ -156,7 +156,7 @@ class Hello_FB:
 
 # Подготовка
 1. Скачать и установить IDE FL (https://it.severstal.com/products/oasu-tp/#downloads)
-2. Скачать репозиторий  https://gitverse.ru/rtsoft/OpenFB.git
+2. Скачать репозиторий  https://github.com/rtsoft-sdc/openFB.git
 3. Запустить IDE
 4. Импортировать систему из репозитория  4diac_sys: *demo_whashers*
 5. Заменить пути к файлам у блока *Detector_N_Drawer*
