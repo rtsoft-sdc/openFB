@@ -55,7 +55,7 @@ class OF_E_CYCLE:
             if not self._stop_event.is_set():
                 self._event_counter += 1
                 if self._on_event:
-                    self._on_event('EO', self._event_counter)
+                    self._on_event('EO', self._event_value) # временно так 
     
     def __del__(self):
         if hasattr(self, '_stop_event'):
