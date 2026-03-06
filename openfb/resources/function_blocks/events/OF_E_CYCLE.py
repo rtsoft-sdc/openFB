@@ -58,6 +58,7 @@ class OF_E_CYCLE:
                     self._on_event('EO', self._event_value) # временно так 
     
     def __del__(self):
+        logging.info('OF_E_CYCLE class destroyed')
         if hasattr(self, '_stop_event'):
             self._stop_event.set()
         if hasattr(self, '_cycle_thread') and self._cycle_thread and self._cycle_thread.is_alive():
