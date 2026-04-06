@@ -111,7 +111,9 @@ class UaManagerFboot(peer.UaPeer):
 
             if start_fb is None:
                 for child in element:
-                    start_fb = child.attrib['Name']
+                    if 'Name' in child.attrib:
+                        start_fb = child.attrib['Name']
+                        break
                 new_block.append(';' + request + '\n')
             else:
                 new_block.append(f'{start_fb};{request}\n')
