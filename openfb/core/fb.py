@@ -19,8 +19,8 @@ class FB(threading.Thread, fb_interface.FBInterface):
         self.update_variables_fboot = None
         self.fb_type = fb_type
 
-        #if hasattr(fb_obj, 'set_fb_interface'):
-            #fb_obj.set_fb_interface(self)
+        if hasattr(fb_obj, 'set_on_event_callback'):
+            fb_obj.set_on_event_callback(self._trigger_event)
 
         if fb_type != 'TEST_FB' and fb_name != 'START':
             # Gets the dir path to the py and fbt files
@@ -92,6 +92,24 @@ class FB(threading.Thread, fb_interface.FBInterface):
 
                 # sends a signal when ends execution
                 self.execution_end.set()
+
+    def _trigger_event(self, *args):
+        if len(args) == 0:
+            logging.warning("_trigger_event called with no arguments")
+            return
+        
+        first_arg = args[0]
+        
+        if isinstance(first_arg, str):
+            event_name = first_arg
+            event_value = args[1] if len(args) > 1 else 1
+        else:
+            event_name = 'EO'
+            event_value = first_arg
+        
+        if event_name in self.output_connections:
+            for connection in self.output_connections[event_name]:
+                connection.send_event(event_value)
 
     def stop(self):
 
