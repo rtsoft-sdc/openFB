@@ -377,7 +377,7 @@ class TypeConverter:
             'BOOL': 'BOOL',
             'SINT': 'SINT', 'INT': 'INT', 'DINT': 'DINT', 'LINT': 'LINT',
             'USINT': 'USINT', 'UINT': 'UINT', 'UDINT': 'UDINT', 'ULINT': 'ULINT',
-            'BYTE': 'BYTE', 'WORD': 'WORD', 'DWORD': 'DWORD', 'LWORD': 'LWORD',
+            '16': 'LWORD', #  'BYTE', 'WORD', 'DWORD', 'LWORD'  same identifier 16#... 
             'REAL': 'REAL', 'LREAL': 'LREAL',
             'STRING': 'STRING', 'WSTRING': 'STRING',
             'CHAR': 'CHAR', 'WCHAR': 'CHAR',

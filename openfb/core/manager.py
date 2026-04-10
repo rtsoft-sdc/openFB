@@ -245,6 +245,7 @@ class Manager:
                 self.manager_ua_fboot.from_fboot()
         
         elif action == 'WRITE':
+            cfg = self.get_config(config_id)
             # Iterate over the list of children
             for child in element:
                 # Write a connection with value
@@ -253,7 +254,8 @@ class Manager:
                     connection_destination = child.attrib['Destination']
                     connection_source = child.attrib['Source']
                     try:
-                        self.get_config(config_id).write_connection(connection_source, connection_destination)
+                        if len(cfg.fb_dictionary) > 1 or connection_source  == "START":
+                            cfg.write_connection(connection_source, connection_destination)
                     except:
                         pass
 
