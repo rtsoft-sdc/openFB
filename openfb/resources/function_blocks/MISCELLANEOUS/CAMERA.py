@@ -41,7 +41,6 @@ class CAMERA:
             "Write your handler for current event here."
             if QI == True and self.cap.isOpened():
                 ret, frame = self.cap.read()
-                self.cap.
                 if ret == True:
                     if len(self.smd.keys()) == 0:
                         ind = 0
@@ -57,7 +56,7 @@ class CAMERA:
                         self.smd.clear()
                     return None, event_input_value, True, "Image pushed", int(ind)
                 else:
-                    return None, event_input_name, False, "No image", None
+                    return None, event_input_value, False, "No image", None
             else:
                 # logging.info(f"Stream state is {self.cap.isOpened()}")
-                return None, event_input_name, False, "Stream maybe closed", None
+                return None, event_input_value, False, "Stream maybe closed", None
