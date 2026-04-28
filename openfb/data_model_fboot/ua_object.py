@@ -68,7 +68,7 @@ class UaObject:
                                                         var_idx,
                                                         var["Name"], 
                                                         utils.UA_TYPES[var['Type']], 
-                                                        0)
+                                                        -1)
                     self.ua_vars[var['Name']] = ua_var
                 except KeyError:
                     raise self.InvalidFbtState
