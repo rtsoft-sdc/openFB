@@ -68,7 +68,7 @@ class UaObject:
                     ua_var = self.ua_server.create_typed_variable(self.folders['VarFolder'].get('path'),
                                                         var_idx,
                                                         var["Name"], 
-                                                        utils.UA_TYPES[var['Type']], 
+                                                        var['Type'], 
                                                         -1)
                     self.ua_vars[var['Name']] = ua_var
                 except KeyError:
@@ -90,7 +90,7 @@ class UaObject:
                                 ua_var = self.ua_server.create_typed_variable(self.folders['VarFolder'].get('path'),
                                                                     var_idx,
                                                                     var_declaration.get('Name'), 
-                                                                    utils.UA_TYPES[var_declaration.get('Type')], 
+                                                                    var_declaration.get('Type'), 
                                                                     0)
                                 self.ua_vars[var_declaration.get('Name')] = ua_var
                             except KeyError:
@@ -115,7 +115,7 @@ class UaObject:
                             ua_var = self.ua_server.create_typed_variable(self.folders['EventFolder'].get('path'),
                                                                 var_idx,
                                                                 event.get('Name'), 
-                                                                utils.UA_TYPES['String'], 
+                                                                'String', 
                                                                 0, writable=False)
                             self.ua_vars[event.get('Name')] = ua_var
                         except KeyError as ke:
