@@ -66,23 +66,6 @@ class UaPeer(Server, base.UaBase):
         result = self.client_dictionary[client_address].call_method(path.copy(), *args)
         self.lock.release()
         return result
-    
-    def default_value(self, var_type, value_rank):
-        if value_rank == 0 or value_rank == -1:  
-            return {
-                ua.VariantType.Boolean: False,
-                ua.VariantType.Int16: 0,
-                ua.VariantType.Int32: 0,
-                ua.VariantType.Int64: 0,
-                ua.VariantType.UInt16: 0,
-                ua.VariantType.UInt32: 0,
-                ua.VariantType.UInt64: 0,
-                ua.VariantType.Float: 0.0,
-                ua.VariantType.Double: 0.0,
-                ua.VariantType.String: "",
-            }.get(var_type, None)
-        else:
-            return []
 
     def create_typed_variable(self, path, index, var_name, var_type,
                             value_rank, dimensions=0, writable=True):
@@ -93,12 +76,17 @@ class UaPeer(Server, base.UaBase):
             return my_obj.get_child(var_name)
 
         except BadNoMatch:
+
+            node_var_type = utils.UA_TYPES[var_type]
+            node_data_type = utils.UA_NODE[node_var_type]
+            def_value = utils.TypeRegistry.get_default_value(var_type)
+
             my_var = my_obj.add_variable(
                 index,
                 var_name,
-                self.default_value(var_type, value_rank),
-                var_type,
-                utils.UA_NODE[var_type]
+                def_value,
+                node_var_type,
+                node_data_type
                 )
 
             my_var.set_value_rank(value_rank)
