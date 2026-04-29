@@ -5,6 +5,7 @@ import threading
 import logging
 from opcua.ua.uaerrors import BadNoMatch
 from opcua import ua
+from openfb.data_model_fboot import utils
 
 class UaPeer(Server, base.UaBase):
 
@@ -96,7 +97,8 @@ class UaPeer(Server, base.UaBase):
                 index,
                 var_name,
                 self.default_value(var_type, value_rank),
-                var_type
+                var_type,
+                utils.UA_NODE[var_type]
                 )
 
             my_var.set_value_rank(value_rank)
