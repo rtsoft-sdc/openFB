@@ -1,3 +1,4 @@
+from opcua import ua
 from openfb.data_model_fboot import utils
 import logging
 import uuid
@@ -68,7 +69,7 @@ class UaObject:
                                                         var_idx,
                                                         var["Name"], 
                                                         utils.UA_TYPES[var['Type']], 
-                                                        0)
+                                                        -1)
                     self.ua_vars[var['Name']] = ua_var
                 except KeyError:
                     raise self.InvalidFbtState
@@ -155,9 +156,9 @@ class UaObject:
         for var_name, var_ua in self.ua_vars.items():
             # reads the variable value
             v_type, value, _ = fb.read_attr(var_name)
-
             try:
                 # writes the value inside the opc-ua variable
+                value = ua.Variant(value, var_ua.get_data_type_as_variant_type())
                 var_ua.set_value(value)
 
             except Exception as error:

@@ -5,6 +5,7 @@ import threading
 import logging
 from opcua.ua.uaerrors import BadNoMatch
 from opcua import ua
+from openfb.data_model_fboot import utils
 
 class UaPeer(Server, base.UaBase):
 
@@ -67,7 +68,7 @@ class UaPeer(Server, base.UaBase):
         return result
     
     def default_value(self, var_type, value_rank):
-        if value_rank == 0:  
+        if value_rank == 0 or value_rank == -1:  
             return {
                 ua.VariantType.Boolean: False,
                 ua.VariantType.Int16: 0,
@@ -92,16 +93,13 @@ class UaPeer(Server, base.UaBase):
             return my_obj.get_child(var_name)
 
         except BadNoMatch:
-            if value_rank == -1:
-                init_value = ua.Variant(None, var_type)
-            else:
-                init_value = ua.Variant([], var_type)
-
             my_var = my_obj.add_variable(
                 index,
                 var_name,
                 self.default_value(var_type, value_rank),
-            )
+                var_type,
+                utils.UA_NODE[var_type]
+                )
 
             my_var.set_value_rank(value_rank)
 
