@@ -1,0 +1,15 @@
+<FBType Name="BOOL2BOOL" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="BOOL"/>
+        </InputVars>
+        <OutputVars>
+        </OutputVars>
+    </InterfaceList>
+</FBType>
