@@ -10,6 +10,7 @@
             <VarDeclaration Name="IN" Type="REAL"/>
         </InputVars>
         <OutputVars>
+            <VarDeclaration Name="OUT" Type="REAL"/>
         </OutputVars>
     </InterfaceList>
 </FBType>

@@ -10,6 +10,7 @@
             <VarDeclaration Name="IN" Type="BYTE"/>
         </InputVars>
         <OutputVars>
+            <VarDeclaration Name="OUT" Type="BYTE"/>
         </OutputVars>
     </InterfaceList>
 </FBType>

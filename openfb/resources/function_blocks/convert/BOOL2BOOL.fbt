@@ -10,6 +10,7 @@
             <VarDeclaration Name="IN" Type="BOOL"/>
         </InputVars>
         <OutputVars>
+            <VarDeclaration Name="OUT" Type="BOOL"/>
         </OutputVars>
     </InterfaceList>
 </FBType>
