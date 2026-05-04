@@ -1,0 +1,16 @@
+<FBType Name="WSTRING2WSTRING" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="WSTRING"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="WSTRING"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>
