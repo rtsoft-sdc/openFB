@@ -7,10 +7,10 @@
             <Event Name="CNF" Type="Event"/>
         </EventOutputs>
         <InputVars>
-            <VarDeclaration Name="IN" Type="DT"/>
+            <VarDeclaration Name="IN" Type="DATE_AND_TIME"/>
         </InputVars>
         <OutputVars>
-            <VarDeclaration Name="OUT" Type="DT"/>
+            <VarDeclaration Name="OUT" Type="DATE_AND_TIME"/>
         </OutputVars>
     </InterfaceList>
 </FBType>
