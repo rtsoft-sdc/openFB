@@ -3,7 +3,6 @@ from xml.etree import ElementTree as ETree
 from openfb.data_model_fboot import ua_object, monitor, utils, ua_method
 import logging
 import os
-import sys
 from openfb.core.configuration import Configuration
 
 class UaManagerFboot(peer.UaPeer):
@@ -187,12 +186,12 @@ class UaManagerFboot(peer.UaPeer):
             if self.validate_xml_with_details(chunks[1]) != True:
                 raise self.InvalidFbootState
             
-            if chunks[0] != "":
-                self.resources_running.add(chunks[0])
-                self.config = self.config_dictionary.get(chunks[0])
+            if resource_name != "":
+                self.resources_running.add(resource_name)
+                self.config = self.config_dictionary.get(resource_name)
                 if self.config is None:
-                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
-                    self.config = self.config_dictionary.get(chunks[0])
+                    self.config_dictionary[resource_name] = Configuration(chunks[0], "EMB_RES")
+                    self.config = self.config_dictionary.get(resource_name)
                     self.main_manager.set_config(chunks[0], self.config)
 
             xml_element = ETree.fromstring(chunks[1])
@@ -243,7 +242,7 @@ class UaManagerFboot(peer.UaPeer):
                 self.resources_running.add(chunks[0])
                 self.config = self.config_dictionary.get(chunks[0])
                 if self.config is None:
-                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES")
                     self.config = self.config_dictionary.get(chunks[0])
                     self.main_manager.set_config(chunks[0], self.config)
 

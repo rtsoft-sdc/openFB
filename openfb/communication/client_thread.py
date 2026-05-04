@@ -5,7 +5,7 @@ from xml.etree import ElementTree as ETree
 class ClientThread(threading.Thread):
 
     def __init__(self, connection, client_address, config_m):
-        threading.Thread.__init__(self, name='{0}:{1}'.format(client_address[0], client_address[1]))
+        threading.Thread.__init__(self, name='TCP:{0}:{1}'.format(client_address[0], client_address[1]))
 
         self.config_m = config_m
         self.connection = connection

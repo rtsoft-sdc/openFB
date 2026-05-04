@@ -14,10 +14,9 @@ import glob
 
 class Manager:
 
-    def __init__(self, monitor=None):
+    def __init__(self):
         self.start_time = time.time() * 1000
         self.config_dictionary = dict()
-        self.monitor = monitor
 
         # attributes responsible for the ua integration
         self.ua_integration = False
@@ -53,14 +52,6 @@ class Manager:
         if action == 'CREATE':
             self.requests.append(xml_data)
 
-            ##############################################################
-            ## remove all files in monitoring folder
-            monitoring_path = os.path.join(os.path.dirname(sys.path[0]), 'resources', 'monitoring', '')
-            files = glob.glob("{0}*".format(monitoring_path))
-            for f in files:
-                os.remove(f)
-            ##############################################################
-
             # Iterate over the list of children
             for child in element:
                 # Create configuration (function block)
@@ -78,7 +69,7 @@ class Manager:
                             response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
                             self.is_invalid_FB = True
                             return response
-                        config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
+                        config = configuration.Configuration(conf_name, conf_type)
                         self.set_config(conf_name, config)
                         # check the options for ua_integration
                         if self.ua_integration:
@@ -144,14 +135,6 @@ class Manager:
                 pass
 
         elif action == 'DELETE':
-
-            ##############################################################
-            ## remove all files in monitoring folder
-            monitoring_path = os.path.join(os.path.dirname(sys.path[0]), 'resources', 'monitoring', '')
-            files = glob.glob("{0}*".format(monitoring_path))
-            for f in files:
-                os.remove(f)
-            ##############################################################
 
             # Iterate over the list of children
             for child in element:
@@ -286,7 +269,7 @@ class Manager:
     def build_ua_manager_fboot(self, address, port, fboot_path):
         self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path, self.config_dictionary, self)
         # creates the opc-ua manager
-        config = configuration.Configuration('EMB_RES', 'EMB_RES', monitor=self.monitor)
+        config = configuration.Configuration('EMB_RES', 'EMB_RES')
         self.set_config('EMB_RES', config)
         # parses the description file
         self.manager_ua_fboot(config)

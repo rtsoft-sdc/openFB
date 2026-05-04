@@ -1,14 +1,13 @@
 import threading
 import logging
 from openfb.core import fb_interface
-import os
-from openfb.data_model_fboot import utils
 import queue
 
 class FB(threading.Thread, fb_interface.FBInterface):
 
-    def __init__(self, fb_name, fb_type, fb_obj, fb_xml, monitor=None, opc_mapping=None):
-        threading.Thread.__init__(self, name=fb_name)
+    def __init__(self, fb_name, fb_type, fb_obj, fb_xml, monitor=None, opc_mapping=None, cfg_id='res'):
+        tname = "{}-{}".format(cfg_id, fb_name)
+        threading.Thread.__init__(self, name=tname)
         fb_interface.FBInterface.__init__(self, fb_name, fb_type, fb_xml, monitor)
 
         self.fb_obj = fb_obj
@@ -23,10 +22,6 @@ class FB(threading.Thread, fb_interface.FBInterface):
             fb_obj.set_on_event_callback(self._trigger_event)
 
         if fb_type != 'TEST_FB' and fb_name != 'START':
-            # Gets the dir path to the py and fbt files
-            root_path = utils.get_fb_files_path(fb_type)
-            # Gets the file path to the python file
-            py_path = os.path.join(root_path, fb_type + '.py')
             message_queue = queue.Queue()
             self.message_queue = message_queue
 
@@ -55,7 +50,6 @@ class FB(threading.Thread, fb_interface.FBInterface):
 
             try:
                 outputs = self.fb_obj.schedule(*inputs)
-                logging.debug(f"Inputs: {inputs}, Module ouputs:{outputs}")
 
             except TypeError as error:
                 logging.error('invalid number of arguments (check if fb method args are in fb_type.fbt)')

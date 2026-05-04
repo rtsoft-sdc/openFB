@@ -4,17 +4,14 @@ from openfb.core import fb_interface
 from openfb.data_model_fboot.utils import TypeConverter
 from xml.etree import ElementTree as ETree
 import logging
-import datetime
-import re
 import inspect
 
 
 
 class Configuration:
 
-    def __init__(self, config_id, config_type, monitor=None, opc_mapping=None):
+    def __init__(self, config_id, config_type, opc_mapping=None):
 
-        self.monitor = monitor
         self.opc_mapping = opc_mapping
         self.fb_dictionary = dict()
 
@@ -42,17 +39,17 @@ class Configuration:
     def create_virtualized_fb(self, fb_name, fb_type, ua_update):
         logging.info('creating a virtualized (opc-ua) fb {0}...'.format(fb_name))
 
-        self.create_fb(fb_name, fb_type, monitor=True)
+        self.create_fb(fb_name, fb_type)
         # sets the ua variables update method
         fb2update = self.get_fb(fb_name)
         fb2update.ua_variables_update = ua_update
 
-    def create_fb(self, fb_name, fb_type, monitor=False, opc_mapping=None):
+    def create_fb(self, fb_name, fb_type, opc_mapping=None):
         #fixme: new types like iec61499::system::EMB_RES
         fb_type = fb_type.split('::')[-1]
 
         # fb_name = fb_name.replace('.', '-')
-        logging.info(f'creating a new fb {fb_name} Type: {fb_type}...')
+        logging.info(f'creating a new fb {fb_name} Type: {fb_type} Config Id: {self.config_id}...')
         fb_res = fb_resources.FBResources(fb_type)
 
         exists_fb = fb_res.exists_fb()
@@ -89,10 +86,7 @@ class Configuration:
                     logging.warning('Ensure your variable arguments are the same as the input variables and in the same order')
 
             ## if it is a real FB, not a hidden one
-            if monitor:
-                fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, monitor=self.monitor, opc_mapping=opc_mapping)
-            else:
-                fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, opc_mapping=opc_mapping)
+            fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, opc_mapping=opc_mapping, cfg_id=self.config_id)
 
             self.set_fb(fb_name, fb_element)
             logging.info('created fb type: {0}, instance: {1}'.format(fb_type, fb_name))
