@@ -19,10 +19,6 @@ class UaObject:
         self.folders = dict()
         self.ua_vars = dict()
         self.mapped_ua_vars = opc_mapping
-        # creates the fb inside the configuration
-        self.ua_server.config.create_virtualized_fb(self.fb_name, self.fb_type, self.update_variables)
-        # creates required connections
-        self.set_up_connections()
         # create object
         self.obj_idx = '{0}:{1}'.format(ua_folder.get('idx'), self.fb_name)
         self.obj_path_list, self.obj_path = utils.default_object(ua_server, 
@@ -59,6 +55,11 @@ class UaObject:
             self.populate_events_folder()
         except self.InvalidFbtState:
             logging.error('Invalid function block definition, check {0}.fbt for mistakes'.format(self.fb_name))
+        # creates the fb inside the configuration
+        self.ua_server.config.create_virtualized_fb(self.fb_name, self.fb_type, self.update_variables)
+        # creates required connections
+        self.set_up_connections()
+
 
     def populate_vars_folder(self):
         if self.mapped_ua_vars:
