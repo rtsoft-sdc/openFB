@@ -1,3 +1,16 @@
 #!/bin/bash
 set -e
-exit 0
+
+
+if command -v systemctl &> /dev/null; then
+
+    echo "Stop sevice and remove files"
+    systemctl stop openfb.service
+    systemctl disable openfb.service
+    systemctl daemon-reload
+fi
+
+rm /etc/systemd/system/openfb.service
+
+rm -rf /opt/openfb
+unlink /usr/bin/openfb
