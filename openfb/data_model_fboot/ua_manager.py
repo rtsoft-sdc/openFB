@@ -213,6 +213,8 @@ class UaManagerFboot(peer.UaPeer):
                             fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
                             fb_name = child.get('Name')
                             opc_mapping = child.find('OpcMapping')
+                            if fb_name in self.config_dictionary[resource_name].fb_dictionary:
+                                continue
                             if opc_mapping is not None:
                                 for var in opc_mapping.findall('Var'):
                                     if fb_name not in self.opc_mapped_vars:
@@ -302,7 +304,8 @@ class UaManagerFboot(peer.UaPeer):
         # stops the monitor thread
         self.monitor_hardware.stop()
         # stops the configuration work
-        self.config.stop_work()
+        for res in self.config_dictionary.values():
+            res.stop_work()
         # stops the ua server
         self.stop()
           
