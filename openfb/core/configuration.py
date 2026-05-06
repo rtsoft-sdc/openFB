@@ -156,8 +156,11 @@ class Configuration:
         destination_attr = destination.split(sep='.')
         destination_fb = self.get_fb(destination_attr[0]) if len(destination_attr) == 2 else self.get_fb('.'.join(destination_attr[:-1]))
         destination_name = destination_attr[1] if len(destination_attr) == 2 else destination_attr[-1]
-    
-        v_type, value, is_watch = destination_fb.read_attr(destination_name)
+        if destination_fb is not None:
+            v_type, value, is_watch = destination_fb.read_attr(destination_name)
+        else:
+            logging.error(f"Error occured during writing connection between {source_value} and {destination}")
+            return
 
         # Verifies if is to write an event
         if source_value == '$e' or v_type=='Event':

@@ -81,7 +81,12 @@ class UaManagerFboot(peer.UaPeer):
 
                     if name == '':
                         reqest = ETree.fromstring(req)
-                        name = reqest.find('FB').get('Name')
+                        name = reqest.find('FB')
+                        if name is not None:
+                            name = name.get('Name')
+                        else:
+                            continue
+
                     if name == '' or name != current_name:
                         if current_block:
                             blocks.append((current_name, current_block))
@@ -265,18 +270,20 @@ class UaManagerFboot(peer.UaPeer):
                 elif xml_element.get('Action') == 'WRITE':
                     for child in xml_element:
                         if child.tag == 'Connection':
-                            if len(self.method_names) == 0 or not utils.any_element_in_string(self.method_names, child.get('Destination')):
+                            src = child.get("Source")
+                            dst = child.get("Destination")
+                            if len(self.method_names) == 0 or not utils.any_element_in_string(self.method_names, dst):
                                 # Write connection
-                                self.config.write_connection(child.get('Source'), child.get('Destination'))    
-                            elif len(self.method_names) != 0 and utils.any_element_in_string(self.method_names, child.get('Destination')):
+                                self.config.write_connection(src, dst)    
+                            elif len(self.method_names) != 0 and utils.any_element_in_string(self.method_names, dst):
                                 # Save wrapper info
-                                info_type = child.get('Destination').split('.')[1]
+                                info_type = dst.split('.')[1]
                                 if info_type == 'INPUT':
-                                    self.method_inputs = child.get('Source')
+                                    self.method_inputs = src
                                 elif info_type == 'OUTPUT':
-                                    self.method_outputs = child.get('Source')
+                                    self.method_outputs = src
                                 elif info_type == 'METHOD_NAME':
-                                    self.opcua_method_name = child.get('Source')                   
+                                    self.opcua_method_name = src                   
             except KeyError:
                 raise self.InvalidFbootState
 
