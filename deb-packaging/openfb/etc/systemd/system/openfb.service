@@ -1,6 +1,6 @@
 [Unit]
-Description=Driver monitor service
-After=mm.service
+Description=IEC 61499 Runtime for ML related tasks
+After=openfb.service
 
 [Service]
 Type=simple
