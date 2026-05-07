@@ -1,0 +1,16 @@
+<FBType Name="TIME2TIME" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="TIME"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="TIME"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

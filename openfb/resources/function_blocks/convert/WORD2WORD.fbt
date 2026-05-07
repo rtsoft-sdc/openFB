@@ -1,0 +1,16 @@
+<FBType Name="WORD2WORD" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="WORD"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="WORD"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

@@ -1,0 +1,16 @@
+<FBType Name="DINT2DINT" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="DINT"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="DINT"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

@@ -1,0 +1,16 @@
+<FBType Name="LREAL2LREAL" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="LREAL"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="LREAL"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

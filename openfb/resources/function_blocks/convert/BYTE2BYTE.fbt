@@ -1,0 +1,16 @@
+<FBType Name="BYTE2BYTE" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="BYTE"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="BYTE"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

@@ -1,0 +1,16 @@
+<FBType Name="SINT2SINT" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="SINT"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="SINT"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

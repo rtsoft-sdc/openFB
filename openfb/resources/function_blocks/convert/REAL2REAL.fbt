@@ -1,0 +1,16 @@
+<FBType Name="REAL2REAL" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="REAL"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="REAL"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

@@ -1,0 +1,16 @@
+<FBType Name="LINT2LINT" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="LINT"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="LINT"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

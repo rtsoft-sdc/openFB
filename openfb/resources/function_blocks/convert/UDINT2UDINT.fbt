@@ -1,0 +1,16 @@
+<FBType Name="UDINT2UDINT" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="UDINT"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="UDINT"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>

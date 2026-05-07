@@ -1,0 +1,16 @@
+<FBType Name="DT2DT" OpcUa="SERVICE">
+    <InterfaceList>
+        <EventInputs>
+            <Event Name="REQ" Type="Event"/>
+        </EventInputs>
+        <EventOutputs>
+            <Event Name="CNF" Type="Event"/>
+        </EventOutputs>
+        <InputVars>
+            <VarDeclaration Name="IN" Type="DATE_AND_TIME"/>
+        </InputVars>
+        <OutputVars>
+            <VarDeclaration Name="OUT" Type="DATE_AND_TIME"/>
+        </OutputVars>
+    </InterfaceList>
+</FBType>
