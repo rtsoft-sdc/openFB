@@ -4,8 +4,6 @@ cryptography
 opcua
 numpy
 argparse
-scikit-learn
-pandas
 # Image blocks
 opencv-python
 shared_memory_dict

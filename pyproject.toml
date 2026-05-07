@@ -9,10 +9,8 @@ dependencies = [
     "numpy>=2.2.6",
     "opcua>=0.98.13",
     "opencv-python>=4",
-    "pandas>=2.3.3",
     "psutil>=7.2.1",
     "pyhid-usb-relay>=1.2.0",
-    "scikit-learn>=1.7.2",
     "shared-memory-dict>=0.7.2",
 ]
 
