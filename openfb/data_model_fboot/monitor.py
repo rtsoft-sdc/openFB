@@ -3,7 +3,6 @@ from threading import Event
 from openfb.data_model_fboot import utils
 import psutil
 import os
-import sys
 from importlib.resources import files
 
 # If openFB used as a package set env var OPENFB_LOCAL_DIR with to resources folder 

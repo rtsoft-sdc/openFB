@@ -4,17 +4,14 @@ from openfb.core import fb_interface
 from openfb.data_model_fboot.utils import TypeConverter
 from xml.etree import ElementTree as ETree
 import logging
-import datetime
-import re
 import inspect
 
 
 
 class Configuration:
 
-    def __init__(self, config_id, config_type, monitor=None, opc_mapping=None):
+    def __init__(self, config_id, config_type, opc_mapping=None):
 
-        self.monitor = monitor
         self.opc_mapping = opc_mapping
         self.fb_dictionary = dict()
 
@@ -88,11 +85,7 @@ class Configuration:
                     logging.warning('Argument names for schedule function of {0} do not match definition in {0}.fbt'.format(fb_name))
                     logging.warning('Ensure your variable arguments are the same as the input variables and in the same order')
 
-            ## if it is a real FB, not a hidden one
-            if monitor:
-                fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, monitor=self.monitor, opc_mapping=opc_mapping)
-            else:
-                fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, opc_mapping=opc_mapping)
+            fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, opc_mapping=opc_mapping)
 
             self.set_fb(fb_name, fb_element)
             logging.info('created fb type: {0}, instance: {1}'.format(fb_type, fb_name))

@@ -3,7 +3,6 @@ from xml.etree import ElementTree as ETree
 from openfb.data_model_fboot import ua_object, monitor, utils, ua_method
 import logging
 import os
-import sys
 from openfb.core.configuration import Configuration
 
 class UaManagerFboot(peer.UaPeer):

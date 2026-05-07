@@ -4,7 +4,6 @@ from opcua import ua
 from opcua import uamethod
 from openfb.data_model_fboot import utils
 import os
-import sys
 import logging
 
 

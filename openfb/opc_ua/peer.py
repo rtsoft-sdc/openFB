@@ -4,7 +4,6 @@ from opcua import Server
 import threading
 import logging
 from opcua.ua.uaerrors import BadNoMatch
-from opcua import ua
 from openfb.data_model_fboot import utils
 
 class UaPeer(Server, base.UaBase):

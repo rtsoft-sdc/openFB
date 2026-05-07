@@ -14,10 +14,9 @@ import glob
 
 class Manager:
 
-    def __init__(self, monitor=None):
+    def __init__(self):
         self.start_time = time.time() * 1000
         self.config_dictionary = dict()
-        self.monitor = monitor
 
         # attributes responsible for the ua integration
         self.ua_integration = False
@@ -67,18 +66,15 @@ class Manager:
                 if child.tag == 'FB':
                     conf_name = child.attrib['Name']
                     conf_type = child.attrib['Type']
-                    # Stops the configuration
-                    # for config_name, config in self.config_dictionary.items():
-                    #     config.stop_work()
-                    # self.config_dictionary = dict()
+
                     if conf_name not in self.config_dictionary:
                         # Creates the configuration
-                        if utils.get_fb_files_path(conf_type) == None:
+                        if utils.get_fb_files_path(conf_type) is None:
                             xml = ETree.Element('Response', {'ID': request_id, 'Reason': 'NO_SUCH_OBJECT'})
                             response = b''.join([Manager.build_response_header(xml), ETree.tostring(xml)])
                             self.is_invalid_FB = True
                             return response
-                        config = configuration.Configuration(conf_name, conf_type, monitor=self.monitor)
+                        config = configuration.Configuration(conf_name, conf_type)
                         self.set_config(conf_name, config)
                         # check the options for ua_integration
                         if self.ua_integration:
@@ -286,7 +282,7 @@ class Manager:
     def build_ua_manager_fboot(self, address, port, fboot_path):
         self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(address, port, fboot_path, self.config_dictionary, self)
         # creates the opc-ua manager
-        config = configuration.Configuration('EMB_RES', 'EMB_RES', monitor=self.monitor)
+        config = configuration.Configuration('EMB_RES', 'EMB_RES')
         self.set_config('EMB_RES', config)
         # parses the description file
         self.manager_ua_fboot(config)

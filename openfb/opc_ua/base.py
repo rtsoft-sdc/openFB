@@ -1,6 +1,5 @@
 from opcua import ua
 from openfb.data_model_fboot.ua_observer import UaObserver
-from opcua.ua.uaerrors import BadNoMatch
 
 class UaBase:
 

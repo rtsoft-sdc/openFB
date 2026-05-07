@@ -3,7 +3,6 @@ import logging.handlers
 import os
 import sys
 import argparse
-import glob
 from importlib.resources import files
 
 from openfb.communication import tcp_server
@@ -26,10 +25,7 @@ def main():
     port_diac = 61499
     port_opc = 4840
     log_level = log_levels['INFO']
-    n_samples = 10
-    secs_sample = 20
-    monitor = [n_samples, secs_sample]
-    agent = False
+
 
     fboot_path = os.path.join(resource_dir, 'data_model.fboot')
     unix_socket = "logger.sock"
@@ -47,9 +43,6 @@ def main():
                         help="logging level at the file resources/error_list.log, e.g. INFO, WARN or ERROR (default: ERROR)")
     parser.add_argument("-s", metavar="logging_socket", nargs=1, type=str,
                         help="Unix socket path for external logging collectors")
-    parser.add_argument('-g', action='store_true',
-                        help="sets on the self-organizing agent")
-    parser.add_argument('-m', metavar='monitor', nargs='*', help="activates the behavioral anomaly detection feature. If no paramters are specified, the default values are 10 samples for initial training, each sample with 20 seconds (approximately 3m20s). As an example, you can specify paramters the following way (-m 5 10) meaning 10 samples for training with 10 seconds each sample.")
     parser.add_argument('-f', metavar='fboot_file', nargs=1, type=str, help="path to the .fboot file to run")
     args = parser.parse_args()
 
@@ -61,27 +54,11 @@ def main():
         port_opc = args.u[0]
     if args.l != None:
         log_level = log_levels[args.l[0]]
-    agent = args.g
-    if args.m != None:
-        if len(args.m) == 2:
-            monitor = [int(args.m[0]), int(args.m[1])]
-        elif len(args.m) == 1 or len(args.m) > 2:
-            print("For the monitoring functionality, please specify 2 arguments or none!")
-            exit(2)
-    else:
-        monitor = None
     if args.f != None:
         fboot_path = args.f[0]
     if args.s != None:
         unix_socket = args.s[0]
-    ##############################################################
-    # remove all files in monitoring folder
-    monitoring_path = os.path.join(resource_dir, 'monitoring', '')
-    if os.path.exists(monitoring_path):
-        files = glob.glob("{0}*".format(monitoring_path))
-        for f in files:
-            os.remove(f)
-    ##############################################################
+
 
     # Configure the logging output
     log_path = os.path.join(resource_dir, 'error_list.log')
@@ -104,7 +81,7 @@ def main():
         logging.getLogger("opcua").setLevel(logging.CRITICAL)
 
     # creates the 4diac manager
-    m = manager.Manager(monitor=monitor)
+    m = manager.Manager()
     # sets the ua integration option
     m.build_ua_manager_fboot(address, port_opc, fboot_path)
     print("[INFO]\tOPCUA server is running on {0}:{1}".format(address, port_opc))
