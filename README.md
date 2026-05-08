@@ -162,6 +162,6 @@ Write this line to a file (write only with administrator privileges): /etc/udev/
 - libqt5core5a
 
 ### Python
-
+Minimal version - 3.10
 All required libraries are described in the file: **requirements.txt**
 

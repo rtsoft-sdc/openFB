@@ -175,4 +175,5 @@ class Hello_FB:
 - libqt5gui5
 - libqt5core5a 
 ### Python 
+Minimal version - 3.10
 Все необходимые библиотеки описаны в файле: **requirements.txt**

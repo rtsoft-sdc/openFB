@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [1.1.0] - 2026-05-08
 
 ### Added
-- New method for publishing functional block inputs and outputs.
+- New method for registraion inputs and outputs of functional block in OPC UA server.
 - CLI support: the project can now be installed as a Python module in a virtual environment and used as a command-line utility.
 - Logging handler to forward logs to an arbitrary UNIX socket for integration with logging collector tools.
 - Expanded functional block library with new modules: `convert`, `events`, `iec61131`, `utils`.
