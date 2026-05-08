@@ -1,6 +1,28 @@
-# Интеграция с логером и оркестратором FLOGIC - 16.01.2026
-Добавлен handler для направления логов в UNIX сокет. Для указания сокета используется флаг -s.  
-**Внимание!!!** При использования флага у  openFB должны быть права для работы с сокетом.  
+# Changelog
 
-Для интегарции с оркестратором изменена структура проекта. Проект может быть установлен, как CLI инструмент. Для запуска проекта без установки следует использовать run.py и до запуска скрипта необходимо выставить переменную среды **OPENFB_LOCAL_DIR**. В этой переменной указывается абсолютный путь до директории openfb/resources.  
-При работе openfb в режиме CLI инструмента путь до расположения с openfb/resources указывать не надо, т.к. ресурсы будут браться из внутренних ресурсов пакета.
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/).
+
+## [1.1.0] - 2026-05-08
+
+### Added
+- New method for publishing functional block inputs and outputs.
+- CLI support: the project can now be installed as a Python module in a virtual environment and used as a command-line utility.
+- Logging handler to forward logs to an arbitrary UNIX socket for integration with logging collector tools.
+- Expanded functional block library with new modules: `convert`, `events`, `iec61131`, `utils`.
+
+### Changed
+- Refactored project structure.
+- Fixed OPC UA node value updates in the embedded server.
+- Standardized log output using Python's built-in `logging` module.
+- Updated CLI startup arguments.
+- Updated project dependencies.
+
+### Removed
+- Functional block execution analytics.
+
+## [1.0.0] - 2025-12-10
+
+- Initial release.
