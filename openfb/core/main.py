@@ -7,6 +7,7 @@ from importlib.resources import files
 
 from openfb.communication import tcp_server
 from openfb.core import manager
+from openfb import __version__
 
 # If openFB used as a package set env var OPENFB_LOCAL_DIR with to resources folder 
 if os.environ.get("OPENFB_LOCAL_DIR"):
@@ -44,21 +45,29 @@ def main():
     parser.add_argument("-s", metavar="logging_socket", nargs=1, type=str,
                         help="Unix socket path for external logging collectors")
     parser.add_argument('-f', metavar='fboot_file', nargs=1, type=str, help="path to the .fboot file to run")
+    parser.add_argument('-v', action='store_true', help="print version")
+    parser.add_argument('-r', action='store_true', help="remove fboot if it exists")
+
     args = parser.parse_args()
-
-    if args.a != None:
+    if args.v:
+        print(args.v)
+        print("Openfb version: {}".format(__version__))
+        exit(0)
+    if args.a is not None:
         address = args.a[0]
-    if args.p != None:
+    if args.p is not None:
         port_diac = args.p[0]
-    if args.u != None:
+    if args.u is not None:
         port_opc = args.u[0]
-    if args.l != None:
+    if args.l is not None:
         log_level = log_levels[args.l[0]]
-    if args.f != None:
+    if args.f is not None:
         fboot_path = args.f[0]
-    if args.s != None:
+    if args.s is not None:
         unix_socket = args.s[0]
-
+    if args.r and os.path.exists(fboot_path):
+        os.remove(fboot_path)
+        print("Remove fboot file {}".format(fboot_path))
 
     # Configure the logging output
     log_path = os.path.join(resource_dir, 'error_list.log')
