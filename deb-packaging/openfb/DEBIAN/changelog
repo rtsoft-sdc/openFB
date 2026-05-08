@@ -1,4 +1,22 @@
-OpenFB (0.3) unstable; urgency=medium
+OpenFB (1.1.0-1) unstable; urgency=low
+
+  * Add new method for publishing functional block inputs and outputs.
+  * Add CLI support: the project can now be installed as a Python module and
+    used as a command-line utility.
+  * Add logging handler to forward logs to an arbitrary UNIX socket for
+    integration with logging collector tools.
+  * Expand functional block library with new modules: convert, events,
+    iec61131, utils.
+  * Refactor project structure.
+  * Fix OPC UA node value updates in the embedded server.
+  * Standardize log output using Python's built-in logging module.
+  * Update CLI startup arguments.
+  * Update project dependencies.
+  * Remove functional block execution analytics.
+
+ -- Oleg Botnar <obotnar@dev.rtsoft.ru>  Fri, 08 May 2026 12:00:00 +0300
+
+OpenFB (1.0.0) unstable; urgency=medium
 
   * Initial release 
 
