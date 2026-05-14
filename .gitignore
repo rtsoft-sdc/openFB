@@ -6,3 +6,11 @@ build/
 dist/
 *.egg-info
 .venv
+
+# Build artifacts: Debian package and Python wheel
+*.deb
+*.whl
+
+# local ci testing ground
+.gitlab-ci-local/
+.gitlab-ci-local/expanded-gitlab-ci.yml
