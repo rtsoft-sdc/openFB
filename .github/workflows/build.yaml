@@ -1,0 +1,41 @@
+name: Build deb and WHL
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+            pip install uv
+            uv sync
+
+      - name: Build
+        run: |
+          export PACKAGE_VERSION=$(uv version | awk '{print $2}')
+          chmod +x scripts/build-package.sh
+          scripts/build-package.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages           
+          path: |
+            ./*.deb
+            ./*.whl
+          overwrite: 'true'

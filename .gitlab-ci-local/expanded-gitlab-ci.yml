@@ -1,0 +1,75 @@
+stages:
+  - .pre
+  - build
+  - .post
+variables:
+  CI_REGISTRY_IMAGE: $CI_REGISTRY/$CI_PROJECT_NAME
+  BUILDER_IMAGE: $CI_REGISTRY_IMAGE/builder:latest
+  CONTAINER_PREFIX: openfb-build
+  BUILD_TIMEOUT: '900'
+build-deb:
+  stage: build
+  tags:
+    - ubuntu_docker
+  when: manual
+  resource_group: openfb-builder
+  before_script:
+    - |
+      if [ -z "$BUILDER_IMAGE" ]; then
+        echo "Error: BUILDER_IMAGE is not set. Exiting."
+        exit 1
+      fi
+    - >-
+      PACKAGE_VERSION=$(grep -E '^Version:' deb-packaging/openfb/DEBIAN/control
+      | awk '{print $2}')
+    - >-
+      docker image inspect ${BUILDER_IMAGE} >/dev/null 2>&1 || docker build -t
+      ${BUILDER_IMAGE} -f deb-packaging/Dockerfile.build .
+  script:
+    - |
+      timeout "$BUILD_TIMEOUT" docker run --rm
+        --name "${CONTAINER_PREFIX}-${CI_JOB_ID}"
+        -v "$PWD":/build
+        -w /build
+        -e PACKAGE_VERSION="${PACKAGE_VERSION}"
+        ${BUILDER_IMAGE}
+        bash deb-packaging/scripts/build-package.sh
+
+      EXIT_CODE=$?
+      if [ $EXIT_CODE -ne 0 ]; then
+        echo "Container exited with code $EXIT_CODE"
+        echo "This means the build inside failed or timed out."
+        exit $EXIT_CODE
+      else
+        echo "Container completed successfully"
+      fi
+  after_script:
+    - >
+      echo "Cleaning up any existing containers with prefix
+      $CONTAINER_PREFIX..."
+
+      OLD_CONTAINERS=$(docker ps -aq --filter "name=${CONTAINER_PREFIX}-")
+
+      if [ -n "$OLD_CONTAINERS" ]; then
+        echo "Found containers to clean: $OLD_CONTAINERS"
+        echo "Stopping containers..."          
+        echo "Removing containers..."
+        docker rm -f $OLD_CONTAINERS 2>/dev/null || true
+        STILL_EXISTING=$(docker ps -aq --filter "name=^${CONTAINER_PREFIX}-")
+        if [ -n "$STILL_EXISTING" ]; then
+          echo "ERROR: Containers still exist after force remove!"
+          exit 1
+        fi
+      else
+        echo "No containers found to clean."
+      fi
+  artifacts:
+    paths:
+      - '*.deb'
+      - '*.whl'
+    expire_in: 1 week
+  only:
+    - main
+    - feature/OFB-59-ci-cd-pipeline
+    - tags
+default: {}
