@@ -29,8 +29,8 @@ jobs:
       - name: Build
         run: |
           export PACKAGE_VERSION=$(uv version | awk '{print $2}')
-          chmod +x scripts/build-package.sh
-          scripts/build-package.sh
+          chmod +x deb-packaging/scripts/build-package.sh
+          deb-packaging/scripts/build-package.sh
 
       - uses: actions/upload-artifact@v4
         with:
