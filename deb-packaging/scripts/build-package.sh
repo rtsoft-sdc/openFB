@@ -16,6 +16,7 @@ PACKAGE_VERSION="${PACKAGE_VERSION:?PACKAGE_VERSION is not set}"
 echo '=== 0. Обновление deb-packaging/openfb/DEBIAN/control and openfb/__init__.py ==='
 sed "s/Version: .*/${PACKAGE_VERSION}/g" deb-packaging/openfb/DEBIAN/control
 sed "s/__version__ = .*/__version__ = '${PACKAGE_VERSION}'/" openfb/__init__.py
+sed -i "s|WHEEL_LOC=\(\$APP_DIR/\)openfb-[^-]*-py3-none-any\.whl|WHEEL_LOC=\1openfb-${PACKAGE_VERSION}-py3-none-any.whl|" deb-packaging/openfb/DEBIAN/postinst
 
 echo '=== 1. Сборка Python wheel ==='
 make install
