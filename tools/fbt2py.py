@@ -109,7 +109,7 @@ def generate_python_class(fb_model):
     class_src += f'EVNT_CNTR,'
 
     for var in fb_model.input_vars:
-        class_src += f'{var['name']},'
+        class_src += f"{var['name']},"
          
     idx = len(class_src)-1    
     class_src = class_src[:idx] + class_src[idx+1:]    
