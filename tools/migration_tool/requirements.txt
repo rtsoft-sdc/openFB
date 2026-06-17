@@ -1,0 +1,5 @@
+elementpath
+pathlib 
+pytest-shutil
+pypi-json
+argparse
