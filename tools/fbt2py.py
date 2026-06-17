@@ -88,22 +88,12 @@ def generate_python_class(fb_model):
     for event in fb_model.event_inputs:
         class_src += f'\n    def service_{event}(self):\n'
         class_src += f'        """ Event Handler for {event} """\n'
-        class_src += f'        print("Execution logic for {event} triggered")\n'
+        class_src += f'        logging.info("Execution logic for {event} triggered")\n'
         class_src += f'        # Implement internal algorithms here\n'
         
-        # Stub execution dispatching an output event example
-        if fb_model.event_outputs:
-            target_out = fb_model.event_outputs[0]
-            class_src += f'        self.output_{target_out}()\n'
             
-    # Generate Output Event Dispatchers
-#    for event in fb_model.event_outputs:
-#        class_src += f'\n    def output_{event}(self):\n'
-#        class_src += f'        """ Signals output event {event} """\n'
-#        class_src += f'        print("Event {event} fired!")\n'
-
     # Generate schedule function
-    class_src += f'\n    def shedule(self,'
+    class_src += f'\n    def schedule(self,'
 #    for event in fb_model.event_inputs:
     class_src += f'IN_EVENT_NAME,'    
     class_src += f'EVNT_CNTR,'
@@ -115,16 +105,20 @@ def generate_python_class(fb_model):
     class_src = class_src[:idx] + class_src[idx+1:]    
     class_src += f'): \n'    
 
+    for var in fb_model.input_vars:
+        class_src += f"\n        self.{var['name']}= {var['name']}"
+
+    class_src += '\n' * 2    
 
     # Generate Input Event Triggers
     for event in fb_model.event_inputs:
-        class_src += f'\n        if(IN_EVENT_NAME == \'{event}\' ):'
+        class_src += f'\n        if IN_EVENT_NAME == \"{event}\":'
         class_src += f'\n            # TODO Insert your code here'
-        class_src += f'\n            service_{event}(self)'
+        class_src += f'\n            self.service_{event}()'
         class_src += f'\n            return '
         for ev in fb_model.event_inputs:
             if (ev == event):
-               class_src += f'EVENT_CTR,'
+               class_src += f'EVNT_CNTR,'
             else:
                class_src += f'None,'    
         for var in fb_model.output_vars:
