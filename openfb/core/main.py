@@ -28,7 +28,7 @@ def main():
     log_level = log_levels['INFO']
 
 
-    fboot_path = os.path.join(resource_dir, 'data_model.fboot')
+    fboot_path = os.path.join(resource_dir, 'fboots' ,'data_model.fboot')
     unix_socket = "logger.sock"
 
 
@@ -50,7 +50,6 @@ def main():
 
     args = parser.parse_args()
     if args.v:
-        print(args.v)
         print("Openfb version: {}".format(__version__))
         exit(0)
     if args.a is not None:
