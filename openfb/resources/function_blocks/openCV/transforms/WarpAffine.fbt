@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="WarpAffine" Comment="openCV warp affine" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_ID"/>
+				<With Var="TRANSFORMATION_MATRIX"/>
+				<With Var="DSIZE"/>
+				<With Var="FLAGS"/>
+				<With Var="BORDERMODE"/>
+				<With Var="BORDERVALUE"/>
+				
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="TRANSFORMATION_MATRIX" Type="INT" ArraySize="2*3"/>
+			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2"/>
+			<VarDeclaration Name="FLAGS" Type="STRING"/>
+			<VarDeclaration Name="BORDERMODE" Type="STRING"/>
+			<VarDeclaration Name="BORDERVALUE" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="CornerHarris" Comment="openCV CornerHarris" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_ID"/>
+				<With Var="BLOCK_SIZE"/>
+				<With Var="KSIZE"/>
+				<With Var="K"/>
+				<With Var="BORDERTYPE"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="DST"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="BLOCK_SIZE" Type="INT"/>
+			<VarDeclaration Name="KSIZE" Type="INT"/>
+			<VarDeclaration Name="K" Type="DOUBLE"/>
+			<VarDeclaration Name="BORDERTYPE" Type="INT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DST" Type="REAL" ArraySize="*"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

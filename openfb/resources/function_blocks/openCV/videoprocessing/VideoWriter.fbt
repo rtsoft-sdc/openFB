@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="VideoWriter" Comment="openCV write video" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="FILENAME"/>
+				<With Var="FOURCC"/>
+				<With Var="FPS"/>
+				<With Var="FRAME_SIZE"/>
+				<With Var="IS_COLOR"/>
+				<With Var="APIPREFERENCE"/>
+				<!-- <With Var="PARAMS"/> -->
+			<Event Name="REQ" Type="Event">
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_ID"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event">
+				<With Var="FILENAME"/>
+			</Event>
+			<Event Name="CNF" Type="Event">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="INIT" Type="BOOL"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="FILENAME" Type="STRING"/>
+			<VarDeclaration Name="FOURCC" Type="INT"/>
+			<VarDeclaration Name="FPS" Type="REAL"/>
+			<VarDeclaration Name="FRAME_SIZE" Type="ARRAY[0..1] OF INT"/>
+			<VarDeclaration Name="IS_COLOR" Type="BOOL"/>
+			<VarDeclaration Name="APIPREFERENCE" Type="INT"/>
+			<!-- <VarDeclaration Name="PARAMS" Type="ARRAY[0..9] OF INT"/> -->
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="FILENAME" Type="STRING"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

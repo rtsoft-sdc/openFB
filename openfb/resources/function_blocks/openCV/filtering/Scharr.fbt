@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="Scharr" Comment="openCV scharr filter" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_ID"/>
+				<With Var="DDEPTH"/>
+				<With Var="DX"/>
+				<With Var="DY"/>
+				<With Var="SCALE"/>
+				<With Var="DELTA"/>
+				<With Var="BORDER_TYPE"/>   <!-- morphologyDefaultBorderValue -->
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="DDEPTH" Type="INT"/>
+			<VarDeclaration Name="DX" Type="INT"/>
+			<VarDeclaration Name="DY" Type="INT"/>
+			<VarDeclaration Name="SCALE" Type="REAL"/>
+			<VarDeclaration Name="DELTA" Type="REAL"/>
+			<VarDeclaration Name="BORDER_TYPE" Type="INT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>
+

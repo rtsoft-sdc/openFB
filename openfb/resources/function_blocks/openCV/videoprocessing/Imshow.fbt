@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="Imshow" Comment="openCV show image" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="WINDOW_NAME"/>
+			</Event>
+			<Event Name="REQ" Type="Event">
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_ID"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event">
+				<With Var="Q0"/>
+			</Event>
+			<Event Name="CNF" Type="Event">
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="WINDOW_NAME" Type="STRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q0" Type="BOOL"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

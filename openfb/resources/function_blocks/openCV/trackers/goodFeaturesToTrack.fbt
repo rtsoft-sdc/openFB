@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="GoodFeaturesToTrack" Comment="openCV goodFeaturesToTrack" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_ID"/>
+				<With Var="MAXCORNERS"/>
+				<With Var="QUALITYLEVEL"/>
+				<With Var="MINDISTANCE"/>
+				<With Var="MASK"/>
+				<With Var="CORNERSQUALITY"/>
+				<With Var="BLOCK_SIZE"/>
+				<With Var="GRADIENTSIZE"/>
+				<With Var="USE_HARRIS"/>
+				<With Var="K"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="CORNERS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="MAXCORNERS" Type="INT"/>
+			<VarDeclaration Name="QUALITYLEVEL" Type="REAL"/>
+			<VarDeclaration Name="MINDISTANCE" Type="REAL"/>
+			<VarDeclaration Name="MASK" Type="BOOL" ArraySize="*"/>
+			<VarDeclaration Name="CORNERSQUALITY" Type="REAL" ArraySize="*"/>
+			<VarDeclaration Name="BLOCK_SIZE" Type="INT"/>
+			<VarDeclaration Name="GRADIENTSIZE" Type="INT"/>
+			<VarDeclaration Name="USE_HARRIS" Type="BOOL"/>
+			<VarDeclaration Name="K" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="CORNERS" Type="REAL" ArraySize="*"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

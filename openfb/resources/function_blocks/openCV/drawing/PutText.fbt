@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="PutText" Comment="openCV text drawer" >
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_ID"/>
+				<With Var="TEXT"/>
+				<With Var="ORG"/>
+				<With Var="FONT_FACE"/>
+				<With Var="FONT_SCALE"/>
+				<With Var="COLOR"/>
+				<With Var="THICKNESS"/>
+				<With Var="BOTTOMLEFTORIGIN"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="TEXT" Type="STRING"/>
+			<VarDeclaration Name="ORG" Type="INT" ArraySize="2"/>
+			<VarDeclaration Name="FONT_FACE" Type="INT"/>
+			<VarDeclaration Name="FONT_SCALE" Type="FLOAT"/>
+			<VarDeclaration Name="COLOR" Type="INT" ArraySize="3"/>
+			<VarDeclaration Name="THICKNESS" Type="INT"/>
+			<VarDeclaration Name="BOTTOMLEFTORIGIN" Type="BOOL"/>
+
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>
+
