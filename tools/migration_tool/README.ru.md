@@ -1,27 +1,28 @@
-# Guide to Using the IDE Project Converter 2.0.0->3.0.0
+# Использование приложения для конвертации проектов IDE 2.0.0->3.0.0
 [![English](https://img.shields.io/badge/lang-en-blue.svg)](README.md)
 [![Russian](https://img.shields.io/badge/lang-ru-green.svg)](README.ru.md)
 
-## Installing Dependencies
+## Установка зависимостей
 
 
 ```
 pip install -r ./requirements.txt
 ```
 
-## Converting a Single Project
+## Конвертация одного проекта
 
 ```
-python main.py --project <project_path> --typelibrary <typelibrary_path> [--out <output_directory>]
+python main.py --project <путь_к_проекту> --typelibrary <путь_к_typelibrary> [--out <выходная_директория>]
 ```
 
-Example:
+Пример:
 ```
 python main.py --project ./projects/washer_detector_2.0.1 --typelibrary ./projects/typelibrary --out ./converted_projects
 ```
-## Converting Multiple Projects
 
-Create a JSON configuration file:
+## Конвертация нескольких проектов
+
+Создайте JSON-файл конфигурации:
 
 ```json
 {
@@ -33,7 +34,7 @@ Create a JSON configuration file:
 }
 ```
 
-Run:
+Запустите:
 ```
 python main.py --config test.json [--out ./converted_projects]
 ```
