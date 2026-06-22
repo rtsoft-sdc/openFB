@@ -5,23 +5,22 @@ from shared_memory_dict import SharedMemoryDict
 
 class Blur():
     def __init__(self):
-        self.smd_connections = {}
         self.buffer_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
+        self.smd = None
+        self.queue_id = None
         
     def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, KSIZE, ANCHOR, BORDER_TYPE):
         if event_input_name == 'REQ':
-            if QUEUE_ID not in self.smd_connections:
-                self.smd_connections[QUEUE_ID] = SharedMemoryDict(name=QUEUE_ID, size=self.buffer_size)
-            smd = self.smd_connections[QUEUE_ID]
-            img_key = str(IMG_ID)
-            data = smd.get(img_key)
-            if data is not None:
-                img = data['image']
-                cv2.blur(img, (KSIZE[0], KSIZE[1]), (ANCHOR[0], ANCHOR[1]), BORDER_TYPE, dst=img)
-                smd[img_key] = data
-                return event_input_value, IMG_ID
+            if QUEUE_ID != self.queue_id:
+                self.smd = SharedMemoryDict(name=QUEUE_ID, size=self.buffer_size)
+                self.queue_id = QUEUE_ID
+            img = self.smd.get_frame(int(IMG_ID))
+            
+            if img is not None:
+                cv2.blur(img, (int(KSIZE[0]), int(KSIZE[1])), dst=img, anchor=(int(ANCHOR[0]), int(ANCHOR[1])), borderType=int(BORDER_TYPE))
+                return event_input_value, IMG_ID, QUEUE_ID, "OK"        
+            logging.error(f"Image with ID {IMG_ID} not found in shared memory for QUEUE_ID {QUEUE_ID}.")
+            return event_input_value, None, None, "ERROR: Image not found"
 
     def __del__(self):
         logging.info("Delete Blur")
-        for smd in self.smd_connections.values():
-            del smd

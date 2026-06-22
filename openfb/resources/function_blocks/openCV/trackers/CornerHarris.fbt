@@ -26,7 +26,7 @@
 			<VarDeclaration Name="BORDERTYPE" Type="INT"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="DST" Type="REAL" ArraySize="*"/>
+			<VarDeclaration Name="DST" Type="REAL" ArraySize="1024"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>

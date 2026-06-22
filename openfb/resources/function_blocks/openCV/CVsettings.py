@@ -4,6 +4,7 @@ IMAGE_HEIGHT = 1080
 IMAGE_WIDTH = 1920
 IMAGE_CHANNELS = 3
 IMAGE_BUFFER_SIZE = 5
+BUFFER_SIZE = IMAGE_BUFFER_SIZE * IMAGE_HEIGHT * IMAGE_WIDTH * IMAGE_CHANNELS
 
 def get_opencv_thresh_param(param_name: str) -> int:
     clean_name = param_name.strip().lower()

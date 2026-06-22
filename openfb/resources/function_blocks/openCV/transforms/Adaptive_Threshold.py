@@ -18,9 +18,8 @@ class AdaptiveThreshold():
             data = smd.get(img_key)
             if data is not None:
                 img = data['image']
-                # need2check, maybe need to convert to grayscale 
-                # if len(img.shape) == 3 and img.shape[2] == 3:
-                #     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                if len(img.shape) == 3 and img.shape[2] == 3:
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 if(BLOCK_SIZE % 2 == 0):
                     block_size += 1
                 adaptive_method = CVsettings.get_opencv_adaptive_method_param(ADAPTIVE_METHOD)

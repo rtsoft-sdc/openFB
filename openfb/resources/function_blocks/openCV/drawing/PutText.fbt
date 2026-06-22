@@ -17,6 +17,8 @@
 		<EventOutputs>
 			<Event Name="CNF" Type="Event">
 				<With Var="IMG_IDO"/>
+				<With Var="QUEUE_IDO"/>
+				<With Var="STATUS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
@@ -29,10 +31,11 @@
 			<VarDeclaration Name="COLOR" Type="INT" ArraySize="3"/>
 			<VarDeclaration Name="THICKNESS" Type="INT"/>
 			<VarDeclaration Name="BOTTOMLEFTORIGIN" Type="BOOL"/>
-
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>

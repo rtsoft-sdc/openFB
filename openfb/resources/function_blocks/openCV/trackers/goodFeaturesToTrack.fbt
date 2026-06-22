@@ -28,8 +28,8 @@
 			<VarDeclaration Name="MAXCORNERS" Type="INT"/>
 			<VarDeclaration Name="QUALITYLEVEL" Type="REAL"/>
 			<VarDeclaration Name="MINDISTANCE" Type="REAL"/>
-			<VarDeclaration Name="MASK" Type="BOOL" ArraySize="*"/>
-			<VarDeclaration Name="CORNERSQUALITY" Type="REAL" ArraySize="*"/>
+			<VarDeclaration Name="MASK" Type="BOOL" ArraySize="1024"/>
+			<VarDeclaration Name="CORNERSQUALITY" Type="REAL" ArraySize="1024"/>
 			<VarDeclaration Name="BLOCK_SIZE" Type="INT"/>
 			<VarDeclaration Name="GRADIENTSIZE" Type="INT"/>
 			<VarDeclaration Name="USE_HARRIS" Type="BOOL"/>
@@ -37,7 +37,7 @@
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="CORNERS" Type="REAL" ArraySize="*"/>
+			<VarDeclaration Name="CORNERS" Type="REAL" ArraySize="1024"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>

@@ -7,7 +7,7 @@ from settings import get_interpolation_flag
 class WarpAffine:
     def __init__(self):
         self.smd_connections = {}
-        self.fuffer_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
+        self.buffer_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
 
     def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, TRANSFORMATION_MATRIX, DSIZE, FLAGS, BORDERMODE, BORDERVALUE):
         if event_input_name == 'REQ':
