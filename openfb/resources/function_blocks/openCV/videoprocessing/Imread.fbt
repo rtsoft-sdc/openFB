@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="Imread" Comment="Imread OpenCV function block">
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="">
+				<With Var=""/>
+				<With Var="DEVICE_ID"/>
+				<With Var="QUEUE_ID"/>
+			</Event>
+			<Event Name="RSP" Type="Event" Comment="">
+				<With Var="QI"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="IND" Type="Event" Comment="">
+				<With Var="QO"/>
+				<With Var="IMG_ID"/>
+				<With Var="QUEUE_IDO"/>
+				<With Var="STATUSO"/>				
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="ID" Type="STRING" Comment=""/>
+			<VarDeclaration Name="PARAM" Type="STRING" Comment=""/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>
