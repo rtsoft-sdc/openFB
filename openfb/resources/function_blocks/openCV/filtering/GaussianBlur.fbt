@@ -8,8 +8,6 @@
 				<With Var="KSIZE"/>
 				<With Var="SIGMAX"/>
 				<With Var="SIGMAY"/>
-				<With Var="BORDER_TYPE"/>
-				<With Var="HINT"/>   <!-- morphologyDefaultBorderValue -->
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -25,8 +23,6 @@
 			<VarDeclaration Name="KSIZE" Type="INT" ArraySize="2"/>
 			<VarDeclaration Name="SIGMAX" Type="REAL"/>
 			<VarDeclaration Name="SIGMAY" Type="REAL"/>
-			<VarDeclaration Name="BORDER_TYPE" Type="INT"/>
-			<VarDeclaration Name="HINT" Type="INT"/>			 <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>

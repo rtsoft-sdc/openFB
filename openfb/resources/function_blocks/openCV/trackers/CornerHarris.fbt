@@ -8,7 +8,6 @@
 				<With Var="BLOCK_SIZE"/>
 				<With Var="KSIZE"/>
 				<With Var="K"/>
-				<With Var="BORDERTYPE"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -17,13 +16,11 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="QI" Type="BOOL"/>
-			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID0" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID0" Type="STRING"/>
 			<VarDeclaration Name="BLOCK_SIZE" Type="INT"/>
 			<VarDeclaration Name="KSIZE" Type="INT"/>
 			<VarDeclaration Name="K" Type="DOUBLE"/>
-			<VarDeclaration Name="BORDERTYPE" Type="INT"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="DST" Type="REAL" ArraySize="1024"/>

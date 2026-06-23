@@ -1,32 +1,23 @@
 import cv2
-from openfb.resources.function_blocks.openCV import CVsettings
-from shared_memory_dict import SharedMemoryDict
 import logging
-from settings import get_interpolation_flag
-
+import numpy as np
+from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 class WarpAffine:
-    def __init__(self):
-        self.smd_connections = {}
-        self.buffer_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
 
-    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, TRANSFORMATION_MATRIX, DSIZE, FLAGS, BORDERMODE, BORDERVALUE):
+    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, TRANSFORMATION_MATRIX, DSIZE):
         if event_input_name == 'REQ':
-            if QUEUE_ID not in self.smd_connections:
-                self.smd_connections[QUEUE_ID] = SharedMemoryDict(name=QUEUE_ID, size=self.max_size)
-            smd = self.smd_connections[QUEUE_ID]
-            img_key = str(IMG_ID)
-            data = smd.get(img_key)
-            if data is not None:
-                img = data['image']
-                flags = get_interpolation_flag(FLAGS)
-                Mat = TRANSFORMATION_MATRIX.reshape(2, 3)
-                dsize = cv2.Size(DSIZE[0], DSIZE[1])
-                img = cv2.warpAffine(img, M=Mat, dsize=dsize, flags=flags, borderMode=BORDERMODE, borderValue=BORDERVALUE)
-                data['image'] = img
-                smd[img_key] = data
-                return event_input_value, IMG_ID
-            
+            img = GlobalVideoMemory.pop(QUEUE_ID, IMG_ID)
+            if img is not None:
+                try:
+                    mat = np.array(TRANSFORMATION_MATRIX, dtype=np.float32).reshape(2, 3)
+                    dsize = (DSIZE[0], DSIZE[1])
+                    img = cv2.warpAffine(img, mat, dsize)
+                    GlobalVideoMemory.push(QUEUE_ID, IMG_ID, img)
+                    return event_input_value, IMG_ID, QUEUE_ID, "OK"
+                except Exception as e:
+                    logging.error(f"Error occurred while warping affine: {e}")
+            logging.error(f"Image with ID {IMG_ID} not found in queue {QUEUE_ID}.")
+            return event_input_value, IMG_ID, QUEUE_ID, "Image not found"
+
     def __del__(self):
         logging.info("Delete WarpAffine")
-        for smd in self.smd_connections.values():
-            del smd

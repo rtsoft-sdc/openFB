@@ -9,27 +9,25 @@
 				<With Var="KERNEL"/>
 				<With Var="ANCHOR"/>
 				<With Var="ITERATIONS"/>
-				<With Var="BORDER_TYPE"/>   
-				<With Var="BORDERVALUE"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event">
 				<With Var="IMG_IDO"/>
+				<With Var="QUEUE_IDO"/>
+				<With Var="STATUS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="MORPH_OP" Type="INT"/>
-			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="2"/>
-			<VarDeclaration Name="ANCHOR" Type="INT" ArraySize="2"/>
-			<VarDeclaration Name="ITERATIONS" Type="INT"/>
-			<VarDeclaration Name="BORDER_TYPE" Type="INT"/>
-			<VarDeclaration Name="BORDERVALUE" Type="REAL"/>
+			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="1024"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>

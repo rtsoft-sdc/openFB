@@ -1,24 +1,16 @@
 import cv2
 import logging
-from openfb.resources.function_blocks.openCV import CVsettings
-from openfb.resources.function_blocks.openCV.videoMemoryDict import VideoSharedMemory
+from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 import numpy as np
 
 #check arraysofarrays - add input
 
 class FillPoly():
-    def __init__(self):
-        self.buffer_size = CVsettings.BUFFER_SIZE
-        self.smd = None
-        self.queue_id = None
         
     def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, POINTS, COLOR):
         if event_input_name == 'REQ':
-            if QUEUE_ID != self.queue_id:
-                self.smd = VideoSharedMemory(name=QUEUE_ID, size=self.buffer_size)
-                self.queue_id = QUEUE_ID
-            img = self.smd.get_frame(int(IMG_ID))
-            
+            img = GlobalVideoMemory.pop(queue_id=QUEUE_ID, img_id=IMG_ID)
+
             if img is not None:
                 cv2.fillPoly(img, [np.array(POINTS, dtype=np.int32)], (int(COLOR[0]), int(COLOR[1]), int(COLOR[2])))
                 return event_input_value, IMG_ID, QUEUE_ID, "OK"

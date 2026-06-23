@@ -9,7 +9,7 @@
 				<With Var="FRAME_SIZE"/>
 				<With Var="IS_COLOR"/>
 				<With Var="APIPREFERENCE"/>
-				<!-- <With Var="PARAMS"/> -->
+			</Event>	
 			<Event Name="REQ" Type="Event">
 				<With Var="IMG_ID"/>
 				<With Var="QUEUE_ID"/>
@@ -20,6 +20,9 @@
 				<With Var="FILENAME"/>
 			</Event>
 			<Event Name="CNF" Type="Event">
+				<With Var="IMG_IDO"/>
+				<With Var="QUEUE_IDO"/>
+				<With Var="STATUS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
@@ -29,13 +32,15 @@
 			<VarDeclaration Name="FILENAME" Type="STRING"/>
 			<VarDeclaration Name="FOURCC" Type="INT"/>
 			<VarDeclaration Name="FPS" Type="REAL"/>
-			<VarDeclaration Name="FRAME_SIZE" Type="ARRAY[0..1] OF INT"/>
+			<VarDeclaration Name="FRAME_SIZE" Type="INT" ArraySize="2"/>
 			<VarDeclaration Name="IS_COLOR" Type="BOOL"/>
 			<VarDeclaration Name="APIPREFERENCE" Type="INT"/>
-			<!-- <VarDeclaration Name="PARAMS" Type="ARRAY[0..9] OF INT"/> -->
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="FILENAME" Type="STRING"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>

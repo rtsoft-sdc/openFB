@@ -6,7 +6,6 @@
 				<With Var="IMG_ID"/>
 				<With Var="QUEUE_ID"/>
 				<With Var="MAXLEVEL"/>
-				<With Var="BORDER_TYPE"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -21,7 +20,6 @@
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="MAXLEVEL" Type="INT"/>
-			<VarDeclaration Name="BORDER_TYPE" Type="INT"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>

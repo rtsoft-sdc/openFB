@@ -8,14 +8,13 @@
 				<With Var="DDEPTH"/>
 				<With Var="DX"/>
 				<With Var="DY"/>
-				<With Var="SCALE"/>
-				<With Var="DELTA"/>
-				<With Var="BORDER_TYPE"/>   <!-- morphologyDefaultBorderValue -->
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event">
 				<With Var="IMG_IDO"/>
+				<With Var="QUEUE_IDO"/>
+				<With Var="STATUS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
@@ -24,12 +23,11 @@
 			<VarDeclaration Name="DDEPTH" Type="INT"/>
 			<VarDeclaration Name="DX" Type="INT"/>
 			<VarDeclaration Name="DY" Type="INT"/>
-			<VarDeclaration Name="SCALE" Type="REAL"/>
-			<VarDeclaration Name="DELTA" Type="REAL"/>
-			<VarDeclaration Name="BORDER_TYPE" Type="INT"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>

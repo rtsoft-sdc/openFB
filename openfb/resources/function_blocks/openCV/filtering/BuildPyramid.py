@@ -1,27 +1,18 @@
 import cv2
 import logging
-from openfb.resources.function_blocks.openCV import CVsettings
-from shared_memory_dict import SharedMemoryDict
-import numpy as np
+from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class BuildPyramid():
-    def __init__(self):
-        self.smd_connections = {}
-        self.buffer_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
         
-    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, MAXLEVEL, BORDER_TYPE):
+    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, MAXLEVEL):
         if event_input_name == 'REQ':
-            if QUEUE_ID not in self.smd_connections:
-                self.smd_connections[QUEUE_ID] = SharedMemoryDict(name=QUEUE_ID, size=self.buffer_size)
-            smd = self.smd_connections[QUEUE_ID]
-            img_key = str(IMG_ID)
-            data = smd.get(img_key)
-            if data is not None:
-                img = data['image']
-                pyramid_list = cv2.buildPyramid(img, MAXLEVEL, BORDER_TYPE)
-                data['pyramid'] = pyramid_list
-                smd[img_key] = data
-                return event_input_value, IMG_ID
+            img = GlobalVideoMemory.pop(queue_id=QUEUE_ID, img_id=IMG_ID)
+            if img is not None:
+                pyramid_list = cv2.buildPyramid(img, MAXLEVEL, borderType=cv2.BORDER_DEFAULT)
+                GlobalVideoMemory.push(queue_id=QUEUE_ID, img_id=IMG_ID, img=pyramid_list)
+                return event_input_value, IMG_ID, QUEUE_ID, 'OK'
+            logging.error(f"Failed to retrieve image with ID {IMG_ID} from shared memory queue {QUEUE_ID}")
+            return event_input_value, None, None, "ERROR: Image not found"
 
     def __del__(self):
         logging.info("Delete BuildPyramid")

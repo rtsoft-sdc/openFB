@@ -6,30 +6,26 @@
 				<With Var="IMG_ID"/>
 				<With Var="QUEUE_ID"/>
 				<With Var="TRANSFORMATION_MATRIX"/>
-				<With Var="DSIZE"/>
-				<With Var="FLAGS"/>
-				<With Var="BORDERMODE"/>
-				<With Var="BORDERVALUE"/>
-				
+				<With Var="DSIZE"/>				
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event">
 				<With Var="IMG_IDO"/>
+				<With Var="QUEUE_IDO"/>
+				<With Var="STATUS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="QI" Type="BOOL"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="TRANSFORMATION_MATRIX" Type="INT" ArraySize="2*3"/>
 			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2"/>
-			<VarDeclaration Name="FLAGS" Type="STRING"/>
-			<VarDeclaration Name="BORDERMODE" Type="STRING"/>
-			<VarDeclaration Name="BORDERVALUE" Type="REAL"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>

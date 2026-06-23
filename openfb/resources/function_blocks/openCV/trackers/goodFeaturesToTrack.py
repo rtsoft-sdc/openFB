@@ -1,26 +1,22 @@
 import cv2
 import logging
-from openfb.resources.function_blocks.openCV import CVsettings
-from shared_memory_dict import SharedMemoryDict
 import numpy as np
+from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class GoodFeaturesToTrack():
-    def __init__(self):
-        self.smd_connections = {}
-        self.buffer_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
         
-    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, MAXCORNERS, QUALITYLEVEL, MINDISTANCE, MASK, CORNERSQUALITY, BLOCK_SIZE, GRADIENTSIZE, USE_HARRIS, K):
+    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, MAXCORNERS, QUALITYLEVEL, MINDISTANCE, MASK, BLOCK_SIZE, GRADIENTSIZE, USE_HARRIS, K):
         if event_input_name == 'REQ':
-            if QUEUE_ID not in self.smd_connections:
-                self.smd_connections[QUEUE_ID] = SharedMemoryDict(name=QUEUE_ID, size=self.buffer_size)
-            self.smd = self.smd_connections[QUEUE_ID]
-            img_key = str(IMG_ID)
-            data = self.smd.get(img_key)
-            if data is not None:
-                img = data['image']
+            img = GlobalVideoMemory.pop(queue_id=QUEUE_ID, img_id=IMG_ID)
+            if img is not None:
+                if len(img.shape) == 3 and img.shape[2] == 3:
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                
                 corners = cv2.goodFeaturesToTrack(img, MAXCORNERS, QUALITYLEVEL, MINDISTANCE, mask=MASK, blockSize=BLOCK_SIZE, gradientSize=GRADIENTSIZE, useHarrisDetector=USE_HARRIS, k=K)
-                corners_quality = corners[:, 0, 1].tolist() if corners is not None else []
-                return event_input_value, IMG_ID, corners_quality
+                corners = corners[:, 0, 0].tolist() if corners is not None else []
+                return event_input_value, IMG_ID, QUEUE_ID, corners, "OK"
+            logging.error(f"Image with ID {IMG_ID} not found in queue {QUEUE_ID}.")
+            return event_input_value, None, None, None, "ERROR: Image not found"
 
     def __del__(self):
         logging.info("Delete GoodFeaturesToTrack")

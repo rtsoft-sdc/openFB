@@ -1,50 +1,32 @@
 import cv2
 import logging
-
-from openfb.resources.function_blocks.openCV import CVsettings
-from settings import get_interpolation_flag
-from shared_memory_dict import SharedMemoryDict
-
+from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class WarpPolar:
-    def __init__(self):
-        self.smd_connections = {}
-        self.buffer_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
+    
+    @staticmethod
+    def get_interpolation_flag(flag_str) -> int:
+        clean_name = flag_str.strip().upper()
+        base_flag = cv2.WARP_POLAR_LOG if "LOG" in clean_name else cv2.WARP_POLAR_LINEAR
+        if "INVERSE" in clean_name or "INV" in clean_name:
+            base_flag |= cv2.WARP_INVERSE_MAP
+        return base_flag
 
-    def schedule(
-        self,
-        event_input_name,
-        event_input_value,
-        IMG_ID,
-        QUEUE_ID,
-        DSIZE,
-        CENTER,
-        MAXRADIUS,
-        FLAGS,
-    ):
+    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, DSIZE, CENTER, MAXRADIUS, FLAGS):
         if event_input_name == "REQ":
-            if QUEUE_ID not in self.smd_connections:
-                self.smd_connections[QUEUE_ID] = SharedMemoryDict(
-                    name=QUEUE_ID, size=self.buffer_size
-                )
-            smd = self.smd_connections[QUEUE_ID]
-            img_key = str(IMG_ID)
-            data = smd.get(img_key)
-
-            if data is not None:
-                img = data["image"]
-                dsize_tuple = (int(DSIZE[0]), int(DSIZE[1]))
-                center_tuple = (int(CENTER[0]), int(CENTER[1]))
-                maxradius_int = int(MAXRADIUS)
-                flags_int = get_interpolation_flag(FLAGS)
-                warped_img = cv2.warpPolar(
-                    img, dsize_tuple, center_tuple, maxradius_int, flags_int
-                )
-                data["image"] = warped_img
-                smd[img_key] = data
-                return event_input_value, IMG_ID            
+            img = GlobalVideoMemory.pop(QUEUE_ID, IMG_ID)
+            if img is not None:
+                try:
+                    dsize_tuple = (int(DSIZE[0]), int(DSIZE[1]))
+                    center_tuple = (int(CENTER[0]), int(CENTER[1]))
+                    flags_int = self.get_interpolation_flag(FLAGS)
+                    warped_img = cv2.warpPolar(img, dsize_tuple, center_tuple, MAXRADIUS, flags_int)
+                    GlobalVideoMemory.push(QUEUE_ID, IMG_ID, warped_img)
+                    return event_input_value, IMG_ID, QUEUE_ID, "OK"
+                except Exception as e:
+                    logging.error(f"Error occurred while warping polar: {e}")
+            logging.error(f"Image with ID {IMG_ID} not found in queue {QUEUE_ID}.")
+            return event_input_value, IMG_ID, QUEUE_ID, "Image not found"
 
     def __del__(self):
         logging.info("Delete WarpPolar")
-        for smd in self.smd_connections.values():
-            del smd

@@ -1,40 +1,57 @@
 # need to add ogl support 
 
 import cv2
-import numpy as np
 import logging
-from openfb.resources.function_blocks.openCV import CVsettings
-from shared_memory_dict import SharedMemoryDict
+from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class VideoWriter:
     def __init__(self):
         self.video_writer = None
-        self.smd_connections = {}
-        self.buffer_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
         
     def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, FILENAME, FOURCC, FPS, FRAME_SIZE, IS_COLOR, APIREFERENCE=None):
         if event_input_name == 'INIT':
-            if APIREFERENCE is not None:
-                self.video_writer = cv2.VideoWriter(FILENAME, APIREFERENCE, FOURCC, FPS, (FRAME_SIZE[0], FRAME_SIZE[1]), IS_COLOR)
+            try:
+                if self.video_writer is not None:
+                    self.video_writer.release()
+                frame_size_tuple = (int(FRAME_SIZE[0]), int(FRAME_SIZE[1]))
+                
+                if isinstance(FOURCC, str):
+                    fourcc = cv2.VideoWriter_fourcc(*FOURCC)
+                else:
+                    fourcc = FOURCC
+
+                if APIREFERENCE is not None:
+                    self.video_writer = cv2.VideoWriter(FILENAME, fourcc, FPS, frame_size_tuple, IS_COLOR, apiPreference=APIREFERENCE)
+                else:
+                    self.video_writer = cv2.VideoWriter(FILENAME, fourcc, FPS, frame_size_tuple, IS_COLOR)
+                    
+                if not self.video_writer.isOpened():
+                    logging.error(f"Failed to open video writer with filename: {FILENAME}")
+                    return event_input_value, IMG_ID, QUEUE_ID, "ERROR"
+                logging.info(f"Video writer initialized with filename: {FILENAME}")
+                return event_input_value, IMG_ID, QUEUE_ID, "OK"
+            except Exception as e:
+                logging.error(f"Error initializing video writer: {e}")
+                return event_input_value, IMG_ID, QUEUE_ID, "ERROR"
+            
+        elif event_input_name == 'REQ':
+            if self.video_writer is None:
+                logging.error("Video writer not initialized. Please call INIT first.")
+                return event_input_value, IMG_ID, QUEUE_ID, "ERROR"
+            
+            img = GlobalVideoMemory.pop(QUEUE_ID, IMG_ID)
+            if img is not None:
+                try:
+                    self.video_writer.write(img)
+                    logging.info(f"Frame written to video: IMG_ID={IMG_ID}, QUEUE_ID={QUEUE_ID}")
+                    return event_input_value, IMG_ID, QUEUE_ID, "OK"
+                except Exception as e:
+                    logging.error(f"Error writing frame to video: {e}")
+                    return event_input_value, IMG_ID, QUEUE_ID, "ERROR"
             else:
-                self.video_writer = cv2.VideoWriter(FILENAME, FOURCC, FPS, (FRAME_SIZE[0], FRAME_SIZE[1]), IS_COLOR)
-                return event_input_value, None, FILENAME
-        if event_input_name == 'REQ':
-            if QUEUE_ID not in self.smd_connections:
-                self.smd_connections[QUEUE_ID] = SharedMemoryDict(name=QUEUE_ID, size=self.buffer_size)
-            smd = self.smd_connections[QUEUE_ID]
-            img_key = str(IMG_ID)
-            data = smd.get(img_key)
-            if data is not None:
-                img = data['image']
-                self.video_writer.write(img)
-                return event_input_value, IMG_ID, FILENAME
-                                                                  
-            return None, event_input_value, None
-
-
+                logging.error(f"Image with ID {IMG_ID} not found in queue {QUEUE_ID}.")
+                return event_input_value, IMG_ID, QUEUE_ID, "Image not found"
     def __del__(self):
         logging.info('Stopping VideoWriter')
-        for smd in self.smd_connections.values():
-            del smd
-                    
+        if self.video_writer is not None:
+            self.video_writer.release()

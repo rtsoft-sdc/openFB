@@ -1,23 +1,14 @@
 import cv2
 import logging
-from openfb.resources.function_blocks.openCV import CVsettings
-from shared_memory_dict import SharedMemoryDict
+from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class cvtColor():
-    def __init__(self):
-        self.smd_connections = {}
-        self.max_size = CVsettings.IMAGE_BUFFER_SIZE * CVsettings.IMAGE_HEIGHT * CVsettings.IMAGE_WIDTH * CVsettings.IMAGE_CHANNELS
-
 
     def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, CODE, DSTCHANNEL):
+
         if event_input_name == 'REQ':
-            if QUEUE_ID not in self.smd_connections:
-                self.smd_connections[QUEUE_ID] = SharedMemoryDict(name=QUEUE_ID, size=self.max_size)
-            smd = self.smd_connections[QUEUE_ID]
-            img_key = str(IMG_ID)
-            data = smd.get(img_key)
-            if data is not None:
-                img = data['image']
+            img = GlobalVideoMemory.pop(QUEUE_ID, IMG_ID)
+            if img is not None:
                 code = f"COLOR_{CODE.upper()}"
                 if hasattr(cv2, code):
                     CODE = getattr(cv2, code)
@@ -25,8 +16,10 @@ class cvtColor():
                     logging.error(f"Invalid color conversion code: {CODE}")
                     CODE = cv2.COLOR_BGR2GRAY
                 img = cv2.cvtColor(img, CODE, dstCn=DSTCHANNEL)
-                smd[img_key] = img
-                return event_input_value, IMG_ID
+                GlobalVideoMemory.push(QUEUE_ID, IMG_ID, img)
+                return event_input_value, IMG_ID, QUEUE_ID, "OK"
+            logging.error(f"No image found in GlobalVideoMemory for QUEUE_ID: {QUEUE_ID}, IMG_ID: {IMG_ID}")
+            return event_input_value, IMG_ID, QUEUE_ID, "ERROR"
 
     def __del__(self):
         for smd in self.smd_connections.values():

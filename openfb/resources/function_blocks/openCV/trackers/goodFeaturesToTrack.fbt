@@ -18,7 +18,10 @@
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event">
+				<With Var="IMG_IDO"/>
+				<With Var="QUEUE_IDO"/>
 				<With Var="CORNERS"/>
+				<With Var="STATUS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
@@ -36,8 +39,10 @@
 			<VarDeclaration Name="K" Type="REAL"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
 			<VarDeclaration Name="CORNERS" Type="REAL" ArraySize="1024"/>
+			<VarDeclaration Name="STATUS" Type="BOOL"/>
 		</OutputVars>
 	</InterfaceList>
 </FBType>

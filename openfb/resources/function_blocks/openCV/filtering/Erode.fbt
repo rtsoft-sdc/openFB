@@ -8,8 +8,6 @@
 				<With Var="KERNEL"/>
 				<With Var="ANCHOR"/>
 				<With Var="ITERATIONS"/>
-				<With Var="BORDER_TYPE"/>
-				<With Var="BORDERVALUE"/>   <!-- morphologyDefaultBorderValue -->
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -25,8 +23,6 @@
 			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="1024"/>
 			<VarDeclaration Name="ANCHOR" Type="INT" ArraySize="2"/>
 			<VarDeclaration Name="ITERATIONS" Type="INT"/>
-			<VarDeclaration Name="BORDER_TYPE" Type="INT"/>
-			<VarDeclaration Name="BORDERVALUE" Type="REAL"/>			 <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
