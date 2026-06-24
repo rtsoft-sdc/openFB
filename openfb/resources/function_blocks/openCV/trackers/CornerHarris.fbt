@@ -20,7 +20,7 @@
 			<VarDeclaration Name="QUEUE_ID0" Type="STRING"/>
 			<VarDeclaration Name="BLOCK_SIZE" Type="INT"/>
 			<VarDeclaration Name="KSIZE" Type="INT"/>
-			<VarDeclaration Name="K" Type="DOUBLE"/>
+			<VarDeclaration Name="K" Type="REAL"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="DST" Type="REAL" ArraySize="1024"/>

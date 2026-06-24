@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="Imshow" Comment="openCV show image" >
+<FBType Name="Imwrite" Comment="openCV write image" >
 	<InterfaceList>
 		<EventInputs>
-			<Event Name="INIT" Type="Event">
-				<With Var="WINDOW_NAME"/>
-			</Event>
 			<Event Name="REQ" Type="Event">
 				<With Var="IMG_ID"/>
 				<With Var="QUEUE_ID"/>
+				<With Var="FILENAME"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event">
-				<With Var="Q0"/>
-			</Event>
 			<Event Name="CNF" Type="Event">
 				<With Var="IMG_IDO"/>
 				<With Var="QUEUE_IDO"/>
+				<With Var="FILENAMEO"/>
 				<With Var="STATUS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="WINDOW_NAME" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="FILENAME" Type="STRING"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="Q0" Type="BOOL"/>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
 			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
+			<VarDeclaration Name="FILENAMEO" Type="STRING"/>
 			<VarDeclaration Name="STATUS" Type="STRING"/>
 		</OutputVars>
 	</InterfaceList>

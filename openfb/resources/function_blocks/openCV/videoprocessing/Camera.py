@@ -29,7 +29,7 @@ class CAMERA:
             logging.info(f"Camera initialized with ID: {ID}")
             return event_input_value, None, True, "Camera initialized", None
             
-        elif event_input_name == 'RSP':
+        elif event_input_name == 'REQ':
             if QI  and self.cap is not None and self.cap.isOpened():
                 ret, frame = self.cap.read()
                 if ret == True:

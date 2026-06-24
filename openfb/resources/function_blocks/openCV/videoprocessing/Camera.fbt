@@ -7,7 +7,7 @@
 				<With Var="DEVICE_ID"/>
 				<With Var="QUEUE_ID"/>
 			</Event>
-			<Event Name="RSP" Type="Event" Comment="">
+			<Event Name="REQ" Type="Event" Comment="">
 				<With Var="QI"/>
 			</Event>
 		</EventInputs>
@@ -16,7 +16,7 @@
 				<With Var="QO"/>
 				<With Var="STATUS"/>
 			</Event>
-			<Event Name="IND" Type="Event" Comment="">
+			<Event Name="CNF" Type="Event" Comment="">
 				<With Var="QO"/>
 				<With Var="IMG_ID"/>
 				<With Var="QUEUE_IDO"/>
