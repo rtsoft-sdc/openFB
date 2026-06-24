@@ -5,14 +5,15 @@
 4. Backward-compatible type dictionaries (UA_TYPES, XML_4DIAC, UA_NODE)
 """
 
-from opcua import ua
 from dataclasses import dataclass
-from typing import Dict, Any, Tuple, Set, Optional, Union
-import os
-import logging
-from importlib.resources import files
-import re
 import datetime
+from importlib.resources import files
+import logging
+import os
+import re
+from typing import Any
+from opcua import ua
+
 
 @dataclass
 class TypeDef:
@@ -21,9 +22,9 @@ class TypeDef:
     xml_4diac_type: str
     default_value: Any
     category: str
-    bits: Optional[int] = None
-    is_signed: Optional[bool] = None
-    aliases: Tuple[str, ...] = ()
+    bits: int | None = None
+    is_signed: bool | None = None
+    aliases: tuple[str, ...] = ()
     
     def get_ua_node_id(self) -> ua.NodeId:
         return ua.NodeId(self.ua_object_id)
@@ -31,14 +32,13 @@ class TypeDef:
 
 class TypeRegistry:
     
-    GENERIC_IMPLIED: Dict[str, Tuple[str, ...]] = {
+    GENERIC_IMPLIED: dict[str, tuple[str, ...]] = {
         'ANY': ('ANY_ELEMENTARY', 'ANY_MAGNITUDE', 'ANY_BIT', 'ANY_CHARS', 'ANY_DATE', 
                 'ANY_INT', 'ANY_REAL', 'TIME', 'BOOL', 'BYTE', 'WORD', 'DWORD', 'LWORD',
                 'SINT', 'INT', 'DINT', 'LINT', 'USINT', 'UINT', 'UDINT', 'ULINT',
                 'REAL', 'LREAL', 'STRING', 'WSTRING', 'CHAR', 'WCHAR', 'DATE', 'DATE_AND_TIME', 'TIME_OF_DAY'),
         'ANY_ELEMENTARY': ('ANY_MAGNITUDE', 'ANY_BIT', 'ANY_CHARS', 'ANY_DATE'),
         'ANY_MAGNITUDE': ('ANY_INT', 'ANY_REAL', 'TIME'),
-        'ANY_INTEGRAL': ('ANY_INT', 'ANY_BIT'),
         'ANY_NUM': ('ANY_INT', 'ANY_REAL'),
         'ANY_REAL': ('REAL', 'LREAL'),
         'ANY_INT': ('SINT', 'INT', 'DINT', 'LINT', 'USINT', 'UINT', 'UDINT', 'ULINT', 'ANY_SIGNED', 'ANY_UNSIGNED'),
@@ -51,7 +51,7 @@ class TypeRegistry:
         'ANY_DATE': ('DATE_AND_TIME', 'DATE', 'TIME_OF_DAY'),
     }
     
-    TYPES: Dict[str, TypeDef] = {
+    TYPES: dict[str, TypeDef] = {
         'BOOL': TypeDef(ua.VariantType.Boolean, ua.ObjectIds.Boolean, 'Boolean', False, 'bool', aliases=('Boolean',)),
         'SINT': TypeDef(ua.VariantType.SByte, ua.ObjectIds.SByte, 'Integer', 0, 'integer', 8, True),
         'INT': TypeDef(ua.VariantType.Int16, ua.ObjectIds.Int16, 'Integer', 0, 'integer', 16, True),
@@ -80,7 +80,6 @@ class TypeRegistry:
         'ANY_INT': TypeDef(ua.VariantType.Int64, ua.ObjectIds.Int64, 'Integer', 0, 'integer'),
         'ANY_UNSIGNED': TypeDef(ua.VariantType.UInt64, ua.ObjectIds.UInt64, 'Integer', 0, 'integer', is_signed=False),
         'ANY_SIGNED': TypeDef(ua.VariantType.Int64, ua.ObjectIds.Int64, 'Integer', 0, 'integer', is_signed=True),
-        'ANY_INTEGRAL': TypeDef(ua.VariantType.Int64, ua.ObjectIds.Int64, 'Integer', 0, 'integer'),
         'ANY_BIT': TypeDef(ua.VariantType.Byte, ua.ObjectIds.Byte, 'Integer', False, 'bool'),
         'ANY_CHARS': TypeDef(ua.VariantType.String, ua.ObjectIds.String, 'String', '', 'string'),
         'ANY_CHAR': TypeDef(ua.VariantType.String, ua.ObjectIds.String, 'String', '', 'string'),
@@ -89,7 +88,7 @@ class TypeRegistry:
     }
     
     @classmethod
-    def resolve_type(cls, type_name: str) -> Optional[TypeDef]:
+    def resolve_type(cls, type_name: str) -> TypeDef | None:
         if type_name in cls.TYPES:
             return cls.TYPES[type_name]
         for mapping in cls.TYPES.values():
@@ -103,27 +102,27 @@ class TypeRegistry:
         return mapping.default_value if mapping else 0
     
     @classmethod
-    def get_ua_variant_type(cls, type_name: str) -> Optional[ua.VariantType]:
+    def get_ua_variant_type(cls, type_name: str) -> ua.VariantType | None:
         mapping = cls.resolve_type(type_name)
         return mapping.ua_variant_type if mapping else None
     
     @classmethod
-    def get_ua_node_id(cls, type_name: str) -> Optional[ua.NodeId]:
+    def get_ua_node_id(cls, type_name: str) -> ua.NodeId | None:
         mapping = cls.resolve_type(type_name)
         return mapping.get_ua_node_id() if mapping else None
     
     @classmethod
-    def get_xml_type(cls, type_name: str) -> Optional[str]:
+    def get_xml_type(cls, type_name: str) -> str | None:
         mapping = cls.resolve_type(type_name)
         return mapping.xml_4diac_type if mapping else None
     
     @classmethod
-    def get_category(cls, type_name: str) -> Optional[str]:
+    def get_category(cls, type_name: str) -> str | None:
         mapping = cls.resolve_type(type_name)
         return mapping.category if mapping else None
     
     @classmethod
-    def get_int_info(cls, type_name: str) -> Optional[Tuple[int, bool]]:
+    def get_int_info(cls, type_name: str) -> tuple[int, bool] | None:
         mapping = cls.resolve_type(type_name)
         if mapping and mapping.bits is not None:
             return (mapping.bits, mapping.is_signed)
@@ -134,28 +133,11 @@ class TypeRegistry:
         return cls.get_category(type_name) == 'integer'
     
     @classmethod
-    def is_float_type(cls, type_name: str) -> bool:
-        return cls.get_category(type_name) == 'float'
-    
-    @classmethod
-    def is_bool_type(cls, type_name: str) -> bool:
-        return cls.get_category(type_name) == 'bool'
-    
-    @classmethod
-    def is_string_type(cls, type_name: str) -> bool:
-        return cls.get_category(type_name) == 'string'
-    
-    @classmethod
-    def is_time_date_type(cls, type_name: str) -> bool:
-        return cls.get_category(type_name) == 'time_date'
-    
-    @classmethod
     def is_generic_type(cls, type_name: str) -> bool:
         return type_name in cls.GENERIC_IMPLIED
     
     @classmethod
-    def get_implied_types(cls, generic_type: str, recursive: bool = True) -> Set[str]:
-        
+    def get_implied_types(cls, generic_type: str, recursive: bool = True) -> set[str]:
         if generic_type not in cls.GENERIC_IMPLIED:
             return set()
         
@@ -189,7 +171,7 @@ class TypeRegistry:
         return False
     
     @classmethod
-    def get_ua_types_dict(cls) -> Dict[str, ua.VariantType]:
+    def get_ua_types_dict(cls) -> dict[str, ua.VariantType]:
         result = {}
         for type_name, mapping in cls.TYPES.items():
             result[type_name] = mapping.ua_variant_type
@@ -198,7 +180,7 @@ class TypeRegistry:
         return result
     
     @classmethod
-    def get_xml_4diac_dict(cls) -> Dict[str, str]:
+    def get_xml_4diac_dict(cls) -> dict[str, str]:
         result = {}
         for type_name, mapping in cls.TYPES.items():
             result[type_name] = mapping.xml_4diac_type
@@ -207,7 +189,7 @@ class TypeRegistry:
         return result
     
     @classmethod
-    def get_ua_node_dict(cls) -> Dict[ua.VariantType, ua.NodeId]:
+    def get_ua_node_dict(cls) -> dict[ua.VariantType, ua.NodeId]:
         result = {}
         for mapping in cls.TYPES.values():
             if mapping.ua_variant_type not in result:
@@ -215,7 +197,7 @@ class TypeRegistry:
         return result
 
     @classmethod
-    def get_canonical_name(cls, type_name: str) -> Optional[str]:
+    def get_canonical_name(cls, type_name: str) -> str | None:
         if type_name in cls.TYPES:
             return type_name
         for canonical_name, mapping in cls.TYPES.items():
@@ -229,7 +211,6 @@ class IntegerConverter:
     SIGNED_CHAIN = ['SINT', 'INT', 'DINT', 'LINT']
     UNSIGNED_CHAIN = ['USINT', 'UINT', 'UDINT', 'ULINT']
     BITMASK_CHAIN = ['BYTE', 'WORD', 'DWORD', 'LWORD']
-    BITMASK_SET = set(BITMASK_CHAIN)
     
     @staticmethod
     def parse_int(value: Any) -> int:
@@ -265,11 +246,8 @@ class IntegerConverter:
         return lo <= value <= hi
     
     @classmethod
-    def find_fitting_type(cls, value: int, bits: int, is_signed: bool) -> Optional[str]:
-        if is_signed:
-            chains = [cls.SIGNED_CHAIN]
-        else:
-            chains = [cls.UNSIGNED_CHAIN, cls.BITMASK_CHAIN]
+    def find_fitting_type(cls, value: int, is_signed: bool) -> str | None:
+        chains = [cls.SIGNED_CHAIN] if is_signed else [cls.UNSIGNED_CHAIN, cls.BITMASK_CHAIN]
         for chain in chains:
             for type_name in chain:
                 if cls.fits(value, type_name):
@@ -277,7 +255,7 @@ class IntegerConverter:
         return None
     
     @classmethod
-    def convert_to_int(cls, value: Any, target_type: str) -> Union[int, Tuple[int, str]]:
+    def convert_to_int(cls, value: Any, target_type: str) -> int | tuple[int, str]:
         int_info = TypeRegistry.get_int_info(target_type)
         if not int_info:
             logging.warning(f"Type {target_type} is not an integer type")
@@ -290,11 +268,11 @@ class IntegerConverter:
             return 0
         if cls.fits(iv, target_type):
             return cls.wrap(iv, bits, is_signed)
-        fitting_type = cls.find_fitting_type(iv, bits, is_signed)
+        fitting_type = cls.find_fitting_type(iv, is_signed)
         if fitting_type and fitting_type != target_type:
-            logging.info(f"Value {iv} doesn't fit in {target_type}, promoting to {fitting_type}")
-            fit_bits, fit_signed = TypeRegistry.get_int_info(fitting_type)
-            return (cls.wrap(iv, fit_bits, fit_signed), fitting_type)
+            logging.debug(f"Value {iv} doesn't fit in {target_type}, promoting to {fitting_type}")
+            fit_bits, _ = TypeRegistry.get_int_info(fitting_type)
+            return cls.wrap(iv, fit_bits, is_signed), fitting_type
         return cls.wrap(iv, bits, is_signed)
 
 
@@ -320,17 +298,11 @@ class BoolConverter:
     def convert_to_bool(value: Any) -> bool:
         if isinstance(value, bool):
             return value
+            
         if isinstance(value, (int, float)):
-            return bool(int(value))
-        s = str(value).strip().upper()
-        if s in ('TRUE', '1', 'YES', 'T', 'Y', 'ON'):
-            return True
-        if s in ('FALSE', '0', 'NO', 'F', 'N', 'OFF', ''):
-            return False
-        try:
-            return bool(int(float(s)))
-        except (ValueError, TypeError):
             return bool(value)
+            
+        return str(value).strip().upper() == 'TRUE'
 
 
 class StringConverter:
@@ -360,14 +332,9 @@ class TypeConverter:
     _timedate_converter = TimeDateConverter()
     
     @staticmethod
-    def _parse_iec_literal(value: Any) -> Tuple[Optional[str], Any]:
-  
+    def _parse_iec_literal(value: Any) -> tuple[str | None, Any]:
         s = str(value).strip()
-        if '#' not in s:
-            return None, value
-        
-        parts = s.split('#', 1)
-        if len(parts) != 2:
+        if '#' not in s or len(parts := s.split('#', 1)) != 2:
             return None, value
         
         type_prefix = parts[0].strip().upper()
@@ -377,7 +344,7 @@ class TypeConverter:
             'BOOL': 'BOOL',
             'SINT': 'SINT', 'INT': 'INT', 'DINT': 'DINT', 'LINT': 'LINT',
             'USINT': 'USINT', 'UINT': 'UINT', 'UDINT': 'UDINT', 'ULINT': 'ULINT',
-            '16': 'LWORD', #  'BYTE', 'WORD', 'DWORD', 'LWORD'  same identifier 16#... 
+            '16': 'LWORD', 
             'REAL': 'REAL', 'LREAL': 'LREAL',
             'STRING': 'STRING', 'WSTRING': 'STRING',
             'CHAR': 'CHAR', 'WCHAR': 'CHAR',
@@ -388,17 +355,13 @@ class TypeConverter:
         }
         
         inferred_type = prefix_map.get(type_prefix)
-        if inferred_type:
-            return inferred_type, literal_value
-        
-        return None, value
+        return (inferred_type, literal_value) if inferred_type else (None, value)
     
     @classmethod
-    def convert(cls, value: Any, target_type: str, source_type: Optional[str] = None) -> Union[Any, Tuple[Any, str]]:
+    def _convert_scalar(cls, value: Any, target_type: str, source_type: str | None) -> Any | tuple[Any, str]:
         inferred_source_type, extracted_value = cls._parse_iec_literal(value)
         working_value = extracted_value
         source_type = source_type or inferred_source_type
-        
         mapping = TypeRegistry.resolve_type(target_type)
         if not mapping:
             logging.error(f"Unknown type: {target_type}")
@@ -408,180 +371,140 @@ class TypeConverter:
         
         if TypeRegistry.is_generic_type(canonical_target):
             if source_type and TypeRegistry.is_type_compatible(source_type, canonical_target):
-                source_category = TypeRegistry.get_category(source_type)
-                if source_category == 'integer':
-                    return cls._int_converter.convert_to_int(working_value, source_type)
-                elif source_category == 'float':
-                    return cls._float_converter.convert_to_float(working_value, source_type)
-                elif source_category == 'bool':
-                    return cls._bool_converter.convert_to_bool(working_value)
-                elif source_category == 'string':
-                    return cls._string_converter.convert_to_string(working_value)
-                elif source_category == 'time_date':
-                    return cls._timedate_converter.convert_to_time_date(working_value, source_type)
+                match TypeRegistry.get_category(source_type):
+                    case 'integer': return cls._int_converter.convert_to_int(working_value, source_type)
+                    case 'float': return cls._float_converter.convert_to_float(working_value, source_type)
+                    case 'bool': return cls._bool_converter.convert_to_bool(working_value)
+                    case 'string': return cls._string_converter.convert_to_string(working_value)
+                    case 'time_date': return cls._timedate_converter.convert_to_time_date(working_value, source_type)
             
-            if isinstance(working_value, bool):
-                return working_value
-            if isinstance(working_value, int):
-                return working_value
-            if isinstance(working_value, float):
+            if isinstance(working_value, (bool, int, float)):
                 return working_value
             if isinstance(working_value, str):
                 try:
-                    if '.' in working_value:
-                        return float(working_value)
-                    return int(working_value)
+                    return float(working_value) if '.' in working_value else int(working_value)
                 except (ValueError, TypeError):
                     return working_value
             
             return TypeRegistry.get_default_value(canonical_target)
         
         try:
-            if TypeRegistry.is_bool_type(canonical_target):
-                return cls._bool_converter.convert_to_bool(working_value)
-            elif TypeRegistry.is_integer_type(canonical_target):
-                return cls._int_converter.convert_to_int(working_value, canonical_target)
-            elif TypeRegistry.is_float_type(canonical_target):
-                return cls._float_converter.convert_to_float(working_value, canonical_target)
-            elif TypeRegistry.is_string_type(canonical_target):
-                return cls._string_converter.convert_to_string(working_value)
-            elif TypeRegistry.is_time_date_type(canonical_target):
-                return cls._timedate_converter.convert_to_time_date(working_value, canonical_target)
-            else:
-                logging.warning(f"No converter for category: {mapping.category}")
-                return working_value
+            match TypeRegistry.get_category(canonical_target):
+                case 'bool': return cls._bool_converter.convert_to_bool(working_value)
+                case 'integer': return cls._int_converter.convert_to_int(working_value, canonical_target)
+                case 'float': return cls._float_converter.convert_to_float(working_value, canonical_target)
+                case 'string': return cls._string_converter.convert_to_string(working_value)
+                case 'time_date': return cls._timedate_converter.convert_to_time_date(working_value, canonical_target)
+                case _:
+                    logging.warning(f"No converter for category: {mapping.category}")
+                    return working_value
         except Exception as e:
             logging.error(f"Error converting value={working_value!r} to {target_type}: {e}", exc_info=True)
             return TypeRegistry.get_default_value(canonical_target)
     
     @classmethod
-    def batch_convert(cls, values: Dict[str, Any], type_map: Dict[str, str]) -> Dict[str, Any]:
-        result = {}
-        for name, value in values.items():
-            target_type = type_map.get(name, 'STRING')
-            result[name] = cls.convert(value, target_type)
-        return result
-
+    def convert(cls, value: Any, target_type: str, source_type: str | None = None) -> Any | tuple[Any, str]:
+        if value == '*':
+            return
+        is_array = False
+        array_values = value
+        if(isinstance(value, str)):
+            s = value.strip()
+            if s.startswith('[') and s.endswith(']'):    
+                s = s[1:-1].strip()
+                elements = [v.strip() for v in s.split(',')] if s else []
+                is_array = True
+                array_values = []
+                
+                if re.fullmatch(r'\d+\(0\)', elements[-1]):
+                    elements.pop()
+                    
+                for elem in elements:
+                    match = re.fullmatch(r'(\d+)\(([^()]+)\)', elem)
+                    if match:
+                        count = int(match.group(1))
+                        val = match.group(2)
+                        array_values.extend([val] * count)
+                    else:
+                        array_values.append(elem)        
+         
+        canonical_target = TypeRegistry.get_canonical_name(target_type) or target_type  
+                
+        if is_array:
+            converted_array = []
+            for item in array_values:
+                converted_item = cls._convert_scalar(item, canonical_target, source_type)
+                converted_array.append(converted_item)
+            return converted_array
+        else:
+            return cls._convert_scalar(value, canonical_target, source_type)
+        
 UA_TYPES = TypeRegistry.get_ua_types_dict()
 XML_4DIAC = TypeRegistry.get_xml_4diac_dict()
 UA_NODE = TypeRegistry.get_ua_node_dict()
 
-XML_NODE = {
-    ua.ObjectIds.Boolean: 'Boolean',
-    ua.ObjectIds.SByte: 'Integer',
-    ua.ObjectIds.Byte: 'Integer',
-    ua.ObjectIds.Int16: 'Integer',
-    ua.ObjectIds.UInt16: 'Integer',
-    ua.ObjectIds.Int32: 'Integer',
-    ua.ObjectIds.UInt32: 'Integer',
-    ua.ObjectIds.Int64: 'Integer',
-    ua.ObjectIds.UInt64: 'Integer',
-    ua.ObjectIds.Float: 'Float',
-    ua.ObjectIds.Double: 'Double',
-    ua.ObjectIds.String: 'String',
-    ua.ObjectIds.DateTime: 'String',
-}
-
-
-
-if os.environ.get("OPENFB_LOCAL_DIR"):
-    resource_dir = os.environ.get("OPENFB_LOCAL_DIR")
-else:
-    resource_dir = str(files("openfb.resources"))
+resource_dir = os.environ.get("OPENFB_LOCAL_DIR") or str(files("openfb.resources"))
 
 
 def default_folder(ua_peer, obj_idx, obj_path, path_list, folder_name):
-    # creates the methods folder
-    folder_idx = '{0}:{1}'.format(obj_idx, folder_name)
-    browse_name = '2:{0}'.format(folder_name)
+    folder_idx = f"{obj_idx}:{folder_name}"
+    browse_name = f"2:{folder_name}"
     ua_peer.create_folder(obj_path, folder_idx, browse_name)
-    # path for the methods folder
     folder_list = path_list + [(2, folder_name)]
-    folder_path = ua_peer.generate_path(folder_list)
-    return folder_idx, folder_path, folder_list
+    return folder_idx, ua_peer.generate_path(folder_list), folder_list
 
 
 def default_property(ua_peer, obj_idx, obj_path, property_name, property_value):
-    prop_idx = '{0}.{1}'.format(obj_idx, property_name)
-    browse_name = '2:{0}'.format(property_name)
+    prop_idx = f"{obj_idx}.{property_name}"
+    browse_name = f"2:{property_name}"
     ua_peer.create_property(obj_path, prop_idx, browse_name, property_value)
 
 
 def default_object(ua_peer, obj_idx, obj_path, path_list, obj_name):
-    browse_name = '2:{0}'.format(obj_name)
+    browse_name = f"2:{obj_name}"
     ua_peer.create_object(obj_idx, browse_name, path=obj_path)
-    # sets the path for the device object
     new_list = path_list + [(2, obj_name)]
-    new_path = ua_peer.generate_path(new_list)
-    return new_list, new_path
+    return new_list, ua_peer.generate_path(new_list)
 
 
 def parse_fb_description(fb_xml):
-    input_events_xml, output_events_xml, input_vars_xml, output_vars_xml = None, None, None, None
+    input_events_xml = output_events_xml = input_vars_xml = output_vars_xml = None
     for item in fb_xml:
-        # gets the events and vars
         if item.tag == 'InterfaceList':
-            # Iterates over the interface list
-            # to find the inputs/outputs
             for interface in item:
-                # Input events
-                if interface.tag == 'EventInputs':
-                    input_events_xml = interface
-                # Output events
-                elif interface.tag == 'EventOutput':
-                    output_events_xml = interface
-                # Input variables
-                elif interface.tag == 'InputVars':
-                    input_vars_xml = interface
-                # Output variables
-                elif interface.tag == 'OutputVars':
-                    output_vars_xml = interface
-
+                match interface.tag:
+                    case 'EventInputs': input_events_xml = interface
+                    case 'EventOutput': output_events_xml = interface
+                    case 'InputVars': input_vars_xml = interface
+                    case 'OutputVars': output_vars_xml = interface
     return input_events_xml, output_events_xml, input_vars_xml, output_vars_xml
-
-
-def any_element_in_string(array, string):
-    for element in array:
-        if element in string:
-            return True
-
-    return False
 
 
 def get_fb_files_path(fb_name):
     root_fbs_path = os.path.join(resource_dir, 'function_blocks')
     try:
-        #fixme: new types like iec61499::system::EMB_RES
         fb_name = fb_name.split('::')[-1]
         path = next(scan_match(fb_name, root_fbs_path))
-    except Exception as e:
-        logging.error("[ERROR] FB does not exist. name {0} path {1}".format(fb_name, root_fbs_path))
-        # sys.exit(0)
+    except Exception:
+        logging.error(f"[ERROR] FB does not exist. name {fb_name} path {root_fbs_path}")
         return None
 
-    if "__pycache__" in path:
-        path = path.replace('/__pycache__', '')
-    return path
+    return path.replace('/__pycache__', '') if "__pycache__" in path else path
 
 
-def scan_match(fb_name, dir):
-    for entry in os.scandir(dir):
+def scan_match(fb_name, directory):
+    for entry in os.scandir(directory):
         if entry.is_dir():
             yield from scan_match(fb_name, entry.path)
         elif entry.name.split('.')[0] == fb_name:
-            yield dir
+            yield directory
 
 
 class UaInterface:
+    def from_xml(self, item_xml): raise NotImplementedError
+    def from_fb(self, fb, optional_fb_xml): raise NotImplementedError
+    def save_xml(self, xml_set): raise NotImplementedError
 
-    def from_xml(self, item_xml):
-        raise NotImplementedError
-
-    def from_fb(self, fb, optional_fb_xml):
-        raise NotImplementedError
-
-    def save_xml(self, xml_set):
-        raise NotImplementedError
 
 SIGNED_INT = {'SINT', 'INT', 'DINT', 'LINT'}
 UNSIGNED_INT = {'USINT', 'UINT', 'UDINT', 'ULINT'}
@@ -590,8 +513,8 @@ ALL_INT = SIGNED_INT | UNSIGNED_INT | BITMASK
 REAL_T = {'REAL', 'LREAL'}
 GENERIC_T = {
     'ANY', 'ANY_ELEMENTARY', 'ANY_MAGNITUDE', 'ANY_NUM',
-    'ANY_INTEGRAL', 'ANY_REAL', 'ANY_INT', 'ANY_UNSIGNED',
-    'ANY_SIGNED', 'ANY_BIT', 'ANY_CHARS', 'ANY_CHAR',
+    'ANY_REAL', 'ANY_INT', 'ANY_UNSIGNED', 'ANY_SIGNED', 
+    'ANY_BIT', 'ANY_CHARS', 'ANY_CHAR',
     'ANY_STRING', 'ANY_DATE',
 }
 
@@ -601,180 +524,115 @@ def strip_prefix(s: str, prefix: str) -> str:
 
 
 def format_concrete_value(ctype: str, val: Any) -> str:
-    if ctype == 'BOOL':
-        if isinstance(val, bool):
-            return 'TRUE' if val else 'FALSE'
-        if isinstance(val, (int, float)):
-            return 'TRUE' if val else 'FALSE'
-        s = str(val).strip().upper()
-        # Handle various boolean representations
-        if s in ('TRUE', '1', 'YES', 'T', 'Y', 'ON'):
-            return 'TRUE'
-        if s in ('FALSE', '0', 'NO', 'F', 'N', 'OFF'):
-            return 'FALSE'
-        # Default: treat non-empty/non-zero as TRUE
-        return 'TRUE' if s and s != '0' else 'FALSE'
+    if isinstance(val, list):
+        return f"[{', '.join(format_concrete_value(ctype, v) for v in val)}]"
+    match ctype:
+        case 'BOOL':
+            if isinstance(val, (bool, int, float)):
+                return 'TRUE' if val else 'FALSE'            
+            return 'TRUE' if str(val).strip().upper() == 'TRUE' else 'FALSE'
 
-    if ctype in ALL_INT:
-        try:
-            return str(int(val))
-        except (ValueError, TypeError):
-            return str(val)
+        case _ if ctype in ALL_INT:
+            try: return str(int(val))
+            except (ValueError, TypeError): return str(val)
 
-    if ctype in REAL_T:
-        try:
-            return str(float(val))
-        except (ValueError, TypeError):
-            return str(val)
+        case _ if ctype in REAL_T:
+            try: return str(float(val))
+            except (ValueError, TypeError): return str(val)
 
-    if ctype == 'STRING':
-        return "'{0}'".format(val)
-    if ctype == 'WSTRING':
-        return '"{0}"'.format(val)
-    if ctype == 'CHAR':
-        return "'{0}'".format(val)
-    if ctype == 'WCHAR':
-        return '"{0}"'.format(val)
+        case 'STRING' | 'CHAR': return f"'{val}'"
+        case 'WSTRING' | 'WCHAR': return f'"{val}"'
 
-    if ctype == 'TIME':
-        if isinstance(val, datetime.timedelta):
-            return 'T#{0}s'.format(val.total_seconds())
-        if isinstance(val, datetime.datetime):
-            return 'T#{0}s'.format(val.timestamp())
-        return 'T#{0}'.format(strip_prefix(str(val), 'T#'))
+        case 'TIME':
+            if isinstance(val, datetime.timedelta): return f"T#{val.total_seconds()}s"
+            if isinstance(val, datetime.datetime): return f"T#{val.timestamp()}s"
+            return f"T#{strip_prefix(str(val), 'T#')}"
 
-    if ctype == 'DATE':
-        if isinstance(val, datetime.datetime):
-            return 'D#{0:04d}-{1:02d}-{2:02d}'.format(val.year, val.month, val.day)
-        if isinstance(val, datetime.date):
-            return 'D#{0:04d}-{1:02d}-{2:02d}'.format(val.year, val.month, val.day)
-        return 'D#{0}'.format(strip_prefix(str(val), 'D#'))
+        case 'DATE':
+            if isinstance(val, (datetime.datetime, datetime.date)):
+                return f"D#{val.year:04d}-{val.month:02d}-{val.day:02d}"
+            return f"D#{strip_prefix(str(val), 'D#')}"
 
-    if ctype in ('TIME_OF_DAY', 'TOD'):
-        if isinstance(val, datetime.datetime):
-            return 'TOD#{0:02d}:{1:02d}:{2:02d}'.format(val.hour, val.minute, val.second)
-        if isinstance(val, datetime.time):
-            return 'TOD#{0:02d}:{1:02d}:{2:02d}'.format(val.hour, val.minute, val.second)
-        return 'TOD#{0}'.format(strip_prefix(str(val), 'TOD#'))
+        case 'TIME_OF_DAY' | 'TOD':
+            if isinstance(val, (datetime.datetime, datetime.time)):
+                return f"TOD#{val.hour:02d}:{val.minute:02d}:{val.second:02d}"
+            return f"TOD#{strip_prefix(str(val), 'TOD#')}"
 
-    if ctype in ('DATE_AND_TIME', 'DT'):
-        if isinstance(val, datetime.datetime):
-            # IEC 61131-3 format: DT#YYYY-MM-DD-HH:MM:SS[.mmm]
-            dt_str = '{0:04d}-{1:02d}-{2:02d}-{3:02d}:{4:02d}:{5:02d}'.format(
-                val.year, val.month, val.day,
-                val.hour, val.minute, val.second
-            )
-            if val.microsecond:
-                dt_str += '.{0:03d}'.format(val.microsecond // 1000)
-            return 'DT#{0}'.format(dt_str)
-        s = str(val)
-        s = strip_prefix(s, 'DT#')
-        s = strip_prefix(s, 'DATE_AND_TIME#')
-        return 'DT#{0}'.format(s)
+        case 'DATE_AND_TIME' | 'DT':
+            if isinstance(val, datetime.datetime):
+                dt_str = f"{val.year:04d}-{val.month:02d}-{val.day:02d}-{val.hour:02d}:{val.minute:02d}:{val.second:02d}"
+                if val.microsecond:
+                    dt_str += f".{val.microsecond // 1000:03d}"
+                return f"DT#{dt_str}"
+            s = str(val)
+            for prefix in ('DT#', 'DATE_AND_TIME#'):
+                s = strip_prefix(s, prefix)
+            return f"DT#{s}"
 
-    return "'{0}'".format(val) if isinstance(val, str) else str(val)
+        case _: return f"'{val}'" if isinstance(val, str) else str(val)
 
 
 def infer_concrete_type(val: Any) -> str:
-    if isinstance(val, bool):
-        return 'BOOL'
-    # Check datetime types before numbers (datetime has numeric operations)
-    if isinstance(val, datetime.datetime):
-        return 'DATE_AND_TIME'
-    if isinstance(val, datetime.date):
-        return 'DATE'
-    if isinstance(val, datetime.time):
-        return 'TIME_OF_DAY'
-    if isinstance(val, datetime.timedelta):
-        return 'TIME'
-    if isinstance(val, float):
-        return 'LREAL'
+    if isinstance(val, bool): return 'BOOL'
+    if isinstance(val, datetime.datetime): return 'DATE_AND_TIME'
+    if isinstance(val, datetime.date): return 'DATE'
+    if isinstance(val, datetime.time): return 'TIME_OF_DAY'
+    if isinstance(val, datetime.timedelta): return 'TIME'
+    if isinstance(val, float): return 'LREAL'
     if isinstance(val, int):
-        if -128 <= val <= 127:
-            return 'SINT'
-        if 0 <= val <= 255:
-            return 'USINT'
-        if -32768 <= val <= 32767:
-            return 'INT'
-        if 0 <= val <= 65535:
-            return 'UINT'
-        if -2147483648 <= val <= 2147483647:
-            return 'DINT'
-        if 0 <= val <= 4294967295:
-            return 'UDINT'
-        if val < 0:
-            return 'LINT'
-        return 'ULINT'
-    # Check prefix
+        if -128 <= val <= 127: return 'SINT'
+        if 0 <= val <= 255: return 'USINT'
+        if -32768 <= val <= 32767: return 'INT'
+        if 0 <= val <= 65535: return 'UINT'
+        if -2147483648 <= val <= 2147483647: return 'DINT'
+        if 0 <= val <= 4294967295: return 'UDINT'
+        return 'LINT' if val < 0 else 'ULINT'
+    
     s = str(val)
     if '#' in s:
-        pfx = s.split('#', 1)[0].strip().upper()
-        if pfx == 'T':
-            return 'TIME'
-        if pfx == 'D':
-            return 'DATE'
-        if pfx == 'TOD':
-            return 'TIME_OF_DAY'
-        if pfx == 'DT':
-            return 'DATE_AND_TIME'
-    if len(s) == 1:
-        return 'CHAR'
-    return 'STRING'
+        match s.split('#', 1)[0].strip().upper():
+            case 'T': return 'TIME'
+            case 'D': return 'DATE'
+            case 'TOD': return 'TIME_OF_DAY'
+            case 'DT': return 'DATE_AND_TIME'
+    return 'CHAR' if len(s) == 1 else 'STRING'
 
 
-def infer_any_bit_type(val: Any) -> Tuple[str, Any]:
-    if isinstance(val, bool):
-        return 'BOOL', val
+def infer_any_bit_type(val: Any) -> tuple[str, Any]:
+    if isinstance(val, bool): return 'BOOL', val
     if isinstance(val, int):
-        if 0 <= val <= 1:
-            return 'BOOL', bool(val)
-        if 0 <= val <= 0xFF:
-            return 'BYTE', val
-        if 0 <= val <= 0xFFFF:
-            return 'WORD', val
-        if 0 <= val <= 0xFFFFFFFF:
-            return 'DWORD', val
-        if 0 <= val <= 0xFFFFFFFFFFFFFFFF:
-            return 'LWORD', val
-        return 'LWORD', (val & 0xFFFFFFFFFFFFFFFF)
+        if 0 <= val <= 1: return 'BOOL', bool(val)
+        if 0 <= val <= 0xFF: return 'BYTE', val
+        if 0 <= val <= 0xFFFF: return 'WORD', val
+        if 0 <= val <= 0xFFFFFFFF: return 'DWORD', val
+        return ('LWORD', val) if 0 <= val <= 0xFFFFFFFFFFFFFFFF else ('LWORD', val & 0xFFFFFFFFFFFFFFFF)
 
     s = str(val).strip()
     su = s.upper()
-    if su in ('TRUE', 'FALSE'):
-        return 'BOOL', su
+    if su in ('TRUE', 'FALSE'): return 'BOOL', su
 
     if '#' in su:
         pfx, _, rest = su.partition('#')
-        if pfx in {'BOOL', 'BYTE', 'WORD', 'DWORD', 'LWORD'}:
-            return pfx, rest
+        if pfx in {'BOOL', 'BYTE', 'WORD', 'DWORD', 'LWORD'}: return pfx, rest
         if pfx == '16':
-            try:
-                return infer_any_bit_type(int(rest, 16))
-            except ValueError:
-                pass
-
+            try: return infer_any_bit_type(int(rest, 16))
+            except ValueError: pass
     try:
-        if su.startswith('0X'):
-            return infer_any_bit_type(int(su, 16))
-        return infer_any_bit_type(int(su))
+        return infer_any_bit_type(int(su, 16) if su.startswith('0X') else int(su))
     except ValueError:
         return 'LWORD', s
 
 
 def format_value_for_watch(vtype: str, val: Any) -> str:
- 
+    if isinstance(val, list):
+        return f"[{', '.join(format_value_for_watch(vtype, item) for item in val)}]"
     if vtype == 'ANY_BIT':
         concrete, norm_val = infer_any_bit_type(val)
-        formatted = format_concrete_value(concrete, norm_val)
-        return '{0}#{1}'.format(concrete, formatted)
+        return f"{concrete}#{format_concrete_value(concrete, norm_val)}"
     
     if vtype not in GENERIC_T:
         return format_concrete_value(vtype, val)
 
     concrete = infer_concrete_type(val)
     formatted = format_concrete_value(concrete, val)
-
-    if concrete in ('TIME', 'DATE', 'TIME_OF_DAY', 'DATE_AND_TIME'):
-        return formatted
-
-    return '{0}#{1}'.format(concrete, formatted)
+    return formatted if concrete in ('TIME', 'DATE', 'TIME_OF_DAY', 'DATE_AND_TIME') else f"{concrete}#{formatted}"
