@@ -33,6 +33,8 @@ class UaBase:
         return my_var
     
     def create_folder(self, path, index, folder_name):
+        if path is None:
+            self.root.add_folder(index, folder_name)
         try:
             my_obj = self.root.get_child(path)
             my_obj.add_folder(index, folder_name)

@@ -447,8 +447,9 @@ resource_dir = os.environ.get("OPENFB_LOCAL_DIR") or str(files("openfb.resources
 
 
 def default_folder(ua_peer, obj_idx, obj_path, path_list, folder_name):
-    folder_idx = f"{obj_idx}:{folder_name}"
-    browse_name = f"2:{folder_name}"
+    # creates the methods folder
+    folder_idx = '{0}.{1}'.format(obj_idx, folder_name)
+    browse_name = '2:{0}'.format(folder_name)
     ua_peer.create_folder(obj_path, folder_idx, browse_name)
     folder_list = path_list + [(2, folder_name)]
     return folder_idx, ua_peer.generate_path(folder_list), folder_list
