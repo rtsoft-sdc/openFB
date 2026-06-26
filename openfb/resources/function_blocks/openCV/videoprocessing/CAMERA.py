@@ -37,8 +37,8 @@ class CAMERA:
                     GlobalVideoMemory.push(queue_id=self.QUEUE_ID, img_id=current_id, frame=frame)
                     self.imgIDcounter += 1
                     logging.info(f"Frame captured and stored with ID: {current_id}")
-                    return None, event_input_value, current_id, self.QUEUE_ID, "Frame captured"
+                    return None, event_input_value, True, "Frame captured", current_id 
                 
                 else:
                     logging.error("Failed to capture frame from camera")
-                    return None, event_input_value, None, None, "Failed to capture frame"
+                    return None, event_input_value, False, "Failed to capture frame", None

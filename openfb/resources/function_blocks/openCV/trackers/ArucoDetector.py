@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class ArucoDetector():
@@ -11,13 +12,14 @@ class ArucoDetector():
             img = GlobalVideoMemory.pop(queue_id=QUEUE_ID, img_id=IMG_ID)
             if img is not None:
                 try:
-                    DICTIONARY = int(DICTIONARY)
+                    DICTIONARY = cv2.aruco.DICT_6X6_250
                     if self.detector is None or self.current_dict_id != DICTIONARY:
                         self.detector = cv2.aruco.ArucoDetector(cv2.aruco.getPredefinedDictionary(DICTIONARY))
                         self.current_dict_id = DICTIONARY
                     corners, ids, rejected = self.detector.detectMarkers(img)
                     return event_input_value, "OK", IMG_ID, corners, ids, rejected
                 except Exception as e:
+                    print(f"Error in ArucoDetector: {e}")
                     return event_input_value, "ERROR arucodetector", None, None, None, None
             return event_input_value, "ERROR: no image found", None, None, None, None
 

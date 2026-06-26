@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="cvtColor" Comment="openCV color conversion" >
+<FBType Name="CVTCOLOR" Comment="openCV color conversion" >
 	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
 	</VersionInfo>
 	<InterfaceList>
@@ -8,7 +8,6 @@
 				<With Var="QUEUE_ID"/>
 				<With Var="IMG_ID"/>
 				<With Var="CODE"/>
-				<With Var="DSTCHANNEL"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -21,7 +20,6 @@
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="CODE" Type="STRING"/>
-			<VarDeclaration Name="DSTCHANNEL" Type="UDINT"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>
