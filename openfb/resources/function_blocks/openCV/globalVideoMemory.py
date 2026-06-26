@@ -9,6 +9,10 @@ class GlobalVideoMemory():
         if queue_id not in cls._storage:
             cls._storage[queue_id] = {}
         cls._storage[queue_id][img_id] = frame
+        MAX_FRAMES = 50
+        if len(cls._storage[queue_id]) > MAX_FRAMES:
+            first_key = next(iter(cls._storage[queue_id]))
+            del cls._storage[queue_id][first_key]
     
     @classmethod
     def pop(cls, queue_id: str, img_id: int) -> np.ndarray:
