@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="VideoWriter" Comment="openCV write video" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="INIT" Type="Event">
@@ -11,24 +13,20 @@
 				<With Var="APIPREFERENCE"/>
 			</Event>	
 			<Event Name="REQ" Type="Event">
-				<With Var="IMG_ID"/>
 				<With Var="QUEUE_ID"/>
+				<With Var="IMG_ID"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
-			<Event Name="INITO" Type="Event">
-				<With Var="FILENAME"/>
-			</Event>
 			<Event Name="CNF" Type="Event">
-				<With Var="IMG_IDO"/>
-				<With Var="QUEUE_IDO"/>
 				<With Var="STATUS"/>
+				<With Var="IMG_IDO"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="INIT" Type="BOOL"/>
-			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="QI" Type="BOOL"/>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="FILENAME" Type="STRING"/>
 			<VarDeclaration Name="FOURCC" Type="INT"/>
 			<VarDeclaration Name="FPS" Type="REAL"/>
@@ -37,10 +35,10 @@
 			<VarDeclaration Name="APIPREFERENCE" Type="INT"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="FILENAME" Type="STRING"/>
-			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
-			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
 			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
 		</OutputVars>
 	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+	</Service>
 </FBType>

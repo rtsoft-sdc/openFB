@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="GoodFeaturesToTrack" Comment="openCV goodFeaturesToTrack" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event">
-				<With Var="IMG_ID"/>
 				<With Var="QUEUE_ID"/>
+				<With Var="IMG_ID"/>
 				<With Var="MAXCORNERS"/>
 				<With Var="QUALITYLEVEL"/>
 				<With Var="MINDISTANCE"/>
@@ -18,16 +20,14 @@
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event">
-				<With Var="IMG_IDO"/>
-				<With Var="QUEUE_IDO"/>
-				<With Var="CORNERS"/>
 				<With Var="STATUS"/>
+				<With Var="IMG_IDO"/>
+				<With Var="CORNERS"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="QI" Type="BOOL"/>
-			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="MAXCORNERS" Type="INT"/>
 			<VarDeclaration Name="QUALITYLEVEL" Type="REAL"/>
 			<VarDeclaration Name="MINDISTANCE" Type="REAL"/>
@@ -39,10 +39,11 @@
 			<VarDeclaration Name="K" Type="REAL"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
-			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
-			<VarDeclaration Name="CORNERS" Type="REAL" ArraySize="1024"/>
 			<VarDeclaration Name="STATUS" Type="BOOL"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="CORNERS" Type="REAL" ArraySize="1024"/>
 		</OutputVars>
 	</InterfaceList>
+	<SimpleFB><Algorithm Name="REQ"><ST>
+	</ST></Algorithm></SimpleFB>
 </FBType>

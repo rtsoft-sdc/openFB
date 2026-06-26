@@ -1,5 +1,4 @@
 import cv2
-import logging
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class WarpPolar:
@@ -12,7 +11,7 @@ class WarpPolar:
             base_flag |= cv2.WARP_INVERSE_MAP
         return base_flag
 
-    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, DSIZE, CENTER, MAXRADIUS, FLAGS):
+    def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, DSIZE, CENTER, MAXRADIUS, FLAGS):
         if event_input_name == "REQ":
             img = GlobalVideoMemory.pop(QUEUE_ID, IMG_ID)
             if img is not None:
@@ -22,11 +21,11 @@ class WarpPolar:
                     flags_int = self.get_interpolation_flag(FLAGS)
                     warped_img = cv2.warpPolar(img, dsize_tuple, center_tuple, MAXRADIUS, flags_int)
                     GlobalVideoMemory.push(QUEUE_ID, IMG_ID, warped_img)
-                    return event_input_value, IMG_ID, QUEUE_ID, "OK"
+                    return event_input_value, "OK", IMG_ID
                 except Exception as e:
-                    logging.error(f"Error occurred while warping polar: {e}")
-            logging.error(f"Image with ID {IMG_ID} not found in queue {QUEUE_ID}.")
-            return event_input_value, IMG_ID, QUEUE_ID, "Image not found"
+                    return event_input_value, "ERROR: Failed to warp polar", None
+                
+            return event_input_value, "ERROR: Image not found", None
 
     def __del__(self):
-        logging.info("Delete WarpPolar")
+        pass

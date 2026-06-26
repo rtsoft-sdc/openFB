@@ -1,6 +1,4 @@
 import cv2
-import logging
-import numpy as np
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class GoodFeaturesToTrack():
@@ -14,11 +12,8 @@ class GoodFeaturesToTrack():
                 
                 corners = cv2.goodFeaturesToTrack(img, MAXCORNERS, QUALITYLEVEL, MINDISTANCE, mask=MASK, blockSize=BLOCK_SIZE, gradientSize=GRADIENTSIZE, useHarrisDetector=USE_HARRIS, k=K)
                 corners = corners[:, 0, 0].tolist() if corners is not None else []
-                return event_input_value, IMG_ID, QUEUE_ID, corners, "OK"
-            logging.error(f"Image with ID {IMG_ID} not found in queue {QUEUE_ID}.")
-            return event_input_value, None, None, None, "ERROR: Image not found"
+                return event_input_value, "OK", IMG_ID, corners
+            return event_input_value, "ERROR: no image found", None, None
 
     def __del__(self):
-        logging.info("Delete GoodFeaturesToTrack")
-        for smd in self.smd_connections.values():
-            del smd
+        pass

@@ -1,10 +1,9 @@
 import cv2
-import logging
 import numpy as np
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 class WarpAffine:
 
-    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, TRANSFORMATION_MATRIX, DSIZE):
+    def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, TRANSFORMATION_MATRIX, DSIZE):
         if event_input_name == 'REQ':
             img = GlobalVideoMemory.pop(QUEUE_ID, IMG_ID)
             if img is not None:
@@ -13,11 +12,11 @@ class WarpAffine:
                     dsize = (DSIZE[0], DSIZE[1])
                     img = cv2.warpAffine(img, mat, dsize)
                     GlobalVideoMemory.push(QUEUE_ID, IMG_ID, img)
-                    return event_input_value, IMG_ID, QUEUE_ID, "OK"
+                    return event_input_value, "OK", IMG_ID
                 except Exception as e:
-                    logging.error(f"Error occurred while warping affine: {e}")
-            logging.error(f"Image with ID {IMG_ID} not found in queue {QUEUE_ID}.")
-            return event_input_value, IMG_ID, QUEUE_ID, "Image not found"
+                    return event_input_value, f"ERROR: {e}", None
+
+            return event_input_value, "ERROR: Image not found", None
 
     def __del__(self):
-        logging.info("Delete WarpAffine")
+        pass

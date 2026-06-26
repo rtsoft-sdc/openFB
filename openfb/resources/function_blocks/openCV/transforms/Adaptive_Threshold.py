@@ -1,5 +1,4 @@
 import cv2
-import logging
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class AdaptiveThreshold():
@@ -24,12 +23,13 @@ class AdaptiveThreshold():
         if 'gaussian' in clean_name:
             return cv2.ADAPTIVE_THRESH_GAUSSIAN_C
 
-    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, MAX_VALUE, ADAPTIVE_METHOD, THRESHOLD_TYPE, BLOCK_SIZE, C):
+    def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, MAX_VALUE, ADAPTIVE_METHOD, THRESHOLD_TYPE, BLOCK_SIZE, C):
         if event_input_name == 'REQ':
             img = GlobalVideoMemory.pop(QUEUE_ID, IMG_ID)
             if img is not None:
                 if len(img.shape) == 3 and img.shape[2] == 3:
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                block_size = BLOCK_SIZE
                 if(BLOCK_SIZE % 2 == 0):
                     block_size += 1
                 if BLOCK_SIZE < 3:
@@ -41,10 +41,8 @@ class AdaptiveThreshold():
                 img = cv2.adaptiveThreshold(img, MAX_VALUE, adaptive_method, threshold_type, block_size, C, dst=img)
                 GlobalVideoMemory.push(QUEUE_ID, IMG_ID, img)
 
-                return event_input_value, IMG_ID, QUEUE_ID, "OK"
-            logging.error(f"Image with ID {IMG_ID} not found in queue {QUEUE_ID}.")
-            return event_input_value, IMG_ID, QUEUE_ID, "Image not found"
-            
-            
+                return event_input_value, "OK", IMG_ID
+            return event_input_value, "ERROR: Image not found", IMG_ID
+
     def __del__(self):
-        logging.info("Delete Adaptive Threshold")
+        pass

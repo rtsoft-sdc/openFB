@@ -1,5 +1,4 @@
 import cv2
-import logging
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class ArucoDetector():
@@ -7,7 +6,7 @@ class ArucoDetector():
         self.detector = None
         self.current_dict_id = None
         
-    def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, DICTIONARY):
+    def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, DICTIONARY):
         if event_input_name == 'REQ':
             img = GlobalVideoMemory.pop(queue_id=QUEUE_ID, img_id=IMG_ID)
             if img is not None:
@@ -17,10 +16,10 @@ class ArucoDetector():
                         self.detector = cv2.aruco.ArucoDetector(cv2.aruco.getPredefinedDictionary(DICTIONARY))
                         self.current_dict_id = DICTIONARY
                     corners, ids, rejected = self.detector.detectMarkers(img)
-                    return event_input_value, IMG_ID, corners, ids, rejected, "OK"
+                    return event_input_value, "OK", IMG_ID, corners, ids, rejected
                 except Exception as e:
-                    logging.error(f"Error initializing ArucoDetector: {e}")
-                    return event_input_value, None, None, None, None, "ERROR: Invalid dictionary ID"
-                        
+                    return event_input_value, "ERROR arucodetector", None, None, None, None
+            return event_input_value, "ERROR: no image found", None, None, None, None
+
     def __del__(self):
-        logging.info("Delete ArucoDetector")
+        pass

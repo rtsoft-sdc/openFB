@@ -1,5 +1,4 @@
 import cv2
-import logging
 import numpy as np
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
@@ -9,8 +8,8 @@ class WarpPerspective:
         self,
         event_input_name,
         event_input_value,
-        IMG_ID,
         QUEUE_ID,
+        IMG_ID,
         TRANSFORMATION_MATRIX,
         DSIZE,
     ):
@@ -22,13 +21,10 @@ class WarpPerspective:
                     dsize = (DSIZE[0], DSIZE[1])
                     img = cv2.warpPerspective(img, M=map, dsize=dsize)
                     GlobalVideoMemory.push(QUEUE_ID, IMG_ID, img)
-                    return event_input_value, IMG_ID, QUEUE_ID, "OK"
+                    return event_input_value, "OK", IMG_ID
                 except Exception as e:
-                    logging.error(f"Error in warpPerspective: {e}")
-                    return event_input_value, IMG_ID, QUEUE_ID, "ERROR"
-            logging.error(f"No image found in GlobalVideoMemory for QUEUE_ID: {QUEUE_ID}, IMG_ID: {IMG_ID}")
-            return event_input_value, IMG_ID, QUEUE_ID, "ERROR"
-            
+                    return event_input_value, "ERROR: Failed to warp perspective", None
+            return event_input_value, "ERROR: Image not found", None
 
     def __del__(self):
-        logging.info("Delete WarpPerspective")
+        pass

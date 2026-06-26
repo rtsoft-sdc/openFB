@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FBType Name="Laplacian" Comment="openCV laplacian filter" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event">
-				<With Var="IMG_ID"/>
 				<With Var="QUEUE_ID"/>
+				<With Var="IMG_ID"/>
 				<With Var="DDEPTH"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event">
-				<With Var="IMG_IDO"/>
-				<With Var="QUEUE_IDO"/>
 				<With Var="STATUS"/>
+				<With Var="IMG_IDO"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="DDEPTH" Type="INT"/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
-			<VarDeclaration Name="QUEUE_IDO" Type="STRING"/>
 			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
 		</OutputVars>
 	</InterfaceList>
+	<SimpleFB><Algorithm Name="REQ"><ST>
+	</ST></Algorithm></SimpleFB>
 </FBType>
 
