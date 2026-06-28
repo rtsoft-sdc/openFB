@@ -175,6 +175,13 @@ class Configuration:
             else:
                 destination_fb.set_attr(destination_name, new_value=value_to_set)
 
+        if destination_fb.ua_variables_update is not None:
+            try:
+                destination_fb.ua_variables_update()
+            except Exception as error:
+                logging.warning('Could not update OPC-UA variables')
+                logging.warning(error)
+
         logging.info('connection ({0}) configured with the value {1}'.format(destination, source_value))
 
     def read_watches(self, start_time):
