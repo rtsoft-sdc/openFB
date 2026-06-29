@@ -21,9 +21,9 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="BLOCK_SIZE" Type="INT"/>
-			<VarDeclaration Name="KSIZE" Type="INT"/>
-			<VarDeclaration Name="K" Type="REAL"/>
+			<VarDeclaration Name="BLOCK_SIZE" Type="INT" Comment="Neighborhood size"/>
+			<VarDeclaration Name="KSIZE" Type="INT" Comment="Aperture parameter for the Sobel operator"/>
+			<VarDeclaration Name="K" Type="REAL" Comment="Harris detector free parameter"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

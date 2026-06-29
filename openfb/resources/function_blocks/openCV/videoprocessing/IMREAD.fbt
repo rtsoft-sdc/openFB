@@ -5,21 +5,25 @@
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="QI"/>
 				<With Var="QUEUE_ID"/>
 				<With Var="FILE_PATH"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="">
+				<With Var="QO"/>
 				<With Var="STATUS"/>				
 				<With Var="IMG_IDO"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="FILE_PATH" Type="STRING"/>
 		</InputVars>
 		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL"/>
 			<VarDeclaration Name="STATUS" Type="STRING"/>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
 		</OutputVars>

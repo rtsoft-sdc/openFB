@@ -19,7 +19,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="KSIZE" Type="INT" ArraySize="2"/>
+			<VarDeclaration Name="KSIZE" Type="INT" ArraySize="2" Comment="Median kernel size (width, height)"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

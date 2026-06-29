@@ -2,8 +2,8 @@ import cv2
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class IMREAD:
-    def schedule(self, event_input_name, event_input_value, QUEUE_ID, FILE_PATH):
-        if event_input_name == 'REQ':
+    def schedule(self, event_input_name, event_input_value, QI, QUEUE_ID, FILE_PATH):
+        if event_input_name == 'REQ' and QI:
             try:
                 img = cv2.imread(FILE_PATH)
                 if img is not None:

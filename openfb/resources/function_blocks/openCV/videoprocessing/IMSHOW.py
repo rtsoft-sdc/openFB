@@ -1,7 +1,6 @@
 import cv2
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 import queue
-import logging
 import tkinter as tk
 import threading
 

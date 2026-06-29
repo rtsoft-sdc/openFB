@@ -1,7 +1,7 @@
 import cv2
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
-class GOOFEATURESTOTRACK():
+class GOODFEATURESTOTRACK():
         
     def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, MAXCORNERS, QUALITYLEVEL, MINDISTANCE, MASK, BLOCK_SIZE, GRADIENTSIZE, USE_HARRIS, K):
         if event_input_name == 'REQ':

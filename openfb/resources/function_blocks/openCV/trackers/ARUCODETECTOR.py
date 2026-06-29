@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class ARUCODETECTOR():

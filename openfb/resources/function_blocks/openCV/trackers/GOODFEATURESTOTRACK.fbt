@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="GOOFEATURESTOTRACK" Comment="openCV goodFeaturesToTrack" >
+<FBType Name="GOODFEATURESTOTRACK" Comment="openCV goodFeaturesToTrack" >
 	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
 	</VersionInfo>
 	<InterfaceList>
@@ -28,15 +28,15 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="MAXCORNERS" Type="INT"/>
+			<VarDeclaration Name="MAXCORNERS" Type="INT" Comment="Maximum number of corners to return"/>
 			<VarDeclaration Name="QUALITYLEVEL" Type="REAL"/>
-			<VarDeclaration Name="MINDISTANCE" Type="REAL"/>
+			<VarDeclaration Name="MINDISTANCE" Type="REAL" Comment="Minimum distance between returned corners"/>
 			<VarDeclaration Name="MASK" Type="BOOL" ArraySize="1024"/>
-			<VarDeclaration Name="CORNERSQUALITY" Type="REAL" ArraySize="1024"/>
-			<VarDeclaration Name="BLOCK_SIZE" Type="INT"/>
+			<VarDeclaration Name="CORNERSQUALITY" Type="REAL" ArraySize="1024" Comment="Output vector for corner qualities"/>
+			<VarDeclaration Name="BLOCK_SIZE" Type="INT" Comment="Size of an average block for computing a derivative covariation matrix"/>
 			<VarDeclaration Name="GRADIENTSIZE" Type="INT"/>
 			<VarDeclaration Name="USE_HARRIS" Type="BOOL"/>
-			<VarDeclaration Name="K" Type="REAL"/>
+			<VarDeclaration Name="K" Type="REAL" Comment="Harris detector free parameter"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="BOOL"/>

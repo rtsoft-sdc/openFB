@@ -1,5 +1,3 @@
-# need to add ogl support 
-
 import cv2
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
@@ -43,6 +41,7 @@ class VIDEOWRITER:
                     return event_input_value, "ERROR: Failed to write frame to video", IMG_ID
             else:
                 return event_input_value, "ERROR: Image not found", IMG_ID
+    
     def __del__(self):
         if self.video_writer is not None:
             self.video_writer.release()

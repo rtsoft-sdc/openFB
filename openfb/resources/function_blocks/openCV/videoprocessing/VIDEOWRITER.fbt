@@ -19,6 +19,7 @@
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event">
+				<With Var="QO"/>
 				<With Var="STATUS"/>
 				<With Var="IMG_IDO"/>
 			</Event>
@@ -35,6 +36,7 @@
 			<VarDeclaration Name="APIPREFERENCE" Type="INT"/>
 		</InputVars>
 		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL"/>
 			<VarDeclaration Name="STATUS" Type="STRING"/>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
 		</OutputVars>

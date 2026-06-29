@@ -9,7 +9,7 @@
 				<With Var="IMG_ID"/>
 				<With Var="THRESH"/>
 				<With Var="MAXVAL"/>
-				<With Var="TYPE"/>
+				<With Var="THRESHTYPE"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -23,7 +23,7 @@
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="THRESH" Type="REAL"/>
 			<VarDeclaration Name="MAXVAL" Type="REAL"/>
-			<VarDeclaration Name="TYPE" Type="STRING"/>
+			<VarDeclaration Name="THRESHTYPE" Type="STRING" Comment="Threshold type"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

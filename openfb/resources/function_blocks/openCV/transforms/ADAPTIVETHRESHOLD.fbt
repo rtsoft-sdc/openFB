@@ -27,7 +27,7 @@
 			<VarDeclaration Name="ADAPTIVE_METHOD" Type="STRING"/>
 			<VarDeclaration Name="THRESHOLD_TYPE" Type="STRING"/>
 			<VarDeclaration Name="BLOCK_SIZE" Type="UDINT"/>
-			<VarDeclaration Name="C" Type="REAL"/>
+			<VarDeclaration Name="C" Type="REAL" Comment="Free parameter for the threshold"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

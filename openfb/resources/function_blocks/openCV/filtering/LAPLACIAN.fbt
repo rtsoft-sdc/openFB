@@ -19,7 +19,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="DDEPTH" Type="INT"/>
+			<VarDeclaration Name="DDEPTH" Type="INT" Comment="Destination depth"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

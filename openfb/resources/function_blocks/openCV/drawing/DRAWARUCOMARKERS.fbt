@@ -24,8 +24,8 @@
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="CORNERS" Type="INT" ArraySize="1024"/>
 			<VarDeclaration Name="IDS" Type="INT" ArraySize="1024"/>
-			<VarDeclaration Name="DRAWCORNERS" Type="BOOL"/>
-			<VarDeclaration Name="DRAWAXIS" Type="BOOL"/>
+			<VarDeclaration Name="DRAWCORNERS" Type="BOOL" Comment="Bool flag to Draw Corners"/>
+			<VarDeclaration Name="DRAWAXIS" Type="BOOL" Comment="Bool flag to Draw Axis"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

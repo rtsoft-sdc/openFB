@@ -21,7 +21,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="MORPH_OP" Type="INT"/>
+			<VarDeclaration Name="MORPH_OP" Type="INT" Comment="Morphology operation"/>
 			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="1024"/>
 		</InputVars>
 		<OutputVars>
