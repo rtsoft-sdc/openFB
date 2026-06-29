@@ -22,10 +22,10 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="CENTER" Type="INT" ArraySize="2"/>
+			<VarDeclaration Name="CENTER" Type="INT" ArraySize="2" Comment="Center of the circle [x, y]"/>
 			<VarDeclaration Name="RADIUS" Type="INT"/>
-			<VarDeclaration Name="COLOR" Type="INT" ArraySize="3"/>
-			<VarDeclaration Name="THICKNESS" Type="INT"/>
+			<VarDeclaration Name="COLOR" Type="INT" ArraySize="3" Comment="Color of the circle [B, G, R]"/>
+			<VarDeclaration Name="THICKNESS" Type="INT" Comment="Thickness of the circle outline"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

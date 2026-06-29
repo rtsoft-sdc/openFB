@@ -19,7 +19,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="CODE" Type="STRING"/>
+			<VarDeclaration Name="CODE" Type="STRING" Comment="Color conversion code. E.g., RGB2GRAY, bgr2gray. Case insensitive."/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

@@ -8,7 +8,7 @@ class BUILDPYRAMID():
             img = GlobalVideoMemory.get(queue_id=QUEUE_ID, img_id=IMG_ID)
             if img is not None:
                 pyramid_list = cv2.buildPyramid(img, MAXLEVEL, borderType=cv2.BORDER_DEFAULT)
-                GlobalVideoMemory.set(queue_id=QUEUE_ID, img_id=IMG_ID, img=pyramid_list)
+                GlobalVideoMemory.set(queue_id=QUEUE_ID, img_id=IMG_ID, frame=pyramid_list)
                 return event_input_value, "OK", IMG_ID
             return event_input_value, "ERROR: Image not found", None
 

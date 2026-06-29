@@ -3,17 +3,16 @@ from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVide
 
 class THRESHOLD():
     
-    def get_opencv_thresh_param(self, param_name: str) -> int:
-        clean_name = param_name.strip().lower()
-        if 'binary_inv' in clean_name or 'inv' in clean_name and 'binary' in clean_name:
+    def get_opencv_thresh_param(self, param_number: int) -> int:
+        if param_number == 0:
             return cv2.THRESH_BINARY_INV
-        if 'binary' in clean_name:
+        if param_number == 1:
             return cv2.THRESH_BINARY
-        if 'tozero_inv' in clean_name or 'inv' in clean_name and 'tozero' in clean_name:
+        if param_number == 2:
             return cv2.THRESH_TOZERO_INV
-        if 'tozero' in clean_name:
+        if param_number == 3:
             return cv2.THRESH_TOZERO
-        if 'trunc' in clean_name:
+        if param_number == 4:
             return cv2.THRESH_TRUNC
         
     def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, THRESH, MAX_VALUE, TYPE):

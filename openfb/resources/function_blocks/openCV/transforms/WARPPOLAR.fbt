@@ -22,10 +22,10 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2" Comment="Size of the output image (width, height)"/>
-			<VarDeclaration Name="CENTER" Type="REAL" ArraySize="2" Comment="Center of the polar transformation (x, y)"/>
+			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2" Comment="Size of the output image [width, height]"/>
+			<VarDeclaration Name="CENTER" Type="REAL" ArraySize="2" Comment="Center of the polar transformation [x, y]"/>
 			<VarDeclaration Name="MAXRADIUS" Type="REAL" Comment="Maximum radius of the polar transformation"/>
-			<VarDeclaration Name="FLAGS" Type="STRING"/>
+			<VarDeclaration Name="FLAGS" Type="INT" ArraySize="2" Comment="Combination of flags for the warp operation. [interpolation, warp_polar]"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

@@ -20,7 +20,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="1024"/>
+			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="1024" Comment="Erosion kernel. Array of integers will be reshaped into a square matrix"/>
 			<VarDeclaration Name="ITERATIONS" Type="INT"/>
 		</InputVars>
 		<OutputVars>

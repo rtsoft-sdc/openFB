@@ -16,7 +16,7 @@ class CVTCOLOR():
                     else:
                         CODE = cv2.COLOR_BGR2GRAY
                     img = cv2.cvtColor(img, CODE)
-                    GlobalVideoMemory.set(QUEUE_ID, IMG_ID, img)
+                    GlobalVideoMemory.set(QUEUE_ID, IMG_ID, img)                    
                 return event_input_value, "OK", IMG_ID
             return event_input_value, "ERROR: Image not found", IMG_ID
 

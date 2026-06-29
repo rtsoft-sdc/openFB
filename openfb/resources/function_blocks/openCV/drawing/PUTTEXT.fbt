@@ -29,7 +29,7 @@
 			<VarDeclaration Name="ORG" Type="INT" ArraySize="2" Comment="Bottom-left corner of the text string in the image"/>
 			<VarDeclaration Name="FONT_FACE" Type="INT"/>
 			<VarDeclaration Name="FONT_SCALE" Type="REAL"/>
-			<VarDeclaration Name="COLOR" Type="INT" ArraySize="3"/>
+			<VarDeclaration Name="COLOR" Type="INT" ArraySize="3" Comment="Color in [B, G, R]"/>
 			<VarDeclaration Name="THICKNESS" Type="INT"/>
 			<VarDeclaration Name="BOTTOMLEFTORIGIN" Type="BOOL" Comment="When true, the image data origin is at the bottom-left corner, otherwise at the top-left corner"/>
 		</InputVars>

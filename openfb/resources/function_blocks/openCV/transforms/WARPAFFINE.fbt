@@ -20,8 +20,8 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="TRANSFORMATION_MATRIX" Type="INT" ArraySize="2*3"/>
-			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2"/>
+			<VarDeclaration Name="TRANSFORMATION_MATRIX" Type="INT" ArraySize="2*3" Comment="Transformation matrix- Array will be transformed in 2x3 matrix"/>
+			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2" Comment="Destination size"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

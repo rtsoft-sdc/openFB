@@ -22,8 +22,8 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="CORNERS" Type="INT" ArraySize="1024"/>
-			<VarDeclaration Name="IDS" Type="INT" ArraySize="1024"/>
+			<VarDeclaration Name="CORNERS" Type="INT" ArraySize="1024" Comment="Array of corner points"/>
+			<VarDeclaration Name="IDS" Type="INT" ArraySize="1024" Comment="Array of marker IDs"/>
 			<VarDeclaration Name="DRAWCORNERS" Type="BOOL" Comment="Bool flag to Draw Corners"/>
 			<VarDeclaration Name="DRAWAXIS" Type="BOOL" Comment="Bool flag to Draw Axis"/>
 		</InputVars>

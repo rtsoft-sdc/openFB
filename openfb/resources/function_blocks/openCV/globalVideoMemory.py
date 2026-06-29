@@ -22,3 +22,9 @@ class GlobalVideoMemory():
     def clear_queue(cls, queue_id: str):
         if queue_id in cls._storage:
             cls._storage[queue_id].clear()
+            
+    @classmethod
+    def get_last_img_id(cls, queue_id: str) -> int:
+        if queue_id in cls._storage and cls._storage[queue_id]:
+            return max(cls._storage[queue_id].keys())
+        return None

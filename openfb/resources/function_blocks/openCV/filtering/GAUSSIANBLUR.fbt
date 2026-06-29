@@ -21,7 +21,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="KSIZE" Type="INT" ArraySize="2" Comment="Gaussian kernel size (width, height)"/>
+			<VarDeclaration Name="KSIZE" Type="INT" ArraySize="2" Comment="Gaussian kernel size [width, height]"/>
 			<VarDeclaration Name="SIGMAX" Type="REAL" Comment="kernel deviation in X direction"/>
 			<VarDeclaration Name="SIGMAY" Type="REAL" Comment="kernel deviation in Y direction"/>
 		</InputVars>
@@ -33,4 +33,3 @@
 	<SimpleFB><Algorithm Name="REQ"><ST>
 	</ST></Algorithm></SimpleFB>
 </FBType>
-

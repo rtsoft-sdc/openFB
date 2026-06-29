@@ -24,8 +24,8 @@
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="MAXVAL" Type="REAL"/>
-			<VarDeclaration Name="ADAPTIVE_METHOD" Type="STRING"/>
-			<VarDeclaration Name="THRESHOLD_TYPE" Type="STRING"/>
+			<VarDeclaration Name="ADAPTIVE_METHOD" Type="INT" Comment="0: ADAPTIVE_THRESH_MEAN_C, 1: ADAPTIVE_THRESH_GAUSSIAN_C"/>
+			<VarDeclaration Name="THRESHOLD_TYPE" Type="INT" Comment="0: BINARY_INV, 1: BINARY, 2: TOZERO_INV, 3: TOZERO, 4: TRUNC"/>
 			<VarDeclaration Name="BLOCK_SIZE" Type="UDINT"/>
 			<VarDeclaration Name="C" Type="REAL" Comment="Free parameter for the threshold"/>
 		</InputVars>

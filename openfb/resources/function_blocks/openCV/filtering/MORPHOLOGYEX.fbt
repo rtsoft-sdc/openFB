@@ -21,8 +21,8 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="MORPH_OP" Type="INT" Comment="Morphology operation"/>
-			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="1024"/>
+			<VarDeclaration Name="MORPH_OP" Type="INT" Comment="Morphology operation: 0=ERODE, 1=DILATE, 2=OPEN, 3=CLOSE, 4=GRADIENT, 5=TOPHAT, 6=BLACKHAT"/>
+			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="1024" Comment="Morphology kernel. Array of integers will be reshaped into a square matrix"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

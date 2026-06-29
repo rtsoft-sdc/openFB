@@ -23,7 +23,7 @@
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
 			<VarDeclaration Name="THRESH" Type="REAL"/>
 			<VarDeclaration Name="MAXVAL" Type="REAL"/>
-			<VarDeclaration Name="THRESHTYPE" Type="STRING" Comment="Threshold type"/>
+			<VarDeclaration Name="THRESHTYPE" Type="INT" Comment="Threshold type. 0: Binary Inv, 1: Binary, 2: ToZero Inv, 3: ToZero, 4: Trunc"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>
