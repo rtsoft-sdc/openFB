@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="WARPPERSPECTIVE" Comment="openCV warp perspective" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="QUEUE_ID"/>
+				<With Var="IMG_ID"/>
+				<With Var="TRANSFORMATION_MATRIX"/>
+				<With Var="DSIZE"/>
+				<With Var="FLAGS"/>
+				<With Var="BORDERMODE"/>
+				<With Var="BORDERVALUE"/>
+				
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="STATUS"/>
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="TRANSFORMATION_MATRIX" Type="REAL" ArraySize="9"/>
+			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2"/>
+			<VarDeclaration Name="FLAGS" Type="INT"/>
+			<VarDeclaration Name="BORDERMODE" Type="INT"/>
+			<VarDeclaration Name="BORDERVALUE" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB><Algorithm Name="REQ"><ST>
+	</ST></Algorithm></SimpleFB>
+</FBType>

@@ -6,7 +6,7 @@ class CVTCOLOR():
     def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, CODE):
 
         if event_input_name == 'REQ':
-            img = GlobalVideoMemory.pop(QUEUE_ID, IMG_ID)
+            img = GlobalVideoMemory.get(QUEUE_ID, IMG_ID)
             if img is not None:
                 channels = img.shape[2] if len(img.shape) == 3 else 1
                 if channels > 1:
@@ -16,7 +16,7 @@ class CVTCOLOR():
                     else:
                         CODE = cv2.COLOR_BGR2GRAY
                     img = cv2.cvtColor(img, CODE)
-                    GlobalVideoMemory.push(QUEUE_ID, IMG_ID, img)
+                    GlobalVideoMemory.set(QUEUE_ID, IMG_ID, img)
                 return event_input_value, "OK", IMG_ID
             return event_input_value, "ERROR: Image not found", IMG_ID
 

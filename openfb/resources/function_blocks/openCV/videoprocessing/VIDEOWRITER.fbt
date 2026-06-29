@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="VIDEOWRITER" Comment="openCV write video" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="FILENAME"/>
+				<With Var="FOURCC"/>
+				<With Var="FPS"/>
+				<With Var="FRAME_SIZE"/>
+				<With Var="IS_COLOR"/>
+				<With Var="APIPREFERENCE"/>
+			</Event>	
+			<Event Name="REQ" Type="Event">
+				<With Var="QUEUE_ID"/>
+				<With Var="IMG_ID"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="STATUS"/>
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="FILENAME" Type="STRING"/>
+			<VarDeclaration Name="FOURCC" Type="INT"/>
+			<VarDeclaration Name="FPS" Type="REAL"/>
+			<VarDeclaration Name="FRAME_SIZE" Type="INT" ArraySize="2"/>
+			<VarDeclaration Name="IS_COLOR" Type="BOOL"/>
+			<VarDeclaration Name="APIPREFERENCE" Type="INT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+	<Service RightInterface="RESOURCE" LeftInterface="APPLICATION" Comment="Service Interface Function Block Type">
+	</Service>
+</FBType>

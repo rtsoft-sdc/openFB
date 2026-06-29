@@ -6,7 +6,7 @@ class DRAWARUCOMARKERS:
 
     def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, CORNERS, IDS, DRAWCORNERS, DRAWAXIS):
         if event_input_name == 'REQ':
-            img = GlobalVideoMemory.pop(queue_id=QUEUE_ID, img_id=IMG_ID)
+            img = GlobalVideoMemory.get(queue_id=QUEUE_ID, img_id=IMG_ID)
             if img is not None:
                 try:
                     if DRAWCORNERS:
@@ -43,3 +43,6 @@ class DRAWARUCOMARKERS:
                 except Exception as e:
                     print(f"Error in DRAWARUCOMARKERS: {e}")
                     return event_input_value, "ERROR drawarucomarkers", None
+
+    def __del__(self):
+        pass

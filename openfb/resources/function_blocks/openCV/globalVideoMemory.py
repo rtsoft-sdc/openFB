@@ -5,7 +5,7 @@ class GlobalVideoMemory():
     _storage = {}
     
     @classmethod
-    def push(cls, queue_id: str, img_id: int, frame: np.ndarray):
+    def set(cls, queue_id: str, img_id: int, frame: np.ndarray):
         if queue_id not in cls._storage:
             cls._storage[queue_id] = {}
         cls._storage[queue_id][img_id] = frame
@@ -15,7 +15,7 @@ class GlobalVideoMemory():
             del cls._storage[queue_id][first_key]
     
     @classmethod
-    def pop(cls, queue_id: str, img_id: int) -> np.ndarray:
+    def get(cls, queue_id: str, img_id: int) -> np.ndarray:
         return cls._storage.get(queue_id, {}).get(img_id)
     
     @classmethod

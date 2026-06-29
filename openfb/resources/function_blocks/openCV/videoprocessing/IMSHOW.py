@@ -49,7 +49,7 @@ class IMSHOW:
             pass
         if frame is not None:
             try:
-                image = GlobalVideoMemory.pop(queue_id=frame[0], img_id=frame[1])
+                image = GlobalVideoMemory.get(queue_id=frame[0], img_id=frame[1])
                 if image is not None:
                     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                     success, encoded_img = cv2.imencode('.ppm', rgb_image)
@@ -67,7 +67,7 @@ class IMSHOW:
         if self.title != WINDOW_NAME:
             self.title = WINDOW_NAME
             self.root.title(self.title)
-        img = GlobalVideoMemory.pop(queue_id=QUEUE_ID, img_id=IMG_ID)
+        img = GlobalVideoMemory.get(queue_id=QUEUE_ID, img_id=IMG_ID)
         if img is not None and self.root.winfo_exists():
             try:
                 if len(img.shape) == 3 and img.shape[2] == 3:

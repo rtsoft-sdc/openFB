@@ -34,7 +34,7 @@ class CAMERA:
                 ret, frame = self.cap.read()
                 if ret == True:
                     current_id = self.imgIDcounter
-                    GlobalVideoMemory.push(queue_id=self.QUEUE_ID, img_id=current_id, frame=frame)
+                    GlobalVideoMemory.set(queue_id=self.QUEUE_ID, img_id=current_id, frame=frame)
                     self.imgIDcounter += 1
                     logging.info(f"Frame captured and stored with ID: {current_id}")
                     return None, event_input_value, True, "Frame captured", current_id 
