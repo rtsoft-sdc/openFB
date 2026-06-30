@@ -27,6 +27,7 @@ class IMSHOW:
             self.label.pack(expand=True, fill=tk.BOTH)
             self.window_is_open = True
             self.root.after(1000, self.check_queue)
+            self.root.withdraw()
         except Exception as e:
             with open("/tmp/IMSHOW_error.log", "a") as f:
                 f.write(f"Error Tkinter: {e}\n")
@@ -53,6 +54,7 @@ class IMSHOW:
                     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                     success, encoded_img = cv2.imencode('.ppm', rgb_image)
                     if success:
+                        self.root.deiconify()
                         tk_img = tk.PhotoImage(master=self.root, data=encoded_img.tobytes())
                         self.label.config(image=tk_img)
                         self.label.image = tk_img 
