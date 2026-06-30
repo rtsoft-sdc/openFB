@@ -21,6 +21,7 @@ class CAMERA:
             self.QUEUE_ID = QUEUE_ID
             ID = int(ID) if ID.isdigit() else ID
             self.cap = cv2.VideoCapture(ID)
+            self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
             if not self.cap.isOpened():
                 return event_input_value, None, False, "Failed to open camera", None
             return event_input_value, None, True, "Camera initialized", None

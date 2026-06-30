@@ -26,7 +26,7 @@ class IMSHOW:
             self.label = tk.Label(self.root, text="Waiting...")
             self.label.pack(expand=True, fill=tk.BOTH)
             self.window_is_open = True
-            self.root.after(20, self.check_queue)
+            self.root.after(1000, self.check_queue)
         except Exception as e:
             with open("/tmp/IMSHOW_error.log", "a") as f:
                 f.write(f"Error Tkinter: {e}\n")

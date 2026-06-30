@@ -258,7 +258,6 @@ class FBInterface:
         # Converts the second part of the list to variables
         for index, var_name in enumerate(self.output_vars):
             # Second part of the list delimited by the events dictionary len
-            print(f'index: {index}, var_name: {var_name}, outputs: {outputs}. count: {len(outputs)}, output_events: {self.output_events}, len(output_events): {len(self.output_events)}')
             new_value = outputs[index + len(self.output_events)]
 
             # Updates the var value
