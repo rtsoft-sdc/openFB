@@ -20,6 +20,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="KERNELSIZE" Type="INT" Comment="Size of the dilation kernel. Must be a positive odd integer"/>
 			<VarDeclaration Name="KERNEL" Type="INT" ArraySize="1024" Comment="Dilation kernel. Array of integers will be reshaped into a square matrix"/>
 			<VarDeclaration Name="ITERATIONS" Type="INT"/>
 		</InputVars>

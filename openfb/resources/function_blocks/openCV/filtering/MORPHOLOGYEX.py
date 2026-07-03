@@ -16,11 +16,11 @@ class MORPHOLOGYEX():
         }
         return operations.get(operation_number, None)
 
-    def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, MORPH_OP, KERNEL):
+    def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, KERNELSIZE, MORPH_OP, KERNEL):
         if event_input_name == 'REQ':
             img = GlobalVideoMemory.get(queue_id=QUEUE_ID, img_id=IMG_ID)
             morph_op = self.get_morphology_operation(MORPH_OP)
-            kernel = np.array(KERNEL, dtype=np.uint8).reshape((int(np.sqrt(len(KERNEL))), int(np.sqrt(len(KERNEL)))))
+            kernel = np.array(KERNEL, dtype=np.uint8).reshape((KERNELSIZE, KERNELSIZE))
             if img is not None:
                 img = cv2.morphologyEx(img, morph_op, kernel, dst=img)
                 return event_input_value, "OK", IMG_ID
