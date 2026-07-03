@@ -20,12 +20,13 @@ class ARUCODETECTOR():
                         self.detector = cv2.aruco.ArucoDetector(aruco_dict)
                                 
                     corners, ids, rejected = self.detector.detectMarkers(img)
-                    #print(f"Detected {len(corners)} ArUco markers in image with ID {IMG_ID}")
-                    return event_input_value, "OK", IMG_ID, corners, ids, rejected
+                    if corners is None or ids is None or len(corners) == 0 or len(ids) == 0:
+                        corners, ids, rejected = [-1]*1024, [-1]*1024, [-1]*1024
+                    return event_input_value, "OK", IMG_ID, len(ids), corners, ids, rejected
                 except Exception as e:
                     print(f"Error in ArucoDetector: {e}")
-                    return event_input_value, "ERROR arucodetector", None, None, None, None
-            return event_input_value, "ERROR: no image found", None, None, None, None
+                    return event_input_value, "ERROR arucodetector", None, None, None, None, None
+            return event_input_value, "ERROR: no image found", None, None, None, None, None
 
     def __del__(self):
         pass

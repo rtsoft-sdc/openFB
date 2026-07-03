@@ -4,7 +4,7 @@ from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVide
 class CAMERA:
     def __init__(self) -> None:
         self.cap = None
-        self.QUEUE_ID = None
+        self.QUEUE_ID = "default_queue"
         self.imgIDcounter = 0
 
     def __del__(self):
@@ -18,7 +18,10 @@ class CAMERA:
         if event_input_name == 'INIT':
             if self.cap is not None:
                 self.cap.release()
-            self.QUEUE_ID = QUEUE_ID
+            if QUEUE_ID:
+                self.QUEUE_ID = QUEUE_ID
+            else:
+                self.QUEUE_ID = "default_queue"
             ID = int(ID) if ID.isdigit() else ID
             self.cap = cv2.VideoCapture(ID)
             self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)

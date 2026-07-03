@@ -20,7 +20,7 @@
 			<Event Name="CNF" Type="Event">
 				<With Var="QO"/>
 				<With Var="IMG_ID"/>
-				<With Var="STATUSO"/>				
+				<With Var="STATUS"/>				
 			</Event>
 		</EventOutputs>
 		<InputVars>

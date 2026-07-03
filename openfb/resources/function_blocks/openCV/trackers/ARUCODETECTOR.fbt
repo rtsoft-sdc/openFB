@@ -27,6 +27,7 @@
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>
 			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="CORNERCOUNT" Type="INT" Comment="Number of detected Aruco markers"/>
 			<VarDeclaration Name="CORNERS" Type="INT" ArraySize="1024" Comment="Detected Aruco marker corners"/>
 			<VarDeclaration Name="IDS" Type="INT" ArraySize="1024" Comment="Detected Aruco marker IDs"/>
 			<VarDeclaration Name="REJECTED" Type="INT" ArraySize="1024" Comment="Rejected Aruco marker candidates"/>

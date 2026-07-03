@@ -34,8 +34,7 @@ class OF_E_CYCLE:
                     daemon=True
                 )
                 self._cycle_thread.start()
-                
-                return (event_value,)
+                return (self._event_counter,)
             
             except Exception as e:
                 logging.error("Error in OF_E_CYCLE: %s", str(e))
@@ -55,7 +54,7 @@ class OF_E_CYCLE:
             if not self._stop_event.is_set():
                 self._event_counter += 1
                 if self._on_event:
-                    self._on_event('EO', self._event_value) # временно так 
+                    self._on_event('EO', self._event_counter)
     
     def __del__(self):
         logging.info('OF_E_CYCLE class destroyed')
