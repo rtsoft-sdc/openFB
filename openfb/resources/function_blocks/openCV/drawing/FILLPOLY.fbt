@@ -7,6 +7,7 @@
 			<Event Name="REQ" Type="Event">
 				<With Var="QUEUE_ID"/>
 				<With Var="IMG_ID"/>
+				<With Var="POINTCOUNT"/>
 				<With Var="POINTS"/>
 				<With Var="COLOR"/>
 			</Event>

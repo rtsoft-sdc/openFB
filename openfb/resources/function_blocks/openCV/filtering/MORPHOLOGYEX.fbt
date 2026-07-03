@@ -8,8 +8,8 @@
 				<With Var="QUEUE_ID"/>
 				<With Var="IMG_ID"/>
 				<With Var="MORPH_OP"/>
+				<With Var="KERNELSIZE"/>
 				<With Var="KERNEL"/>
-				<With Var="ITERATIONS"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>

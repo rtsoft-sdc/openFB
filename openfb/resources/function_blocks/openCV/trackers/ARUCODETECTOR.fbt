@@ -14,6 +14,7 @@
 			<Event Name="CNF" Type="Event">
 				<With Var="STATUS"/>
 				<With Var="IMG_IDO"/>
+				<With Var="CORNERCOUNT"/>
 				<With Var="CORNERS"/>
 				<With Var="IDS"/>
 				<With Var="REJECTED"/>
