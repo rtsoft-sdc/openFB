@@ -11,7 +11,7 @@
 * **Added OpenCV usage example**
 * **Added OPC UA client block**
 * **Added MQTT client block** 
-* **Added the project converter utility** — migration from **Version 2.0** to **Version 3.0**.
+* **Added the IDE project converter utility** — migration from **Version 2.0** to **Version 3.0**.
 
 ## Changes and improvements
 
