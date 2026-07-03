@@ -6,7 +6,8 @@ class CORNERHARRIS():
 
     def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, BLOCK_SIZE, KSIZE, K, BORDERTYPE):
         if event_input_name == 'REQ':
-            img = GlobalVideoMemory.get(queue_id=QUEUE_ID, img_id=IMG_ID)
+            queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)
+            img = GlobalVideoMemory.get(queue_id=queue_id, img_id=IMG_ID)
             if img is not None:
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 gray = np.float32(gray)

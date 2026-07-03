@@ -31,8 +31,8 @@ class VIDEOWRITER:
         elif event_input_name == 'REQ':
             if self.video_writer is None:
                 return event_input_value, "ERROR: Video writer not initialized. Please call INIT first.", IMG_ID
-            
-            img = GlobalVideoMemory.get(QUEUE_ID, IMG_ID)
+            queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)
+            img = GlobalVideoMemory.get(queue_id=queue_id, img_id=IMG_ID)
             if img is not None:
                 try:
                     self.video_writer.write(img)

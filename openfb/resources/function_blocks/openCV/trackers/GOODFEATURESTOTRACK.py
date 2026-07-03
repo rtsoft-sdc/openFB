@@ -5,7 +5,8 @@ class GOODFEATURESTOTRACK():
         
     def schedule(self, event_input_name, event_input_value, IMG_ID, QUEUE_ID, MAXCORNERS, QUALITYLEVEL, MINDISTANCE, MASK, BLOCK_SIZE, GRADIENTSIZE, USE_HARRIS, K):
         if event_input_name == 'REQ':
-            img = GlobalVideoMemory.get(queue_id=QUEUE_ID, img_id=IMG_ID)
+            queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)
+            img = GlobalVideoMemory.get(queue_id=queue_id, img_id=IMG_ID)
             if img is not None:
                 if len(img.shape) == 3 and img.shape[2] == 3:
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

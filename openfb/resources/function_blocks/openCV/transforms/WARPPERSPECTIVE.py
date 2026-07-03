@@ -47,14 +47,15 @@ class WARPPERSPECTIVE:
         DSIZE, FLAGS, BORDERMODE, BORDERVALUE
     ):
         if event_input_name == "REQ":
-            img = GlobalVideoMemory.get(QUEUE_ID, IMG_ID)
+            queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)
+            img = GlobalVideoMemory.get(queue_id=queue_id, img_id=IMG_ID)
             if img is not None:
                 try:
                     map = np.array(TRANSFORMATION_MATRIX, dtype=np.float32).reshape((3, 3))
                     dsize = (DSIZE[0], DSIZE[1])
                     
                     img = cv2.warpPerspective(img, M=map, dsize=dsize, flags=self.get_interpolation_method(FLAGS), borderMode=self.get_border_type(BORDERMODE), borderValue=BORDERVALUE)
-                    GlobalVideoMemory.set(QUEUE_ID, IMG_ID, img)
+                    GlobalVideoMemory.set(queue_id=queue_id, img_id=IMG_ID, frame=img)
                     return event_input_value, "OK", IMG_ID
                 except Exception as e:
                     return event_input_value, "ERROR: Failed to warp perspective", None

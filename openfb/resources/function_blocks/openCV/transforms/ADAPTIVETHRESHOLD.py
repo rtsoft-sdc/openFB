@@ -23,7 +23,8 @@ class ADAPTIVETHRESHOLD():
 
     def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, MAX_VALUE, ADAPTIVE_METHOD, THRESHOLD_TYPE, BLOCK_SIZE, C):
         if event_input_name == 'REQ':
-            img = GlobalVideoMemory.get(QUEUE_ID, IMG_ID)
+            queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)
+            img = GlobalVideoMemory.get(queue_id=queue_id, img_id=IMG_ID)
             if img is not None:
                 if len(img.shape) == 3 and img.shape[2] == 3:
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -37,7 +38,7 @@ class ADAPTIVETHRESHOLD():
                 threshold_type = self.get_opencv_thresh_param(THRESHOLD_TYPE)
 
                 img = cv2.adaptiveThreshold(img, MAX_VALUE, adaptive_method, threshold_type, block_size, C, dst=img)
-                GlobalVideoMemory.set(QUEUE_ID, IMG_ID, img)
+                GlobalVideoMemory.set(queue_id=queue_id, img_id=IMG_ID, frame=img)
 
                 return event_input_value, "OK", IMG_ID
             return event_input_value, "ERROR: Image not found", IMG_ID

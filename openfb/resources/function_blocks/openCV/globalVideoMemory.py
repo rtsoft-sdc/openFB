@@ -28,3 +28,7 @@ class GlobalVideoMemory():
         if queue_id in cls._storage and cls._storage[queue_id]:
             return max(cls._storage[queue_id].keys())
         return None
+    
+    @classmethod
+    def get_queue_id(cls, queue_id: str) -> str:
+        return queue_id or "default_queue"

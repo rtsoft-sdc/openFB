@@ -18,10 +18,7 @@ class CAMERA:
         if event_input_name == 'INIT':
             if self.cap is not None:
                 self.cap.release()
-            if QUEUE_ID:
-                self.QUEUE_ID = QUEUE_ID
-            else:
-                self.QUEUE_ID = "default_queue"
+            self.QUEUE_ID = GlobalVideoMemory.get_queue_id(QUEUE_ID)
             ID = int(ID) if ID.isdigit() else ID
             self.cap = cv2.VideoCapture(ID)
             self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)

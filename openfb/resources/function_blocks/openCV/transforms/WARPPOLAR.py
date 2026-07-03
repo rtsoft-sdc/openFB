@@ -29,14 +29,15 @@ class WARPPOLAR:
 
     def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, DSIZE, CENTER, MAXRADIUS, FLAGS):
         if event_input_name == "REQ":
-            img = GlobalVideoMemory.get(QUEUE_ID, IMG_ID)
+            queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)
+            img = GlobalVideoMemory.get(queue_id=queue_id, img_id=IMG_ID)
             if img is not None:
                 try:
                     dsize_tuple = (int(DSIZE[0]), int(DSIZE[1]))
                     center_tuple = (int(CENTER[0]), int(CENTER[1]))
                     flags_int = self.get_result_flag(FLAGS[0], FLAGS[1])
                     warped_img = cv2.warpPolar(img, dsize_tuple, center_tuple, MAXRADIUS, flags_int)
-                    GlobalVideoMemory.set(QUEUE_ID, IMG_ID, warped_img)
+                    GlobalVideoMemory.set(queue_id=queue_id, img_id=IMG_ID, frame=warped_img)
                     return event_input_value, "OK", IMG_ID
                 except Exception as e:
                     return event_input_value, "ERROR: Failed to warp polar", None
