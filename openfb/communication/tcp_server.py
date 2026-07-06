@@ -35,6 +35,7 @@ class TcpServer:
         connection, client_address = self.sock.accept()
 
         thread = client_thread.ClientThread(connection, client_address, self.config_m)
+        thread.daemon = True  
         thread.start()
 
     def stop_server(self):
