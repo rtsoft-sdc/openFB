@@ -19,8 +19,11 @@ class CAMERA:
             if self.cap is not None:
                 self.cap.release()
             self.QUEUE_ID = GlobalVideoMemory.get_queue_id(QUEUE_ID)
-            ID = int(ID) if ID.isdigit() else ID
-            self.cap = cv2.VideoCapture(ID)
+            clean_id = str(ID).strip().split('.')[0]
+            if clean_id.isdigit():
+                self.cap = cv2.VideoCapture(int(clean_id))
+            else:
+                self.cap = cv2.VideoCapture(ID)
             self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
             if not self.cap.isOpened():
                 return event_input_value, None, False, "Failed to open camera", None
