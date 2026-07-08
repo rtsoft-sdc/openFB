@@ -1,7 +1,7 @@
 import cv2
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory 
 
-class CAMERA:
+class CVCAMERA:
     def __init__(self) -> None:
         self.cap = None
         self.QUEUE_ID = "default_queue"
