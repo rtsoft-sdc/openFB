@@ -10,7 +10,7 @@ class DRAWARUCOMARKERS:
             img = GlobalVideoMemory.get(queue_id=queue_id, img_id=IMG_ID)
             if img is not None:
                 try:
-                    if DRAWCORNERS and IDS is not None and len(CORNERS) > 0 and len(IDS) == len(CORNERS):
+                    if DRAWCORNERS and len(CORNERS) > 1:
                         cv2.aruco.drawDetectedMarkers(img, CORNERS, IDS)
                         
                     if DRAWAXIS:

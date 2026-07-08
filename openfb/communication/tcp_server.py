@@ -27,16 +27,30 @@ class TcpServer:
             sys.exit()
 
         # Listen for incoming connections
+        self.sock.settimeout(1.0)  
+        self.active_threads = []
         self.sock.listen(limit_connections)
 
     def handle_client(self):
         # Wait for a connection
-        logging.info('waiting for a connection...')
-        connection, client_address = self.sock.accept()
-
-        thread = client_thread.ClientThread(connection, client_address, self.config_m)
-        thread.daemon = True  
-        thread.start()
-
+        try:
+            connection, client_address = self.sock.accept()
+            thread = client_thread.ClientThread(connection, client_address, self.config_m)
+            thread.daemon = True  
+            thread.start()
+            self.active_threads.append(thread)
+        except socket.timeout:
+            return
+            
     def stop_server(self):
-        self.sock.close()
+        try:
+            self.sock.close()
+        except Exception:
+            pass
+            
+        for thread in self.active_threads:
+            if thread.is_alive():
+                try:
+                    thread.join(timeout=0.5)
+                except Exception:
+                    logging.error(f"error joining thread {thread.name}")

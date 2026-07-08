@@ -214,22 +214,25 @@ class UaManagerFboot(peer.UaPeer):
                             if root_path == None:
                                 raise self.InvalidFbootState
                             # Check fbt file
-                            fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
-                            fb_name = child.get('Name')
-                            opc_mapping = child.find('OpcMapping')
-                            if fb_name in self.config_dictionary[resource_name].fb_dictionary:
-                                continue
-                            if opc_mapping is not None:
-                                for var in opc_mapping.findall('Var'):
-                                    if fb_name not in self.opc_mapped_vars:
-                                        self.opc_mapped_vars[fb_name] = []
-                                    self.opc_mapped_vars[fb_name].append({
-                                        'Name': var.attrib['Name'],
-                                        'Direction': var.attrib['Direction'],
-                                        'Type': var.attrib['Type']
-                                    })
+                            try:
+                                fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
+                                fb_name = child.get('Name')
+                                opc_mapping = child.find('OpcMapping')
+                                if fb_name in self.config_dictionary[resource_name].fb_dictionary:
+                                    continue
+                                if opc_mapping is not None:
+                                    for var in opc_mapping.findall('Var'):
+                                        if fb_name not in self.opc_mapped_vars:
+                                            self.opc_mapped_vars[fb_name] = []
+                                        self.opc_mapped_vars[fb_name].append({
+                                            'Name': var.attrib['Name'],
+                                            'Direction': var.attrib['Direction'],
+                                            'Type': var.attrib['Type']
+                                        })
 
-                            self.parse_fbt(fb_name, fb_file)
+                                self.parse_fbt(fb_name, fb_file)
+                            except FileNotFoundError:
+                                logging.error('Could not find fbt file for {0}. Awaiting deployment.'.format(open_fb_type))
                                    
             except KeyError:
                 raise self.InvalidFbootState

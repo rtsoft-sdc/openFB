@@ -21,8 +21,10 @@ class ARUCODETECTOR():
                         self.detector = cv2.aruco.ArucoDetector(aruco_dict)
                                 
                     corners, ids, rejected = self.detector.detectMarkers(img)
-                    if corners is None or ids is None or len(corners) == 0 or len(ids) == 0:
-                        corners, ids, rejected = [-1]*1024, [-1]*1024, [-1]*1024
+                    if ids is not None:
+                        print(corners, ids)
+                    if corners is None or ids is None or len(corners) == 0:
+                        corners, ids, rejected = [0], [0], [0]
                     return event_input_value, "OK", IMG_ID, len(ids), corners, ids, rejected
                 except Exception as e:
                     print(f"Error in ArucoDetector: {e}")
