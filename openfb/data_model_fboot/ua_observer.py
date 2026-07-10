@@ -11,7 +11,7 @@ class UaObserver:
     def split_node(self, n):
         node = str(n)
         node = node.split("FunctionBlocks:")[-1]
-        node = node.split(":")
+        node = node.split(".")
         return node[0], node[2]
 
     def datachange_notification(self, node, val, data):

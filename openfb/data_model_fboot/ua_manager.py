@@ -14,7 +14,7 @@ class UaManagerFboot(peer.UaPeer):
         self.address = address
         self.port = port
         self.fboot_path = fboot_path
-        self.base_name = 'OPENFB OPC-UA'
+        self.base_name = 'OPENFB'
         self.endpoint = 'opc.tcp://{0}:{1}'.format(address, port)
 
         peer.UaPeer.__init__(self, address=self.endpoint)
@@ -33,31 +33,19 @@ class UaManagerFboot(peer.UaPeer):
 
     def __call__(self, config):
         # base idx for the opc-ua nodeId
-        self.base_idx = 'ns=2;s={0}'.format(self.base_name)
+        self.base_idx = 'ns=2;s=OPENFB'
         # creates the root object 'SmartObject'
-        self.create_object(2, self.base_name, path=self.generate_path([(0, 'Objects')]))
+        self.create_folder(None, 2, self.base_name)
         # creates the path to that object
-        self.ROOT_LIST = [(0, 'Objects'), (2, self.base_name)]
+        self.ROOT_LIST = [(2, self.base_name)]
         self.ROOT_PATH = self.generate_path(self.ROOT_LIST)
         # configuration (connection to 4diac code)
         self.config = config
+
+        # if we need this?? 1/2
         # create the monitor hardware variables
-        self.monitor_hardware = monitor.MonitorSystem(self)
-        self.monitor_hardware.start()
-        # create function blocks folder
-        folder_idx, folder_path, folder_list = utils.default_folder(self, self.base_idx, self.ROOT_PATH, self.ROOT_LIST, 'FunctionBlocks')
-        self.folders['FunctionBlocks'] = {
-            'idx': folder_idx,
-            'path': folder_path,
-            'path_list': folder_list
-        }
-        # create services folder 
-        folder_idx, folder_path, folder_list = utils.default_folder(self, self.base_idx, self.ROOT_PATH, self.ROOT_LIST, 'OPC-UA_Methods')
-        self.folders['OPC-UA_Methods'] = {
-            'idx': folder_idx,
-            'path': folder_path,
-            'path_list': folder_list
-        }
+        # self.monitor_hardware = monitor.MonitorSystem(self)
+        # self.monitor_hardware.start()
 
     def set_config_dictionary(self, conf_dict):
         self.config_dictionary = conf_dict
@@ -214,25 +202,32 @@ class UaManagerFboot(peer.UaPeer):
                             if root_path == None:
                                 raise self.InvalidFbootState
                             # Check fbt file
-                            try:
-                                fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
-                                fb_name = child.get('Name')
-                                opc_mapping = child.find('OpcMapping')
-                                if fb_name in self.config_dictionary[resource_name].fb_dictionary:
-                                    continue
-                                if opc_mapping is not None:
-                                    for var in opc_mapping.findall('Var'):
-                                        if fb_name not in self.opc_mapped_vars:
-                                            self.opc_mapped_vars[fb_name] = []
-                                        self.opc_mapped_vars[fb_name].append({
-                                            'Name': var.attrib['Name'],
-                                            'Direction': var.attrib['Direction'],
-                                            'Type': var.attrib['Type']
-                                        })
+                            fb_file = open(os.path.join(root_path, '{0}.fbt'.format(open_fb_type)), 'r')
+                            fb_name = child.get('Name')
+                            opc_mapping = child.find('OpcMapping')
+                            if fb_name in self.config_dictionary[resource_name].fb_dictionary:
+                                continue
+                            if opc_mapping is not None:
+                                for var in opc_mapping.findall('Var'):
+                                    if fb_name not in self.opc_mapped_vars:
+                                        self.opc_mapped_vars[fb_name] = []
+                                    self.opc_mapped_vars[fb_name].append({
+                                        'Name': var.attrib['Name'],
+                                        'Direction': var.attrib['Direction'],
+                                        'Type': var.attrib['Type']
+                                    })
 
-                                self.parse_fbt(fb_name, fb_file)
-                            except FileNotFoundError:
-                                logging.error('Could not find fbt file for {0}. Awaiting deployment.'.format(open_fb_type))
+                            if self.folders == {}:
+                                app_name = (var.attrib['Name']).split('.')[0]
+                                app_name = (list(self.opc_mapped_vars.keys())[0]).split('.')[0]
+                                folder_idx, folder_path, folder_list = utils.default_folder(self, self.base_idx, self.ROOT_PATH, self.ROOT_LIST, app_name)
+                                self.folders['FunctionBlocks'] = {
+                                    'idx': folder_idx,
+                                    'path': folder_path,
+                                    'path_list': folder_list
+                                }
+                                
+                            self.parse_fbt(fb_name, fb_file)
                                    
             except KeyError:
                 raise self.InvalidFbootState
@@ -310,8 +305,10 @@ class UaManagerFboot(peer.UaPeer):
         file.close()
 
     def stop_ua(self):
+        # if we need this?? 2/2
         # stops the monitor thread
-        self.monitor_hardware.stop()
+        # self.monitor_hardware.stop()
+
         # stops the configuration work
         for res in self.config_dictionary.values():
             res.stop_work()
