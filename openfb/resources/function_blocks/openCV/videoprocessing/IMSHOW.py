@@ -3,7 +3,7 @@ from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVide
 import queue
 import tkinter as tk
 import threading
-
+import logging
 
 class IMSHOW:
     
@@ -29,8 +29,7 @@ class IMSHOW:
             self.root.after(1000, self.check_queue)
             self.root.withdraw()
         except Exception as e:
-            with open("/tmp/IMSHOW_error.log", "a") as f:
-                f.write(f"Error Tkinter: {e}\n")
+            logging.error(f"Error Tkinter: {e}")
         self.root.mainloop()
         
     def on_close(self):
@@ -59,7 +58,7 @@ class IMSHOW:
                         self.label.config(image=tk_img)
                         self.label.image = tk_img 
             except Exception as e:
-                print(f"Ошибка при обработке кадра: {e}")
+                logging.error(f"Error processing frame: {e}")
 
         self.root.after(20, self.check_queue)
     
@@ -82,8 +81,8 @@ class IMSHOW:
                     self.root.update_idletasks()
                     self.root.update()
             except Exception as e:
-                print(f"Ошибка отрисовки кадра: {e}")
-    
+                logging.error(f"Error rendering frame: {e}")
+
     def schedule(self, event_input_name, event_input_value, QI, QUEUE_ID, IMG_ID):
         if event_input_name == 'REQ':
             queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)

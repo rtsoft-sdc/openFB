@@ -1,3 +1,4 @@
+import logging
 import cv2
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory 
 
@@ -12,7 +13,7 @@ class CVCAMERA:
             if self.cap is not None and not isinstance(self.cap, str):
                 self.cap.release()
         except Exception as e:
-            print(f"Error releasing camera: {e}")
+            logging.error(f"Error releasing camera: {e}")
 
     def schedule(self, event_input_name, event_input_value, QI, ID, QUEUE_ID):
         if event_input_name == 'INIT':
@@ -32,7 +33,7 @@ class CVCAMERA:
         elif event_input_name == 'REQ':
             if QI and self.cap is not None and self.cap.isOpened():
                 ret, frame = self.cap.read()
-                if ret == True:
+                if ret:
                     current_id = self.imgIDcounter
                     GlobalVideoMemory.set(queue_id=self.QUEUE_ID, img_id=current_id, frame=frame)
                     self.imgIDcounter += 1

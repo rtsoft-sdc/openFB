@@ -23,7 +23,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
-			<VarDeclaration Name="DICTIONARY" Type="STRING"/>
+			<VarDeclaration Name="DICTIONARY" Type="STRING" Comment="Dictionary format: 4X4_50, 6x6_250, 6*6_250. Case insensitive"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="STATUS" Type="STRING"/>

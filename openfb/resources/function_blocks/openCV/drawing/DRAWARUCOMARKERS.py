@@ -42,8 +42,7 @@ class DRAWARUCOMARKERS:
                     return event_input_value, "OK", IMG_ID
                             
                 except Exception as e:
-                    print(f"Error in DRAWARUCOMARKERS: {e}")
-                    return event_input_value, "ERROR drawarucomarkers", None
+                    return event_input_value, f"ERROR drawarucomarkers {e}", None
 
     def __del__(self):
         pass
