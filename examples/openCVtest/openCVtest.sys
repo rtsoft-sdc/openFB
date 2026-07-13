@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="openCVtest">
+	<VersionInfo Version="1.0" Author="alex" Date="2026-06-16">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<Application Name="openCVtestApp">
+		<SubAppNetwork>
+			<FB Name="IMSHOW" Type="IMSHOW" x="3200" y="-600">
+				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
+			</FB>
+			<FB Name="DRAWARUCOMARKERS" Type="DRAWARUCOMARKERS" x="1700" y="-700">
+				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
+				<Parameter Name="DRAWCORNERS" Value="TRUE"/>
+			</FB>
+			<FB Name="CVCAMERA" Type="CVCAMERA" x="-1300" y="-700">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="DEVICE_ID" Value="'0'"/>
+				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
+			</FB>
+			<FB Name="ARUCODETECTOR_1" Type="ARUCODETECTOR" x="0" y="-800">
+				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
+			</FB>
+			<FB Name="OF_E_CYCLE" Type="OF_E_CYCLE" x="-2600" y="-500">
+			</FB>
+			<FB Name="MBUS_8_tcp" Type="MBUS_8_tcp" x="-700" y="300">
+			</FB>
+			<EventConnections>
+				<Connection Source="DRAWARUCOMARKERS.CNF" Destination="IMSHOW.REQ" dx1="429.41"/>
+				<Connection Source="OF_E_CYCLE.EO" Destination="CVCAMERA.INIT" dx1="288.24"/>
+				<Connection Source="ARUCODETECTOR_1.CNF" Destination="DRAWARUCOMARKERS.REQ" dx1="229.41"/>
+				<Connection Source="CVCAMERA.CNF" Destination="ARUCODETECTOR_1.REQ" dx1="411.76"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="DRAWARUCOMARKERS.IMG_IDO" Destination="IMSHOW.IMG_ID" dx1="429.41"/>
+				<Connection Source="ARUCODETECTOR_1.IDS" Destination="DRAWARUCOMARKERS.IDS"/>
+				<Connection Source="ARUCODETECTOR_1.CORNERS" Destination="DRAWARUCOMARKERS.CORNERS"/>
+				<Connection Source="ARUCODETECTOR_1.IMG_IDO" Destination="DRAWARUCOMARKERS.IMG_ID" dx1="229.41"/>
+				<Connection Source="CVCAMERA.IMG_ID" Destination="ARUCODETECTOR_1.IMG_ID" dx1="411.76"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="2676.47" y="1223.53">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="2988.24" y="294.12" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="231,188,122"/>
+	</Segment>
+	<Mapping From="openCVtestApp.IMSHOW" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="openCVtestApp.DRAWARUCOMARKERS" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="openCVtestApp.CVCAMERA" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="openCVtestApp.OF_E_CYCLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="openCVtestApp.ARUCODETECTOR_1" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>
