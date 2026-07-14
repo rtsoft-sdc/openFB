@@ -28,7 +28,7 @@ if exist "deb-packaging\openfb\opt\openfb\" (
     del /f /q "deb-packaging\openfb\opt\openfb\openfb-*-py3-none-any.whl" 2>nul
 )
 
-if exist "openfb\resources\data_model.fboot" del /f /q "openfb\resources\data_model.fboot" 2>nul
+if exist "openfb\resources\fboots\data_model.fboot" del /f /q "openfb\resources\fboots\data_model.fboot" 2>nul
 if exist "openfb\resources\error_list.log" del /f /q "openfb\resources\error_list.log" 2>nul
 
 echo Project cleanup completed.
