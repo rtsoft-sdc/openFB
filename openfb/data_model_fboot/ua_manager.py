@@ -218,7 +218,7 @@ class UaManagerFboot(peer.UaPeer):
                                     })
 
                             if self.folders == {}:
-                                app_name = (var.attrib['Name']).split('.')[0]
+                                #app_name = (var.attrib['Name']).split('.')[0]
                                 app_name = (list(self.opc_mapped_vars.keys())[0]).split('.')[0]
                                 folder_idx, folder_path, folder_list = utils.default_folder(self, self.base_idx, self.ROOT_PATH, self.ROOT_LIST, app_name)
                                 self.folders['FunctionBlocks'] = {

@@ -85,9 +85,12 @@ class IMSHOW:
 
     def schedule(self, event_input_name, event_input_value, QI, QUEUE_ID, IMG_ID):
         if event_input_name == 'REQ':
-            queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)
-            self.frame_queue.put((queue_id, IMG_ID, self.title))
-            return event_input_value, True, "Image queued successfully.", IMG_ID
+            if QI:
+                queue_id = GlobalVideoMemory.get_queue_id(QUEUE_ID)
+                self.frame_queue.put((queue_id, IMG_ID, self.title))
+                return event_input_value, True, "Image queued successfully.", IMG_ID
+            else:
+                return event_input_value, False, "Function block is disabled.", None
         return event_input_value, False, "Invalid event input name.", None
 
     def __del__(self):
