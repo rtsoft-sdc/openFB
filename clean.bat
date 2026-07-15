@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 chcp 65001 >nul
 
-echo Cleaning up project directoyries...
+echo Cleaning up project directories...
 
 for /d /r %%i in (__pycache__) do (
     if exist "%%i" (

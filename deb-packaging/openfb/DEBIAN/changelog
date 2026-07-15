@@ -8,8 +8,6 @@ OpenFB (1.2.0) stable; urgency=low
       WARP_PERSPECTIVE, WARP_POLAR
     - Videoprocessing: CAMERA, IMREAD, IMWRITE, IMSHOW, VIDEOWRITER
   * Added OpenCV usage examples.
-  * Added OPC UA client block.
-  * Added MQTT client block.
   * Added built-in IDE project converter utility for migration from 
     Version 2.0 to Version 3.0.
   * Updated OPC UA variables publication format (the structure of the 

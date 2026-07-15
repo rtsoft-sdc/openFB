@@ -16,8 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   * **Tranforms:** ADAPTIVE_THRESHOLD, CVT_COLOR, RESIZE, THRESHOLD, WARP_AFFINE, WARP_PERSPECTIVE, WARP_POLAR
   * **Videoprocessing:** CAMERA, IMREAD, IMWRITE, IMSHOW, VIDEOWRITER
 - OpenCV usage examples
-- OPC UA client block
-- MQTT client block
 - Build-in IDE project converter utility — migration from `Version 2.0` to `Version 3.0`.
 
 ### Changed
