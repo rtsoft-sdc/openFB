@@ -19,6 +19,7 @@ class UaObject:
         self.folders = dict()
         self.ua_vars = dict()
         self.mapped_ua_vars = opc_mapping
+        self.ua_write_callback_handles = []
         # create object
         fb_node_name = fb_name.split('.')[-1]
         self.obj_idx = '{0}.{1}'.format(ua_folder.get('idx'), fb_node_name)
@@ -48,6 +49,7 @@ class UaObject:
                                                         var['Type'], 
                                                         -1)
                     self.ua_vars[var['Name']] = ua_var
+                    self.subscribe_to_ua_write(ua_var, var["Name"])
                 except KeyError:
                     raise self.InvalidFbtState
 
@@ -73,6 +75,24 @@ class UaObject:
                     for conn in conns:
                         self.ua_server.config.create_connection('{0}.{1}'.format(conn.destination_fb.fb_name, conn.value_name), 
                                                     '{0}.{1}'.format(self.fb_name, conn_name))
+
+    def subscribe_to_ua_write(self, ua_var, var_name):
+        status, handle = self.ua_server.iserver.aspace.add_datachange_callback(
+            ua_var.nodeid,
+            ua.AttributeIds.Value,
+            lambda _handle, data_value: self.update_fb_input(var_name, data_value))
+
+        if status.is_good():
+            self.ua_write_callback_handles.append(handle)
+        else:
+            logging.warning('Could not subscribe to OPC-UA writes for %s.%s: %s',
+                            self.fb_name, var_name, status)
+
+    def update_fb_input(self, var_name, data_value):
+        value = data_value.Value.Value
+        fb = self.ua_server.config.get_fb(self.fb_name)
+        fb.set_attr(var_name, new_value=value)
+        logging.info('Updated %s.%s from an OPC-UA write', self.fb_name, var_name)
 
     def update_variables(self):
         # gets the function block
