@@ -13,30 +13,29 @@
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 				<Parameter Name="DRAWCORNERS" Value="TRUE"/>
 			</FB>
-			<FB Name="CVCAMERA" Type="CVCAMERA" x="-1300" y="-700">
+			<FB Name="ARUCODETECTOR_1" Type="ARUCODETECTOR" x="0" y="-800">
+				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
+			</FB>
+			<FB Name="CAMERA" Type="CAMERA" x="-1400" y="-700">
 				<Parameter Name="QI" Value="TRUE"/>
 				<Parameter Name="DEVICE_ID" Value="'0'"/>
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 			</FB>
-			<FB Name="ARUCODETECTOR_1" Type="ARUCODETECTOR" x="0" y="-800">
-				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
-			</FB>
-			<FB Name="OF_E_CYCLE" Type="OF_E_CYCLE" x="-2600" y="-500">
-			</FB>
-			<FB Name="MBUS_8_tcp" Type="MBUS_8_tcp" x="-700" y="300">
+			<FB Name="OF_E_CYCLE" Type="OF_E_CYCLE" x="-2700" y="-600">
+				<Parameter Name="DT" Value="T#100s"/>
 			</FB>
 			<EventConnections>
 				<Connection Source="DRAWARUCOMARKERS.CNF" Destination="IMSHOW.REQ" dx1="429.41"/>
-				<Connection Source="OF_E_CYCLE.EO" Destination="CVCAMERA.INIT" dx1="288.24"/>
 				<Connection Source="ARUCODETECTOR_1.CNF" Destination="DRAWARUCOMARKERS.REQ" dx1="229.41"/>
-				<Connection Source="CVCAMERA.CNF" Destination="ARUCODETECTOR_1.REQ" dx1="411.76"/>
+				<Connection Source="CAMERA.CNF" Destination="ARUCODETECTOR_1.REQ" dx1="241.18"/>
+				<Connection Source="OF_E_CYCLE.EO" Destination="CAMERA.REQ"/>
 			</EventConnections>
 			<DataConnections>
 				<Connection Source="DRAWARUCOMARKERS.IMG_IDO" Destination="IMSHOW.IMG_ID" dx1="429.41"/>
 				<Connection Source="ARUCODETECTOR_1.IDS" Destination="DRAWARUCOMARKERS.IDS"/>
 				<Connection Source="ARUCODETECTOR_1.CORNERS" Destination="DRAWARUCOMARKERS.CORNERS"/>
 				<Connection Source="ARUCODETECTOR_1.IMG_IDO" Destination="DRAWARUCOMARKERS.IMG_ID" dx1="229.41"/>
-				<Connection Source="CVCAMERA.IMG_ID" Destination="ARUCODETECTOR_1.IMG_ID" dx1="411.76"/>
+				<Connection Source="CAMERA.IMG_ID" Destination="ARUCODETECTOR_1.IMG_ID" dx1="241.18"/>
 			</DataConnections>
 		</SubAppNetwork>
 	</Application>
@@ -54,9 +53,9 @@
 	</Segment>
 	<Mapping From="openCVtestApp.IMSHOW" To="FORTE_PC.EMB_RES"/>
 	<Mapping From="openCVtestApp.DRAWARUCOMARKERS" To="FORTE_PC.EMB_RES"/>
-	<Mapping From="openCVtestApp.CVCAMERA" To="FORTE_PC.EMB_RES"/>
-	<Mapping From="openCVtestApp.OF_E_CYCLE" To="FORTE_PC.EMB_RES"/>
 	<Mapping From="openCVtestApp.ARUCODETECTOR_1" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="openCVtestApp.CAMERA" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="openCVtestApp.OF_E_CYCLE" To="FORTE_PC.EMB_RES"/>
 	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
 	</Link>
 </System>

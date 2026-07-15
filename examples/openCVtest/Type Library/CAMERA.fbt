@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<FBType Name="CVCAMERA" Comment="Camera OpenCV function block">
+<FBType Name="CAMERA" Comment="Camera OpenCV function block">
 	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
 	</VersionInfo>
 	<InterfaceList>

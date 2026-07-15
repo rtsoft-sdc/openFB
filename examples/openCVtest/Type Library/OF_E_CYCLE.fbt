@@ -16,5 +16,4 @@
 			<VarDeclaration Name="DT" Type="TIME" Comment="cycle time"/>
 		</InputVars>
 	</InterfaceList>
-	<Attribute Name="eclipse4diac::core::TypeHash" Value="''"/>
 </FBType>
