@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- Partial implementation of the OpenCV library (up to version `4.13`):
+- Partial implementation of the OpenCV library:
   * **Drawing:** CIRCLE, FILLPOLY, LINE, PUT_TEXT, RECTANGLE, DRAW_ARUCO_MARKERS
-  * **Filtering:** BLUR, BUILD_PYRAMID, DILATE, ERODE, GAUSSIAN_BLUR, LAPLACIAN, MEDII_BLUR, MORPHOLOGY_EX, SCHARR, SOBEL
+  * **Filtering:** BLUR, BUILD_PYRAMID, DILATE, ERODE, GAUSSIAN_BLUR, LAPLACIAN, MEDIAN_BLUR, MORPHOLOGY_EX, SCHARR, SOBEL
   * **Detectors:** ARUCO_DETECTOR, CORNER_HARRIS, GOOD_FEATURES_TO_TRACK
   * **Tranforms:** ADAPTIVE_THRESHOLD, CVT_COLOR, RESIZE, THRESHOLD, WARP_AFFINE, WARP_PERSPECTIVE, WARP_POLAR
   * **Videoprocessing:** CAMERA, IMREAD, IMWRITE, IMSHOW, VIDEOWRITER
