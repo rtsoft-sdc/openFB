@@ -7,6 +7,7 @@
 			<Event Name="REQ" Type="Event">
 				<With Var="QUEUE_ID"/>
 				<With Var="IMG_ID"/>
+				<With Var="MARKERCOUNT"/>
 				<With Var="CORNERS"/>
 				<With Var="IDS"/>
 				<With Var="DRAWCORNERS"/>
@@ -22,6 +23,7 @@
 		<InputVars>
 			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
 			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="MARKERCOUNT" Type="INT" Comment="Number of detected Aruco markers"/>
 			<VarDeclaration Name="CORNERS" Type="INT" ArraySize="1024" Comment="Array of corner points"/>
 			<VarDeclaration Name="IDS" Type="INT" ArraySize="1024" Comment="Array of marker IDs"/>
 			<VarDeclaration Name="DRAWCORNERS" Type="BOOL" Comment="Bool flag to Draw Corners"/>

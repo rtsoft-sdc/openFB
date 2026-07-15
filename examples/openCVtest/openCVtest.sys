@@ -6,14 +6,15 @@
 	</CompilerInfo>
 	<Application Name="openCVtestApp">
 		<SubAppNetwork>
-			<FB Name="IMSHOW" Type="IMSHOW" x="3200" y="-600">
+			<FB Name="IMSHOW" Type="IMSHOW" x="3500" y="-200">
+				<Parameter Name="QI" Value="TRUE"/>
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 			</FB>
 			<FB Name="DRAWARUCOMARKERS" Type="DRAWARUCOMARKERS" x="1700" y="-700">
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 				<Parameter Name="DRAWCORNERS" Value="TRUE"/>
 			</FB>
-			<FB Name="ARUCODETECTOR_1" Type="ARUCODETECTOR" x="0" y="-800">
+			<FB Name="ARUCODETECTOR_1" Type="ARUCODETECTOR" x="-300" y="-400">
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 			</FB>
 			<FB Name="CAMERA" Type="CAMERA" x="-1400" y="-700">
@@ -22,20 +23,21 @@
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 			</FB>
 			<FB Name="OF_E_CYCLE" Type="OF_E_CYCLE" x="-2700" y="-600">
-				<Parameter Name="DT" Value="T#100s"/>
+				<Parameter Name="DT" Value="T#50ms"/>
 			</FB>
 			<EventConnections>
-				<Connection Source="DRAWARUCOMARKERS.CNF" Destination="IMSHOW.REQ" dx1="429.41"/>
+				<Connection Source="DRAWARUCOMARKERS.CNF" Destination="IMSHOW.REQ" dx1="247.06"/>
 				<Connection Source="ARUCODETECTOR_1.CNF" Destination="DRAWARUCOMARKERS.REQ" dx1="229.41"/>
-				<Connection Source="CAMERA.CNF" Destination="ARUCODETECTOR_1.REQ" dx1="241.18"/>
+				<Connection Source="CAMERA.CNF" Destination="ARUCODETECTOR_1.REQ" dx1="111.76"/>
 				<Connection Source="OF_E_CYCLE.EO" Destination="CAMERA.REQ"/>
 			</EventConnections>
 			<DataConnections>
-				<Connection Source="DRAWARUCOMARKERS.IMG_IDO" Destination="IMSHOW.IMG_ID" dx1="429.41"/>
-				<Connection Source="ARUCODETECTOR_1.IDS" Destination="DRAWARUCOMARKERS.IDS"/>
-				<Connection Source="ARUCODETECTOR_1.CORNERS" Destination="DRAWARUCOMARKERS.CORNERS"/>
+				<Connection Source="DRAWARUCOMARKERS.IMG_IDO" Destination="IMSHOW.IMG_ID" dx1="247.06"/>
+				<Connection Source="ARUCODETECTOR_1.IDS" Destination="DRAWARUCOMARKERS.IDS" dx1="500"/>
+				<Connection Source="ARUCODETECTOR_1.CORNERS" Destination="DRAWARUCOMARKERS.CORNERS" dx1="500"/>
 				<Connection Source="ARUCODETECTOR_1.IMG_IDO" Destination="DRAWARUCOMARKERS.IMG_ID" dx1="229.41"/>
-				<Connection Source="CAMERA.IMG_ID" Destination="ARUCODETECTOR_1.IMG_ID" dx1="241.18"/>
+				<Connection Source="CAMERA.IMG_ID" Destination="ARUCODETECTOR_1.IMG_ID" dx1="111.76"/>
+				<Connection Source="ARUCODETECTOR_1.MARKERCOUNT" Destination="DRAWARUCOMARKERS.MARKERCOUNT" dx1="447.06"/>
 			</DataConnections>
 		</SubAppNetwork>
 	</Application>

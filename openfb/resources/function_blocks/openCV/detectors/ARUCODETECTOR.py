@@ -1,10 +1,11 @@
 import cv2
+import numpy as np
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class ARUCODETECTOR():
     def __init__(self):
         self.detector = None
-        self.aruco_dict = cv2.aruco.DICT_6X6_250
+        self.aruco_dict = cv2.aruco.DICT_6X6_250        
         
     def schedule(self, event_input_name, event_input_value, QUEUE_ID, IMG_ID, DICTIONARY): 
         if event_input_name == 'REQ':
@@ -20,13 +21,17 @@ class ARUCODETECTOR():
                         aruco_dict = cv2.aruco.getPredefinedDictionary(self.aruco_dict)
                         self.detector = cv2.aruco.ArucoDetector(aruco_dict)
                                 
-                    corners, ids, rejected = self.detector.detectMarkers(img)
-                    if corners is None or ids is None or len(corners) == 0:
-                        corners, ids, rejected = [0], [0], [0]
-                    return event_input_value, "OK", IMG_ID, len(corners), corners, ids, rejected
+                    corners, ids, _ = self.detector.detectMarkers(img)
+                    if ids is not None and len(corners) > 0:
+                        corners = np.array(corners).flatten().tolist()
+                        ids = ids.flatten().tolist()
+                        markercount = len(ids)
+                    else:
+                        markercount, corners, ids = 0, [0], [0]
+                    return event_input_value, "OK", IMG_ID, markercount, corners, ids
                 except Exception as e:
-                    return event_input_value, f"ERROR arucodetector {e}", None, None, None, None, None
-            return event_input_value, "ERROR: no image found", None, None, None, None, None
+                    return event_input_value, f"ERROR arucodetector {e}", None, None, None, None
+            return event_input_value, "ERROR: no image found", None, None, None, None
 
     def __del__(self):
         pass
