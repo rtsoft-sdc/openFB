@@ -82,7 +82,8 @@ class FBResources:
                     logging.error('Unknown data type "{0}" assigned to variable {1}'.format(varDec.get('Type'), varDec.get('Name')))
                     logging.error('Defaulting to String')
                     varDec.set('Type', 'String')
-
+                if varDec.get('ArraySize') is not None:
+                    varDec.set('Type', "arr_" + varDec.get('Type')) #crutch to handle array types
 
         return root, fb_obj
 

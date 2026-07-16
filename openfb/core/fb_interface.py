@@ -85,7 +85,11 @@ class FBInterface:
                             try:
                                 var_name = var.attrib['Name']
                                 var_type = var.attrib['Type']
-                                var_value = TypeRegistry.get_default_value(var_type)
+                                var_value = None
+                                if var_type.startswith('arr_'):
+                                    var_value = [TypeRegistry.get_default_value(var_type[4:])]
+                                else:
+                                    var_value = TypeRegistry.get_default_value(var_type)
                                 try:
                                     var_value = var.attrib['InitialValue']
                                 except:

@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import logging
 from openfb.resources.function_blocks.openCV.globalVideoMemory import GlobalVideoMemory
 
 class DRAWARUCOMARKERS:
@@ -47,7 +48,7 @@ class DRAWARUCOMARKERS:
                     return event_input_value, "OK", IMG_ID
                             
                 except Exception as e:
-                    print(f"Error in DRAWARUCOMARKERS: {e}")
+                    logging.error(f"Error in DRAWARUCOMARKERS: {e}")
                     return event_input_value, f"ERROR drawarucomarkers {e}", None
 
     def __del__(self):

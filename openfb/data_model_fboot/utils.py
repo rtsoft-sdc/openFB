@@ -403,41 +403,41 @@ class TypeConverter:
             return TypeRegistry.get_default_value(canonical_target)
     
     @classmethod
+    def _parse_string_array(cls, strarr: str) -> list[str]:
+        if len(strarr) >= 2:
+            inner = strarr[1:-1].strip()
+        else:
+            return []
+        elements = [v.strip() for v in inner.split(',')] if inner else []
+        parsed_values = []
+        for elem in elements:
+            match = re.fullmatch(r'(\d+)\(([^()]+)\)', elem)
+            if match:
+                count = int(match.group(1))
+                val = match.group(2)
+                parsed_values.extend([val] * count)
+            else:
+                parsed_values.append(elem)
+        return parsed_values
+    
+    @classmethod
     def convert(cls, value: Any, target_type: str, source_type: str | None = None) -> Any | tuple[Any, str]:
         if value == '*':
-            return
-        is_array = False
-        array_values = value
-        if(isinstance(value, str)):
-            s = value.strip()
-            if s.startswith('[') and s.endswith(']'):    
-                s = s[1:-1].strip()
-                elements = [v.strip() for v in s.split(',')] if s else []
-                is_array = True
-                array_values = []
-                
-                if re.fullmatch(r'\d+\(0\)', elements[-1]):
-                    elements.pop()
-                    
-                for elem in elements:
-                    match = re.fullmatch(r'(\d+)\(([^()]+)\)', elem)
-                    if match:
-                        count = int(match.group(1))
-                        val = match.group(2)
-                        array_values.extend([val] * count)
-                    else:
-                        array_values.append(elem)        
-         
-        canonical_target = TypeRegistry.get_canonical_name(target_type) or target_type  
-                
+            return None
+        canonical_target = TypeRegistry.get_canonical_name(target_type) or target_type
+        is_array = canonical_target.startswith('arr_')
+        scalar_target = canonical_target[4:] if is_array else canonical_target
         if is_array:
-            converted_array = []
-            for item in array_values:
-                converted_item = cls._convert_scalar(item, canonical_target, source_type)
-                converted_array.append(converted_item)
-            return converted_array
+            if isinstance(value, str):
+                array_values = cls._parse_string_array(value)
+            elif isinstance(value, list):
+                array_values = value
         else:
-            return cls._convert_scalar(value, canonical_target, source_type)
+            array_values = value
+                         
+        if is_array:
+            return [cls._convert_scalar(item, scalar_target, source_type) for item in array_values]
+        return cls._convert_scalar(value, scalar_target, source_type)
         
 UA_TYPES = TypeRegistry.get_ua_types_dict()
 XML_4DIAC = TypeRegistry.get_xml_4diac_dict()

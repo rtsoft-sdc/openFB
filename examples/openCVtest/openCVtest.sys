@@ -6,15 +6,17 @@
 	</CompilerInfo>
 	<Application Name="openCVtestApp">
 		<SubAppNetwork>
-			<FB Name="IMSHOW" Type="IMSHOW" x="3500" y="-200">
+			<FB Name="IMSHOW" Type="IMSHOW" x="3700" y="-200">
 				<Parameter Name="QI" Value="TRUE"/>
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 			</FB>
-			<FB Name="DRAWARUCOMARKERS" Type="DRAWARUCOMARKERS" x="1700" y="-700">
+			<FB Name="DRAWARUCOMARKERS" Type="DRAWARUCOMARKERS" x="1900" y="-700">
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
+				<Parameter Name="CORNERS" Value="[1, 1023(0)]"/>
+				<Parameter Name="IDS" Value="[1024(0)]"/>
 				<Parameter Name="DRAWCORNERS" Value="TRUE"/>
 			</FB>
-			<FB Name="ARUCODETECTOR_1" Type="ARUCODETECTOR" x="-300" y="-400">
+			<FB Name="ARUCODETECTOR_1" Type="ARUCODETECTOR" x="-200" y="-600">
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 			</FB>
 			<FB Name="CAMERA" Type="CAMERA" x="-1400" y="-700">
@@ -28,12 +30,11 @@
 			<EventConnections>
 				<Connection Source="DRAWARUCOMARKERS.CNF" Destination="IMSHOW.REQ" dx1="247.06"/>
 				<Connection Source="ARUCODETECTOR_1.CNF" Destination="DRAWARUCOMARKERS.REQ" dx1="229.41"/>
-				<Connection Source="CAMERA.CNF" Destination="ARUCODETECTOR_1.REQ" dx1="111.76"/>
+				<Connection Source="CAMERA.CNF" Destination="ARUCODETECTOR_1.REQ"/>
 				<Connection Source="OF_E_CYCLE.EO" Destination="CAMERA.REQ"/>
 			</EventConnections>
 			<DataConnections>
 				<Connection Source="DRAWARUCOMARKERS.IMG_IDO" Destination="IMSHOW.IMG_ID" dx1="247.06"/>
-				<Connection Source="ARUCODETECTOR_1.IDS" Destination="DRAWARUCOMARKERS.IDS" dx1="500"/>
 				<Connection Source="ARUCODETECTOR_1.CORNERS" Destination="DRAWARUCOMARKERS.CORNERS" dx1="500"/>
 				<Connection Source="ARUCODETECTOR_1.IMG_IDO" Destination="DRAWARUCOMARKERS.IMG_ID" dx1="229.41"/>
 				<Connection Source="CAMERA.IMG_ID" Destination="ARUCODETECTOR_1.IMG_ID" dx1="111.76"/>
