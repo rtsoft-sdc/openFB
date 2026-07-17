@@ -41,12 +41,17 @@ class TcpServer:
             self.active_threads.append(thread)
         except socket.timeout:
             return
+        except OSError as e:
+            if e.errno == 9: # closed from other thread
+                logging.info("Socket has been closed, stopping server.")
+                return
             
     def stop_server(self):
+        
         try:
             self.sock.close()
-        except Exception:
-            pass
+        except Exception as e:
+            logging.error("Exception while closing socket: {}".format(e))
             
         for thread in self.active_threads:
             if thread.is_alive():

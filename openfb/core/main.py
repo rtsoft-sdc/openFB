@@ -103,19 +103,32 @@ def main():
     is_running = threading.Event()
     
     def stop_server():
+        if is_running.is_set():
+            return
         print("[INFO]\tStopping server...")
-        m.manager_ua_fboot.stop_ua()
-        hand.stop_server()
-        is_running.set()
 
-    signal.signal(signal.SIGINT, lambda sig, frame: stop_server())
+        is_running.set()
+        try:
+            m.manager_ua_fboot.stop_ua()
+        except Exception as e:
+            logging.error("Exception while stopping UA manager: {}".format(e))
+        try:
+            hand.stop_server()
+        except Exception as e:
+            logging.error("Exception while stopping TCP server: {}".format(e))
+
+    signal.signal(signal.SIGINT, stop_server)
+    signal.signal(signal.SIGTERM, stop_server)
 
     try:
         # handles every client
         while not is_running.is_set():
             hand.handle_client()
-    except KeyboardInterrupt:
-        logging.info('interrupted server')
+    except Exception as e:
+        logging.critical("Server exception occurred: {}".format(e))
+    finally:
+        stop_server()
+        logging.info("Server stopped.")
         sys.exit(0)
 
         

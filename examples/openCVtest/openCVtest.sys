@@ -13,7 +13,6 @@
 			<FB Name="DRAWARUCOMARKERS" Type="DRAWARUCOMARKERS" x="1900" y="-700">
 				<Parameter Name="QUEUE_ID" Value="'testAD'"/>
 				<Parameter Name="CORNERS" Value="[1, 1023(0)]"/>
-				<Parameter Name="IDS" Value="[1024(0)]"/>
 				<Parameter Name="DRAWCORNERS" Value="TRUE"/>
 			</FB>
 			<FB Name="ARUCODETECTOR_1" Type="ARUCODETECTOR" x="-200" y="-600">
