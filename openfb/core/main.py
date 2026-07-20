@@ -102,7 +102,7 @@ def main():
 
     is_running = threading.Event()
     
-    def stop_server():
+    def stop_server(signum=None, frame=None):
         if is_running.is_set():
             return
         print("[INFO]\tStopping server...")
