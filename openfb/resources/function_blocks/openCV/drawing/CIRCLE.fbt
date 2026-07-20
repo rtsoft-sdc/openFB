@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="CIRCLE" Comment="openCV circle drawer" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="QUEUE_ID"/>
+				<With Var="IMG_ID"/>
+				<With Var="CENTER"/>
+				<With Var="RADIUS"/>
+				<With Var="COLOR"/>
+				<With Var="THICKNESS"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="STATUS"/>
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="CENTER" Type="INT" ArraySize="2" Comment="Center of the circle [x, y]"/>
+			<VarDeclaration Name="RADIUS" Type="INT"/>
+			<VarDeclaration Name="COLOR" Type="INT" ArraySize="3" Comment="Color of the circle [B, G, R]"/>
+			<VarDeclaration Name="THICKNESS" Type="INT" Comment="Thickness of the circle outline"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB><Algorithm Name="REQ"><ST>
+	</ST></Algorithm></SimpleFB>
+</FBType>

@@ -1,9 +1,11 @@
 import logging
 import logging.handlers
 import os
+import signal
 import sys
 import argparse
 from importlib.resources import files
+import threading
 
 from openfb.communication import tcp_server
 from openfb.core import manager
@@ -98,16 +100,37 @@ def main():
     hand = tcp_server.TcpServer(address, port_diac, 10, m)
     print("[INFO]\tOpenfb is up and running on {0}:{1}".format(address, port_diac))
 
+    is_running = threading.Event()
+    
+    def stop_server(signum=None, frame=None):
+        if is_running.is_set():
+            return
+        print("[INFO]\tStopping server...")
+
+        is_running.set()
+        try:
+            m.manager_ua_fboot.stop_ua()
+        except Exception as e:
+            logging.error("Exception while stopping UA manager: {}".format(e))
+        try:
+            hand.stop_server()
+        except Exception as e:
+            logging.error("Exception while stopping TCP server: {}".format(e))
+
+    signal.signal(signal.SIGINT, stop_server)
+    signal.signal(signal.SIGTERM, stop_server)
+
     try:
         # handles every client
-        while True:
+        while not is_running.is_set():
             hand.handle_client()
-    except KeyboardInterrupt:
-        logging.info('interrupted server')
-        m.manager_ua_fboot.stop_ua()
-        hand.stop_server()
-
+    except Exception as e:
+        logging.critical("Server exception occurred: {}".format(e))
+    finally:
+        stop_server()
+        logging.info("Server stopped.")
         sys.exit(0)
 
+        
 if __name__ == "__main__":
     main()
