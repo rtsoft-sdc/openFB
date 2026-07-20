@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="WARPPERSPECTIVE" Comment="openCV warp perspective" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="QUEUE_ID"/>
+				<With Var="IMG_ID"/>
+				<With Var="TRANSFORMATION_MATRIX"/>
+				<With Var="DSIZE"/>
+				<With Var="FLAGS"/>
+				<With Var="BORDERMODE"/>
+				<With Var="BORDERVALUE"/>
+				
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="STATUS"/>
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="TRANSFORMATION_MATRIX" Type="REAL" ArraySize="9" Comment="Array will be transformed into a 3x3 transformation matrix"/>
+			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2" Comment="Destination size [width, height]"/>
+			<VarDeclaration Name="FLAGS" Type="INT" Comment="0: INTER_NEAREST, 1: INTER_LINEAR, 2: INTER_CUBIC, 3: INTER_AREA, 4: INTER_LANCZOS4"/>
+			<VarDeclaration Name="BORDERMODE" Type="INT" Comment="0: BORDER_CONSTANT, 1: BORDER_REPLICATE, 2: BORDER_REFLECT, 3: BORDER_WRAP, 4: BORDER_REFLECT_101, 5: BORDER_TRANSPARENT, 6: BORDER_REFLECT101, 7: BORDER_DEFAULT, 8: BORDER_ISOLATED"/>
+			<VarDeclaration Name="BORDERVALUE" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB><Algorithm Name="REQ"><ST>
+	</ST></Algorithm></SimpleFB>
+</FBType>

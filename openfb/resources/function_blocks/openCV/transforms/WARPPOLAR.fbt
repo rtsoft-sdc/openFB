@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="WARPPOLAR" Comment="openCV warp polar" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="QUEUE_ID"/>
+				<With Var="IMG_ID"/>
+				<With Var="DSIZE"/>
+				<With Var="CENTER"/>
+				<With Var="MAXRADIUS"/>
+				<With Var="FLAGS"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="STATUS"/>
+				<With Var="IMG_IDO"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="DSIZE" Type="INT" ArraySize="2" Comment="Size of the output image [width, height]"/>
+			<VarDeclaration Name="CENTER" Type="REAL" ArraySize="2" Comment="Center of the polar transformation [x, y]"/>
+			<VarDeclaration Name="MAXRADIUS" Type="REAL" Comment="Maximum radius of the polar transformation"/>
+			<VarDeclaration Name="FLAGS" Type="INT" ArraySize="2" Comment="Combination of flags for the warp operation. [interpolation, warp_polar]"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB><Algorithm Name="REQ"><ST>
+	</ST></Algorithm></SimpleFB>
+</FBType>
+

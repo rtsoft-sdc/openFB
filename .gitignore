@@ -6,7 +6,7 @@ build/
 dist/
 *.egg-info
 .venv
-
+venv/
 # Build artifacts: Debian package and Python wheel
 *.deb
 *.whl
