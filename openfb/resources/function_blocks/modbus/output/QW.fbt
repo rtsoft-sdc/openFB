@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="QW" Comment="Output service interface FB for word output">
+  <Identification Standard="IEC 61499-1" />
+  <VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>  
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Service Initialization">
+				<With Var="QI"/>
+				<With Var="PARAMS"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Service Request">
+				<With Var="QI"/>
+				<With Var="OUT"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+			<VarDeclaration Name="PARAMS" Type="STRING" Comment="Service Parameters" />
+			<VarDeclaration Name="OUT" Type="WORD" Comment="Output data to resource" />
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+			<VarDeclaration Name="STATUS" Type="STRING" Comment="Service Status" />
+		</OutputVars>
+	</InterfaceList>
+</FBType>
