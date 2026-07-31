@@ -1,15 +1,14 @@
 from openfb.resources.function_blocks.modbus.ModbusIO import ModbusIO
 
 class IW(ModbusIO):
-
     def schedule(self, event_input_name, event_input_value, QI, PARAMS):
         if event_input_name == "INIT":
             self._init_block(QI, PARAMS)
-            return event_input_value, None, self.QO, self.STATUS, 0
+            return event_input_value, None, self.QO, self.STATUS, None
 
         if event_input_name == "REQ":
             if not self._check_ready(QI):
-                return None, None, False, self.STATUS, 0
+                return None, None, False, self.STATUS, None
 
             try:
                 rt = self.register_type.lower()
@@ -31,7 +30,7 @@ class IW(ModbusIO):
 
                 if raw_val is None:
                     self.STATUS = "READ ERROR: No response or invalid address"
-                    return None, None, False, self.STATUS, 0
+                    return None, None, False, self.STATUS, None
 
                 in_val = int(raw_val) & 0xFFFF
                 self.STATUS = "OK"
@@ -39,4 +38,4 @@ class IW(ModbusIO):
 
             except Exception as e:
                 self.STATUS = f"REQ ERROR: {str(e)}"
-                return None, None, False, self.STATUS, 0
+                return None, None, False, self.STATUS, None

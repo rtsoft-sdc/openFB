@@ -5,11 +5,11 @@ class IX(ModbusIO):
     def schedule(self, event_input_name, event_input_value, QI, PARAMS):
         if event_input_name == "INIT":
             success = self._init_block(QI, PARAMS)
-            return event_input_value, None, self.QO, self.STATUS, False
+            return event_input_value, None, self.QO, self.STATUS, None
 
         if event_input_name == "REQ":
             if not self._check_ready(QI):
-                return None, None, False, self.STATUS, False
+                return None, None, False, self.STATUS, None
 
             try:
                 raw_val = self.channel.read_bit_sequence(
@@ -21,7 +21,7 @@ class IX(ModbusIO):
 
                 if raw_val is None:
                     self.STATUS = "READ ERROR: Timeout or Invalid response"
-                    return None, None, False, self.STATUS, False
+                    return None, None, False, self.STATUS, None
 
                 in_val = bool(raw_val & 1)
                 self.STATUS = "OK"
@@ -29,4 +29,4 @@ class IX(ModbusIO):
 
             except Exception as e:
                 self.STATUS = f"REQ ERROR: {str(e)}"
-                return None, None, False, self.STATUS, False
+                return None, None, False, self.STATUS, None

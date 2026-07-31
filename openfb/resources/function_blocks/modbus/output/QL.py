@@ -1,52 +1,36 @@
-from openfb.resources.function_blocks.modbus.utils import parse_params
-import numpy as np
+from openfb.resources.function_blocks.modbus.ModbusIO import ModbusIO
 
-#get_modbus_node
-class QL:    
-    def __init__(self):
-        self.QO = False
-        self.STATUS = "CREATED"
-    
-        self.channel = None        
-        self.address = None
-        self.unit_id = 1
-    
-    def set_channel(self, channel):
-        self.channel = channel
-    
-    def schedule(self, event_input_name, event_input_value, QI, PARAMS, IN):
+class QL(ModbusIO):
+    def schedule(self, event_input_name, event_input_value, QI, PARAMS, OUT):
         if event_input_name == "INIT":
-            if not QI:
-                self.QO = False
-                self.STATUS = "DISABLED"
-                return None, event_input_value, self.QO, self.STATUS
-            if self.channel is None or not self.channel.connected: #is_connected
-                self.QO = False
-                self.STATUS = "NODE_NOT_CONNECTED"
-                return None, event_input_value, self.QO, self.STATUS
-            try: 
-                self.address, self.unit_id = parse_params(PARAMS)
-                self.QO = True
-                self.STATUS = "INITIALIZED"
-                return event_input_value, None, self.QO, self.STATUS
-            except Exception as e:
-                self.STATUS = f"ERROR: {str(e)}"
-                self.QO = False
-                return None, event_input_value, self.QO, self.STATUS
+            self._init_block(QI, PARAMS)
+            return event_input_value, None, self.QO, self.status
         if event_input_name == "REQ":
-            if not QI:
-                self.STATUS = "DISABLED"
-                return None, event_input_value, self.QO, self.STATUS
-            if not self.QO or self.channel is None or not self.address:
-                self.STATUS = "NOT_INITIALIZED"
-                return None, event_input_value, self.QO, self.STATUS
-            try: 
-                self.channel.write_coil(address=self.address, value=np.longdouble(IN), slave=self.unit_id) # long double
-                self.STATUS = "OK"
-                return None, event_input_value, self.QO, self.STATUS
+            if not self._check_ready(QI):
+                return event_input_value, None, self.QO, self.status
+            try:
+                value_64 = int(OUT) & 0xFFFFFFFFFFFFFFFF
+                if self.register_type in ('c', 'd'):
+                    success = self.channel.write_bit_sequence(
+                        address = self.address,
+                        value = value_64,
+                        bit_count = 64,
+                        device_id = self.unit_id,
+                        reg_type = self.register_type
+                    )
+                else:
+                    success = self.channel.write_register_sequence(
+                        address = self.address,
+                        value = value_64,
+                        reg_count = 4,
+                        device_id = self.unit_id,
+                        reg_type = self.register_type
+                    )
+                if not success:
+                    self.status = "write error"
+                    return None, None, False, self.status
+                self.status = "OK"
+                return None, event_input_value, True, self.status
             except Exception as e:
-                self.STATUS = f"ERROR: {str(e)}"
-                self.QO = False
-                return None, event_input_value, self.QO, self.STATUS
-    def __del__(self):
-        self.node_client = None
+                self.status = f"write error: {str(e)}"
+                return None, None, False, self.status

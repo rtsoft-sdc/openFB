@@ -1,42 +1,34 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<FBType Name="ID" Comment="Modbus TCP Client Coil Read Function Block">
-  <Identification Standard="IEC 61499-1" />
-  <VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
-	</VersionInfo>  
-  <InterfaceList>
-    <EventInputs>
-      <Event Name="INIT" Type="Event" Comment="Service Initialization">
-        <With Var="QI" />
-        <With Var="PARAMS" />
-      </Event>
-      <Event Name="REQ" Type="Event" Comment="Service Request">
-        <With Var="QI" />
-      </Event>
-    </EventInputs>
-    <EventOutputs>
-      <Event Name="INITO" Type="Event" Comment="Initialization Confirm">
-        <With Var="QO" />
-        <With Var="STATUS" />
-      </Event>
-      <Event Name="CNF" Type="Event" Comment="Confirmation of Requested Service">
-        <With Var="QO" />
-        <With Var="STATUS" />
-        <With Var="IN" />
-      </Event>
-      <Event Name="IND" Type="Event" Comment="Indication from Resource">
-        <With Var="QO" />
-        <With Var="STATUS" />
-        <With Var="IN" />
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
-      <VarDeclaration Name="PARAMS" Type="STRING" Comment="Service Parameters" />
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
-      <VarDeclaration Name="STATUS" Type="BOOL" Comment="Service Status" />
-      <VarDeclaration Name="IN" Type="STRING" Comment="Input Data from resource" />
-    </OutputVars>
-  </InterfaceList>
-</FBType>
+from openfb.resources.function_blocks.modbus.ModbusIO import ModbusIO
+
+class ID(ModbusIO):
+    def schedule(self, event_input_name, event_input_value, QI, PARAMS):
+        if event_input_name == "INIT":
+            self._init_block(QI, PARAMS)
+            return event_input_value, None, self.QO, self.status, None
+        if event_input_name == "REQ":
+            if not self._check_ready(QI):
+                return event_input_value, None, self.QO, self.status, None
+            try:
+                if self.register_type in ('c', 'd'):
+                    value = self.channel.read_bit_sequence(
+                        address = self.address,
+                        bit_count = 32,
+                        device_id = self.unit_id,
+                        reg_type = self.register_type
+                    )
+                else:
+                    value = self.channel.read_register_sequence(
+                        address = self.address,
+                        reg_count = 2,
+                        device_id = self.unit_id,
+                        reg_type = self.register_type
+                    )
+                if not value:
+                    self.status = "read error"
+                    return None, None, False, self.status, None
+                self.status = "OK"
+                value = int(value) & 0xFFFFFFFF
+                return None, event_input_value, True, self.status, value
+            except Exception as e:
+                self.status = f"read error: {str(e)}"
+                return None, None, False, self.status, None
