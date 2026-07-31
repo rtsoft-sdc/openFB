@@ -1,15 +1,20 @@
-from openfb.resources.function_blocks.modbus import ModbusIO
+from openfb.resources.function_blocks.modbus.ModbusIO import ModbusIO
 
 class IX(ModbusIO):
 
     def schedule(self, event_input_name, event_input_value, QI, PARAMS):
         if event_input_name == "INIT":
             success = self._init_block(QI, PARAMS)
-            return event_input_value, None, self.QO, self.STATUS, None
+            if not success:
+                return event_input_value, None, None, False, self.status, None
+            if self.updated:
+                self.updated = False
+                return event_input_value, None, None, True, self.status, None
+            return event_input_value, None, event_input_value, self.QO, self.status, None
 
         if event_input_name == "REQ":
             if not self._check_ready(QI):
-                return None, None, False, self.STATUS, None
+                return None, event_input_value, None, False, self.status, None
 
             try:
                 raw_val = self.channel.read_bit_sequence(
@@ -20,13 +25,13 @@ class IX(ModbusIO):
                 )
 
                 if raw_val is None:
-                    self.STATUS = "READ ERROR: Timeout or Invalid response"
-                    return None, None, False, self.STATUS, None
+                    self.status = "READ ERROR: Timeout or Invalid response"
+                    return None, event_input_value, None, False, self.status, None
 
                 in_val = bool(raw_val & 1)
-                self.STATUS = "OK"
-                return None, event_input_value, True, self.STATUS, in_val
+                self.status = "OK"
+                return None, event_input_value, None, True, self.status, in_val
 
             except Exception as e:
-                self.STATUS = f"REQ ERROR: {str(e)}"
-                return None, None, False, self.STATUS, None
+                self.status = f"REQ ERROR: {str(e)}"
+                return None, event_input_value, None, False, self.status, None

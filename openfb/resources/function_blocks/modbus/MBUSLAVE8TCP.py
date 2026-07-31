@@ -1,7 +1,7 @@
 from openfb.resources.function_blocks.modbus.ModbusSlaveChannel import ModbusSlaveChannel
 from openfb.resources.function_blocks.modbus.utils import parse_input_data_string, normalize_fb_id
 from pymodbus.server import StartTcpServer
-from pymodbus.datastore import ModbusSequentialDataBlock, ModbusSlaveContext, ModbusServerContext
+from pymodbus.datastore import ModbusSequentialDataBlock, ModbusServerContext, ModbusDeviceContext
 import time
 import threading
 
@@ -37,14 +37,14 @@ class MBUSLAVE8TCP:
             try:
                 self.host, self.port, self.unit_id = parse_input_data_string(PARAMS)
                 self._stop_channel()
-                slave_context = ModbusSlaveContext(
-                    di=ModbusSequentialDataBlock(0, [0]*self.MEMSIZE), # Discrete Inputs
-                    co=ModbusSequentialDataBlock(0, [0]*self.MEMSIZE), # Coils
-                    hr=ModbusSequentialDataBlock(0, [0]*self.MEMSIZE), # Holding Registers
-                    ir=ModbusSequentialDataBlock(0, [0]*self.MEMSIZE)  # Input Registers
+                device_context = ModbusDeviceContext(
+                    di = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE),
+                    co = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE),
+                    hr = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE),
+                    ir = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE),
                 )
-                
-                self.store = ModbusServerContext(slaves={self.unit_id: slave_context}, single=False)
+
+                self.store = ModbusServerContext(devices={self.unit_id:device_context}, single=False)
                 self.channel = ModbusSlaveChannel(server_context=self.store)
                 
                 io_list = [IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7]
@@ -64,14 +64,14 @@ class MBUSLAVE8TCP:
 
                 self.server_thread = threading.Thread(
                     target=self._run_server, 
-                    args=(self.address, self.port, self.store),
+                    args=(self.host, self.port, self.store),
                     daemon=True
                 )
                 self.server_thread.start()
 
                 time.sleep(0.1)
 
-                self.status = f"LISTENING on {self.address}:{self.port}"
+                self.status = f"LISTENING on {self.host}:{self.port}"
                 return event_input_value, None, True, self.status
             except Exception as e:
                 self.status = f"ERROR: {str(e)}"

@@ -3,12 +3,17 @@ from openfb.resources.function_blocks.modbus.ModbusIO import ModbusIO
 class IW(ModbusIO):
     def schedule(self, event_input_name, event_input_value, QI, PARAMS):
         if event_input_name == "INIT":
-            self._init_block(QI, PARAMS)
-            return event_input_value, None, self.QO, self.STATUS, None
+            success = self._init_block(QI, PARAMS)
+            if not success:
+                return event_input_value, None, None, False, self.status, None
+            if self.updated:
+                self.updated = False
+                return event_input_value, None, event_input_value, True, self.status, None
+            return event_input_value, None, None, self.QO, self.status, None
 
         if event_input_name == "REQ":
             if not self._check_ready(QI):
-                return None, None, False, self.STATUS, None
+                return None, event_input_value, None, False, self.status, None
 
             try:
                 rt = self.register_type.lower()
@@ -29,13 +34,13 @@ class IW(ModbusIO):
                     )
 
                 if raw_val is None:
-                    self.STATUS = "READ ERROR: No response or invalid address"
-                    return None, None, False, self.STATUS, None
+                    self.status = "READ ERROR: No response or invalid address"
+                    return None, None, False, self.status, None
 
                 in_val = int(raw_val) & 0xFFFF
-                self.STATUS = "OK"
-                return None, event_input_value, True, self.STATUS, in_val
+                self.status = "OK"
+                return None, event_input_value, None, True, self.status, in_val
 
             except Exception as e:
-                self.STATUS = f"REQ ERROR: {str(e)}"
-                return None, None, False, self.STATUS, None
+                self.status = f"REQ ERROR: {str(e)}"
+                return None, event_input_value, None, False, self.status, None

@@ -88,6 +88,14 @@ class Configuration:
             fb_element = fb.FB(fb_name, fb_type, fb_obj, fb_definition, opc_mapping=opc_mapping)
 
             self.set_fb(fb_name, fb_element)
+            
+            # maybe remake later
+            try:
+                if fb_type in ("MBUSLAVE8TCP", "MBUS8TCP"):
+                    fb_obj.set_fb_registry(self.fb_dictionary)
+            except Exception as e:
+                logging.error(f"Error setting fb_registry for {fb_name}: {e}")
+            
             logging.info('created fb type: {0}, instance: {1}'.format(fb_type, fb_name))
             logging.info("List of existing blocks: %s" % self.fb_dictionary)
             # returns the both elements

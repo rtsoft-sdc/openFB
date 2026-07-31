@@ -3,11 +3,16 @@ from openfb.resources.function_blocks.modbus.ModbusIO import ModbusIO
 class IL(ModbusIO):
     def schedule(self, event_input_name, event_input_value, QI, PARAMS):
         if event_input_name == "INIT":
-            self._init_block(QI, PARAMS)
-            return event_input_value, None, self.QO, self.status, None
+            success = self._init_block(QI, PARAMS)
+            if not success:
+                return event_input_value, None, None, None, False, self.status
+            if self.updated:
+                self.updated = False
+                return event_input_value, None, event_input_value, True, self.status, None
+            return event_input_value, None, None, self.QO, self.status, None
         if event_input_name == "REQ":
             if not self._check_ready(QI):
-                return event_input_value, None, self.QO, self.status, None
+                return event_input_value, None, None, self.QO, self.status, None
             try:
                 if self.register_type in ('c', 'd'):
                     value = self.channel.read_bit_sequence(
@@ -25,11 +30,11 @@ class IL(ModbusIO):
                     )
                 if not value:
                     self.status = "read error"
-                    return None, None, False, self.status, None
+                    return None, event_input_value, None, False, self.status, None
                 value = int(value) & 0xFFFFFFFFFFFFFFFF
                 
                 self.status = "OK"
-                return None, event_input_value, True, self.status, value
+                return None, event_input_value, None, True, self.status, value
             except Exception as e:
                 self.status = f"read error: {str(e)}"
-                return None, None, False, self.status, None
+                return event_input_value, None, None, False, self.status, None

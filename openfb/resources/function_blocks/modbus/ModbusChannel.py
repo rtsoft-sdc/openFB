@@ -85,9 +85,9 @@ class ModbusChannel:
         self._ensure_connection()
         try:
             if reg_type == "h":
-                response = self.client.read_holding_registers(address=address, count=reg_count, unit=device_id)
+                response = self.client.read_holding_registers(address=address, count=reg_count, device_id=device_id)
             elif reg_type == "i":
-                response = self.client.read_input_registers(address=address, count=reg_count, unit=device_id)
+                response = self.client.read_input_registers(address=address, count=reg_count, device_id=device_id)
             else:
                 logger.error("Invalid register type. Use 'holding' or 'input'.")
                 return None
@@ -105,10 +105,10 @@ class ModbusChannel:
         self._ensure_connection()
         try:
             if reg_count == 1:
-                response = self.client.write_register(address=address, value=value, unit=device_id)
+                response = self.client.write_register(address=address, value=value, device_id=device_id)
             else:
                 registers: List[int] = [(value >> (16 * i)) & 0xFFFF for i in range(reg_count)]
-                response = self.client.write_registers(address=address, values=registers, unit=device_id)
+                response = self.client.write_registers(address=address, values=registers, device_id=device_id)
             if response.isError():
                 logger.error(f"Error writing registers at address {address}: {response}")
                 return False

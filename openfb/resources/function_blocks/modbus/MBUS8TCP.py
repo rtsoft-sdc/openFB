@@ -34,27 +34,21 @@ class MBUS8TCP:
                     return None, None, False, self.status
                 
                 io_list = [IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7]
-                print("\n\n", self.fb_registry)
                 for idx, io_block in enumerate(io_list):
                     io_block = normalize_fb_id(io_block)
-                    print(f"Processing IO{idx}: {io_block}")
                     if not io_block:
                         continue
                     fb_wrapper = None
                     for val in self.fb_registry.values():
-                        print(val.fb_name.split('.')[-1], io_block)
                         if val.fb_name.split('.')[-1] == io_block:
                             fb_wrapper = val.fb_obj
                             break
                                                     
-                    if fb_wrapper is None:
-                        print(f"MBUS8TCP: {fb_wrapper} IO block '{io_block}' not found in registry.")    
                     fb_wrapper.bind_channel(channel=self.channel)
 
                 self.status = "CONNECTED {} {}".format(self.address, self.port)
                 return event_input_value, None, True, self.status
             except Exception as e:
-                print(f"Error in MBUS8TCP MAP: {str(e)}")
                 self.status = f"ERROR: {str(e)}"
                 return None, None, False, self.status
             
