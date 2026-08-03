@@ -22,16 +22,19 @@ class MBUS8TCP:
             if not QI:
                 self.stop_channel()
                 self.status = "DISABLED"
-                return None, None, False, self.status
+                return event_input_value, None, False, self.status
         
             try:
                 self.address, self.port, self.unit_id = parse_input_data_string(PARAMS)
+                if not self.address or not self.port:
+                    self.status = "INVALID_PARAMS"
+                    return event_input_value, None, False, self.status
                 self.stop_channel()
                 self.channel = ModbusChannel(address=self.address, port=self.port)
                 
                 if not self.channel.connect():
                     self.status = "CONNECTION_FAILED {} {}".format(self.address, self.port)
-                    return None, None, False, self.status
+                    return event_input_value, None, False, self.status
                 
                 io_list = [IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7]
                 for idx, io_block in enumerate(io_list):
@@ -47,10 +50,10 @@ class MBUS8TCP:
                     fb_wrapper.bind_channel(channel=self.channel)
 
                 self.status = "CONNECTED {} {}".format(self.address, self.port)
-                return event_input_value, None, True, self.status
+                return event_input_value, event_input_value, True, self.status
             except Exception as e:
                 self.status = f"ERROR: {str(e)}"
-                return None, None, False, self.status
+                return event_input_value, None, False, self.status
             
     def __del__(self):
         self.stop_channel()

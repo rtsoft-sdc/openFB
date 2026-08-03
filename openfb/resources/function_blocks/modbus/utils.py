@@ -1,5 +1,6 @@
 import json
 import ast
+import re
 
 def normalize_fb_id(raw_id) -> str:
     if not raw_id and not isinstance(raw_id, str):
@@ -11,19 +12,16 @@ def normalize_fb_id(raw_id) -> str:
     return s
 
 
-def parse_io_params(params): #startswith c-coil reg, h-holding reg, i-input reg, d-discrete input, without letter - deafult h
+def parse_register_value(params) -> tuple[str, int]:
+    params = str(params).lower()
+    if params.isdigit():
+        return 'h', int(params)
+    match = re.match(r'([hidc])(\d+)', params)
+    if match:
+        register_type, register_value = match.groups()
+        return register_type, int(register_value)
+    return None, None
     
-    if params.startswith('c'):
-        addr, register = int(params[1:]), 'c'
-    elif params.startswith('i'):
-        addr, register = int(params[1:]), 'i'
-    elif params.startswith('d'):
-        addr, register = int(params[1:]), 'd'
-    else:
-        addr, register = int(params[1:]), 'h'
-        
-    return addr, register
-
 
 def parse_input_data_string(data_string):
     data_string = str(data_string).strip()
@@ -33,27 +31,52 @@ def parse_input_data_string(data_string):
         data = json.loads(data_string)
     except Exception:
         try:
-            data = ast.literal_eval(data_string)
-        except Exception:
-            clean_str = data_string.strip("{}")
-            for pair in clean_str.split(","):
+            cut_str = data_string.strip("{}")
+            for pair in cut_str.split(","):
                 if ":" in pair:
                     key, val = pair.split(":", 1)
-                    clean_key = key.strip().strip("'\"")
-                    clean_val = val.strip().strip("'\"")
-                    data[clean_key] = clean_val
-
+                    data[key] = val
+        except Exception:
+            data = None # somehow need to return parameters with none value
     if not isinstance(data, dict):
-        raise ValueError(f"Не удалось распознать формат PARAMS: '{data_string}'")
+        data = None
 
     host_port = data.get("host", "")
     if ':' in host_port:
         host, port_str = host_port.split(':', 1)
         port = int(port_str)
-    else: #maybe no need and raise error
-        host = host_port if host_port else "127.0.0.1"
-        port = 502  # default
+    elif host_port:
+        host = host_port
+        port = 502
+    else:
+        host, port = None, None
         
     unit_id = int(data.get("id", 1))
 
     return host, port, unit_id
+
+
+def parse_time_to_seconds(time_str):
+    time_str = str(time_str).strip().lower()
+    if time_str.isdigit():
+        time_str += "mks"
+    frequency = re.match(r"^([\d\.]+)\s*(hz|khz)$", time_str)
+    if frequency:
+        value, unit = frequency.groups()
+        value = float(value)
+        if unit == "hz":
+            return 1.0 / value
+        elif unit == "khz":
+            return 1.0 / (value * 1000)
+    else:
+        time_match = re.match(r"^([\d\.]+)\s*(mks|ms|s)$", time_str)
+        if time_match:
+            value, unit = time_match.groups()
+            value = float(value)
+            if unit == "mks":
+                return value / 1000000.0
+            elif unit == "ms":
+                return value / 1000.0
+            elif unit == "s":
+                return value
+    return None
