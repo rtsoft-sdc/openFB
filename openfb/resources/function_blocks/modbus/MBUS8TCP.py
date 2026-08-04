@@ -1,5 +1,5 @@
 from openfb.resources.function_blocks.modbus.ModbusChannel import ModbusChannel
-from openfb.resources.function_blocks.modbus.utils import parse_input_data_string, normalize_fb_id
+from openfb.resources.function_blocks.modbus.utils import parse_input_data_string, normalize_fb_id, get_host_port_unitid
 
 
 class MBUS8TCP:
@@ -25,10 +25,9 @@ class MBUS8TCP:
                 return event_input_value, None, False, self.status
         
             try:
-                self.address, self.port, self.unit_id = parse_input_data_string(PARAMS)
+                self.address, self.port, self.unit_id, self.status = get_host_port_unitid(PARAMS)
                 if not self.address or not self.port:
-                    self.status = "INVALID_PARAMS"
-                    return event_input_value, None, False, self.status
+                    return event_input_value, None, False, self.status                
                 self.stop_channel()
                 self.channel = ModbusChannel(address=self.address, port=self.port)
                 

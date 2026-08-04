@@ -5,7 +5,7 @@ class ID(ModbusIO):
         if event_input_name == "INIT":
             success = self._init_block(QI, PARAMS)
             if not success:
-                return None, None, None, False, self.status, None
+                return event_input_value, None, None, False, self.status, None
             if self.updated:
                 self.updated = False
                 return event_input_value, None, event_input_value, True, self.status, None
@@ -15,15 +15,17 @@ class ID(ModbusIO):
                 return None, event_input_value, None, self.QO, self.status, None
             try:
                 if self.register_type in ('c', 'd'):
-                    value = self.channel.read_bit_sequence(
-                        address = self.address,
+                    value = self.exec_io(
+                        self.channel.read_bit_sequence,
+                        address = self.register_value,
                         bit_count = 32,
                         device_id = self.unit_id,
                         reg_type = self.register_type
                     )
                 else:
-                    value = self.channel.read_register_sequence(
-                        address = self.address,
+                    value = self.exec_io(
+                        self.channel.read_register_sequence,
+                        address = self.register_value,
                         reg_count = 2,
                         device_id = self.unit_id,
                         reg_type = self.register_type

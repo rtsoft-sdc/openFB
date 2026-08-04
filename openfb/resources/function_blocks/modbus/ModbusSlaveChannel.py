@@ -24,7 +24,7 @@ class ModbusSlaveChannel:
             logging.error(f"Error retrieving slave context for device ID {deviceid}: {e}")
             return None
     
-    def _get_simdata_address(self, slave_ctx, reg_type: str):
+    def _get_simdata_address(self, slave_ctx, reg_type):
         idx = self._types_index.get(reg_type)
         simdata_list = slave_ctx.simdevice.simdata[idx]
         return simdata_list[0]
@@ -43,7 +43,7 @@ class ModbusSlaveChannel:
             return value
         except Exception as e:
             logging.error(f"Error reading {reg_type} at address {address}: {e}")
-            return None
+            return False
             
     def write_bit_sequence(self, address: int, value: int, bit_count: int, device_id: int, reg_type: str):
         try:
@@ -69,7 +69,7 @@ class ModbusSlaveChannel:
             return value
         except Exception as e:
             logging.error(f"Error reading {reg_type} at address {address}: {e}")
-            return None
+            return False
         
     def write_register_sequence(self, address: int, value: int, reg_count: int, device_id: int, reg_type: str):
         try:

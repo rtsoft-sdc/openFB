@@ -1,5 +1,5 @@
 from openfb.resources.function_blocks.modbus.ModbusSlaveChannel import ModbusSlaveChannel
-from openfb.resources.function_blocks.modbus.utils import parse_input_data_string, normalize_fb_id
+from openfb.resources.function_blocks.modbus.utils import parse_input_data_string, normalize_fb_id, get_host_port_unitid
 from pymodbus.server import StartTcpServer
 from pymodbus.datastore import ModbusSequentialDataBlock, ModbusServerContext, ModbusDeviceContext
 import time
@@ -33,9 +33,12 @@ class MBUSLAVE8TCP:
         if event_input_name == "MAP":
             if not QI:
                 self._stop_channel()
-                return None, None, False, "Disabled"
+                return event_input_value, None, False, "Disabled"
             try:
-                self.host, self.port, self.unit_id = parse_input_data_string(PARAMS)
+                self.host, self.port, self.unit_id, self.status = get_host_port_unitid(PARAMS)
+                if not self.host or not self.port:
+                    return event_input_value, None, False, self.status
+                
                 self._stop_channel()
                 device_context = ModbusDeviceContext(
                     di = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE),
@@ -75,7 +78,7 @@ class MBUSLAVE8TCP:
                 return event_input_value, None, True, self.status
             except Exception as e:
                 self.status = f"ERROR: {str(e)}"
-                return None, None, False, self.status
+                return event_input_value, None, False, self.status
                 
 
     def __del__(self):

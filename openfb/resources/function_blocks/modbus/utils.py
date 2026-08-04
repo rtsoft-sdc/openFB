@@ -3,13 +3,10 @@ import ast
 import re
 
 def normalize_fb_id(raw_id) -> str:
-    if not raw_id and not isinstance(raw_id, str):
+    if raw_id is None or raw_id.strip() == "":
         return ""
-    s = raw_id.strip()
-    if s.startswith("."):
-        s = s[1:]
-        # mayabe need to remove other dots
-    return s
+    block_name = raw_id.split(".")[1]
+    return block_name
 
 
 def parse_register_value(params) -> tuple[str, int]:
@@ -35,26 +32,53 @@ def parse_input_data_string(data_string):
             for pair in cut_str.split(","):
                 if ":" in pair:
                     key, val = pair.split(":", 1)
+                    key = key.strip()
+                    val = val.strip()
+                    if val.isdigit():
+                        val = int(val)
                     data[key] = val
         except Exception:
-            data = None # somehow need to return parameters with none value
+            data = None
     if not isinstance(data, dict):
         data = None
 
-    host_port = data.get("host", "")
-    if ':' in host_port:
-        host, port_str = host_port.split(':', 1)
-        port = int(port_str)
-    elif host_port:
-        host = host_port
-        port = 502
-    else:
-        host, port = None, None
-        
-    unit_id = int(data.get("id", 1))
+    return data
 
-    return host, port, unit_id
+def get_host_port_unitid(data):
+    input_data = parse_input_data_string(data)
+    if input_data is None:
+        status = "Invalid PARAMS"
+        return None, None, None, status
+                    
+    if input_data.get("host") is not None:
+        host = input_data.get("host", "")
+        if ":" in host:
+            host, port_str = host.split(":", 1)
+            port = int(port_str)
+        elif input_data.get("port") is not None:
+            port = int(input_data.get("port", None))
+        else:
+            status = "Invalid PARAMS: Missing port"
+            return None, None, None, status
+                    
+    unit_id = int(input_data.get("id", 1))
+    return host, port, unit_id, "OK"
 
+def get_addr_update_delay_mode(data):
+    input_data = parse_input_data_string(data)
+    if input_data is None:
+        status = "Invalid PARAMS"
+        return None, None, None, None, None, status
+
+    address = input_data.get("addr")
+    update_interval_str = input_data.get("update", "")
+    start_delay_str = input_data.get("delay", "")
+    mode = input_data.get("mode", "ind")
+
+    update_interval = parse_time_to_seconds(update_interval_str) if update_interval_str else 0
+    start_delay = parse_time_to_seconds(start_delay_str) if start_delay_str else 0
+
+    return address, update_interval, start_delay, mode, "OK"
 
 def parse_time_to_seconds(time_str):
     time_str = str(time_str).strip().lower()
@@ -80,3 +104,16 @@ def parse_time_to_seconds(time_str):
             elif unit == "s":
                 return value
     return None
+
+'''
+    host_port = data.get("host", "")
+    if ':' in host_port:
+        host, port_str = host_port.split(':', 1)
+        port = int(port_str)
+    elif host_port:
+        host = host_port
+        port = 502
+    else:
+        host, port = None, None
+        
+    unit_id = int(data.get("id", 1))'''

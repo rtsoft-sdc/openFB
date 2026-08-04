@@ -15,15 +15,17 @@ class IL(ModbusIO):
                 return event_input_value, None, None, self.QO, self.status, None
             try:
                 if self.register_type in ('c', 'd'):
-                    value = self.channel.read_bit_sequence(
-                        address = self.address,
+                    value = self.exec_io(
+                        self.channel.read_bit_sequence,
+                        address = self.register_value,
                         bit_count = 64,
                         device_id = self.unit_id,
                         reg_type = self.register_type
                     )
                 else:
-                    value = self.channel.read_register_sequence(
-                        address = self.address,
+                    value = self.exec_io(
+                        self.channel.read_register_sequence,
+                        address = self.register_value,
                         reg_count = 4,
                         device_id = self.unit_id,
                         reg_type = self.register_type

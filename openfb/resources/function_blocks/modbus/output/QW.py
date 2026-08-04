@@ -9,23 +9,25 @@ class QW(ModbusIO):
 
         if event_input_name == "REQ":
             if not self._check_ready(QI):
-                return None, None, False, self.status
+                return None, event_input_value, False, self.status
 
             try:
                 word_val = int(OUT) & 0xFFFF
                 rt = self.register_type.lower()
 
                 if rt in ('c', 'd'):
-                    success = self.channel.write_bit_sequence(
-                        address=self.address,
+                    success = self.exec_io(
+                        self.channel.write_bit_sequence,
+                        address=self.register_value,
                         value=word_val,
                         bit_count=16,
                         reg_type=self.register_type,
                         device_id=self.unit_id
                     )
                 else:
-                    success = self.channel.write_register_sequence(
-                        address=self.address,
+                    success = self.exec_io(
+                        self.channel.write_register_sequence,
+                        address=self.register_value,
                         value=word_val,
                         reg_count=1,
                         reg_type=self.register_type,
@@ -34,11 +36,11 @@ class QW(ModbusIO):
 
                 if not success:
                     self.status = "WRITE ERROR: Failed to write register"
-                    return None, None, False, self.status
+                    return None, event_input_value, False, self.status
 
                 self.status = "OK"
                 return None, event_input_value, True, self.status
 
             except Exception as e:
                 self.status = f"REQ ERROR: {str(e)}"
-                return None, None, False, self.status
+                return None, event_input_value, False, self.status

@@ -19,15 +19,17 @@ class IW(ModbusIO):
                 rt = self.register_type.lower()
 
                 if rt in ('c', 'd'):
-                    raw_val = self.channel.read_bit_sequence(
-                        address=self.address,
+                    raw_val = self.exec_io(
+                        self.channel.read_bit_sequence,
+                        address=self.register_value,
                         bit_count=16,
                         reg_type=self.register_type,
                         device_id=self.unit_id
                     )
                 else:
-                    raw_val = self.channel.read_register_sequence(
-                        address=self.address,
+                    raw_val = self.exec_io(
+                        self.channel.read_register_sequence,
+                        address=self.register_value,
                         reg_count=1,
                         reg_type=self.register_type,
                         device_id=self.unit_id
@@ -35,7 +37,7 @@ class IW(ModbusIO):
 
                 if raw_val is None:
                     self.status = "READ ERROR: No response or invalid address"
-                    return None, None, False, self.status, None
+                    return None, event_input_value, None, False, self.status, None
 
                 in_val = int(raw_val) & 0xFFFF
                 self.status = "OK"

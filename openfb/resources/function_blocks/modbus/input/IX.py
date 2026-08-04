@@ -17,8 +17,9 @@ class IX(ModbusIO):
                 return None, event_input_value, None, False, self.status, None
 
             try:
-                raw_val = self.channel.read_bit_sequence(
-                    address=self.address,
+                raw_val = self.exec_io(
+                    self.channel.read_bit_sequence,
+                    address=self.register_value,
                     bit_count=1,
                     reg_type=self.register_type,
                     device_id=self.unit_id

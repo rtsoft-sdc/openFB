@@ -8,20 +8,22 @@ class QD(ModbusIO):
             return event_input_value, None, self.QO, self.status
         if event_input_name == "REQ":
             if not self._check_ready(QI):
-                return event_input_value, None, self.QO, self.status
+                return None, event_input_value, self.QO, self.status
             try:
                 value_32 = int(OUT) & 0xFFFFFFFF
                 if self.register_type in ('c', 'd'):
-                    status = self.channel.write_bit_sequence(
-                        address = self.address,
+                    status = self.exec_io(
+                        self.channel.write_bit_sequence,
+                        address = self.register_value,
                         value = value_32,
                         reg_count = 2,
                         device_id = self.unit_id,
                         reg_type = self.register_type
                     )
                 else:
-                    status = self.channel.write_register_sequence(
-                        address = self.address,
+                    status = self.exec_io(
+                        self.channel.write_register_sequence,
+                        address = self.register_value,
                         value = value_32,
                         reg_count = 2,
                         device_id = self.unit_id,
@@ -29,9 +31,9 @@ class QD(ModbusIO):
                     )
                 if not status:
                     self.status = "write error"
-                    return None, None, False, self.status
+                    return None, event_input_value, False, self.status
                 self.status = "OK"
                 return None, event_input_value, True, self.status
             except Exception as e:
                 self.status = f"write error: {str(e)}"
-                return None, None, False, self.status
+                return None, event_input_value, False, self.status
