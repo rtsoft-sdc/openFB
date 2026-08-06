@@ -183,7 +183,7 @@ class UaManagerFboot(peer.UaPeer):
                 self.resources_running.add(chunks[0])
                 self.config = self.config_dictionary.get(chunks[0])
                 if self.config is None:
-                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES")
                     self.config = self.config_dictionary.get(chunks[0])
                     self.main_manager.set_config(chunks[0], self.config)
 
@@ -246,7 +246,7 @@ class UaManagerFboot(peer.UaPeer):
                 self.resources_running.add(chunks[0])
                 self.config = self.config_dictionary.get(chunks[0])
                 if self.config is None:
-                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES")
                     self.config = self.config_dictionary.get(chunks[0])
                     self.main_manager.set_config(chunks[0], self.config)
 
