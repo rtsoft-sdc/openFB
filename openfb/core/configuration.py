@@ -89,9 +89,9 @@ class Configuration:
 
             self.set_fb(fb_name, fb_element)
             
-            # maybe remake later
+            #  remake later
             try:
-                if fb_type in ("MBUSLAVE8TCP", "MBUS8TCP"):
+                if fb_type in ("MBUSLAVE8TCP", "MBUS_8_tcp", "OPCUAC_8"):
                     fb_obj.set_fb_registry(self.fb_dictionary)
             except Exception as e:
                 logging.error(f"Error setting fb_registry for {fb_name}: {e}")
