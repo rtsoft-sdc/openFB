@@ -183,7 +183,7 @@ class UaManagerFboot(peer.UaPeer):
                 self.resources_running.add(chunks[0])
                 self.config = self.config_dictionary.get(chunks[0])
                 if self.config is None:
-                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES")
                     self.config = self.config_dictionary.get(chunks[0])
                     self.main_manager.set_config(chunks[0], self.config)
 
@@ -246,7 +246,7 @@ class UaManagerFboot(peer.UaPeer):
                 self.resources_running.add(chunks[0])
                 self.config = self.config_dictionary.get(chunks[0])
                 if self.config is None:
-                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES", monitor=self.main_manager.monitor)
+                    self.config_dictionary[chunks[0]] = Configuration(chunks[0], "EMB_RES")
                     self.config = self.config_dictionary.get(chunks[0])
                     self.main_manager.set_config(chunks[0], self.config)
 
@@ -303,14 +303,19 @@ class UaManagerFboot(peer.UaPeer):
             self.ua_objects[fb_name] = item
         file.close()
 
-    def stop_ua(self):
+    def stop_ua(self, resource='ALL'):
         # if we need this?? 2/2
         # stops the monitor thread
         # self.monitor_hardware.stop()
 
         # stops the configuration work
-        for res in self.config_dictionary.values():
-            res.stop_work()
+        if resource == 'ALL' or resource == None:
+            for res in self.config_dictionary.values():
+                res.stop_work()
+        else:
+            for res in self.config_dictionary.values():
+                if resource == res.config_id:
+                    res.stop_work()
         # stops the ua server
         self.stop()
           

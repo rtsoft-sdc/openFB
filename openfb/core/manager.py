@@ -127,7 +127,8 @@ class Manager:
                         if fb_name in self.config_dictionary:
                             # Stops the configuration
                             for config_name, config in self.config_dictionary.items():
-                                config.stop_work()
+                                if config_name == fb_name: 
+                                    config.stop_work()
                             # Release memory
                             gc.collect()
                 '''ua_server is killing at the main.py file after ctrl+c (SIGINT)'''
@@ -148,12 +149,13 @@ class Manager:
             for f in files:
                 os.remove(f)
             ##############################################################
-
+            res_name = None
             # Iterate over the list of children
             for child in element:
                 # Deletes a configuration (could be a fb)
                 if child.tag == 'FB':
                     conf_name = child.attrib['Name']
+                    res_name = conf_name
                     # Checks if exists the configuration
                     if conf_name in self.config_dictionary:
                         # Stops the configuration
@@ -177,7 +179,7 @@ class Manager:
 
                 # # first stop the previous manager
                 # try:
-                self.manager_ua_fboot.stop_ua()
+                self.manager_ua_fboot.stop_ua(res_name)
                 # except:
                 #     self.manager_ua_fboot.stop()
                 self.manager_ua_fboot = ua_manager_fboot.UaManagerFboot(self.manager_ua_fboot.address, self.manager_ua_fboot.port, 
