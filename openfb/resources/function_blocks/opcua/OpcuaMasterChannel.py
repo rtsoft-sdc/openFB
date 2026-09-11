@@ -41,7 +41,7 @@ class SubscriptionHandler:
         else:
             logging.info(f"unknown node: {node_id}")
 
-class OpcUaMasterChannel():
+class OpcUaMasterChannel:
     def __init__(self, opcua_client: Client, loop: asyncio.AbstractEventLoop, mode: str = "ind", poll_period: float = 1.0):
         self.opcua_client = opcua_client
         self.loop = loop
@@ -55,6 +55,20 @@ class OpcUaMasterChannel():
         self.is_running = True # true
         self.mode = mode
         self.poll_interval = poll_period
+        
+    @staticmethod
+    def _normalize_node_id(nodeid: str):
+        s = nodeid.strip().lstrip(',')
+        match  = re.match(r"^(\d+):([isgb]=.+)$", s, re.IGNORECASE)
+        if match:
+            ns, id = match.groups()
+            return f"ns={ns};{id}"
+        return s
+    
+    @staticmethod
+    def _is_node_id(path_or_nodeid: str):
+        s = path_or_nodeid.strip().lstrip(',')
+        return bool(re.match(r"^(ns=\d+;|^\d+:)[isgb]=", s, re.IGNORECASE))
 
     @staticmethod
     def _parse_browse_path(browse_path: str) -> list:
@@ -89,32 +103,40 @@ class OpcUaMasterChannel():
             self.subscription = await self.opcua_client.create_subscription(period_ms, self.subscription_handler)
 
     def _sync_get_node(self, target_path_or_nodeid: str):
+        normalized_target = target_path_or_nodeid.strip()
         if target_path_or_nodeid in self.nodes_cache:
             return self.nodes_cache[target_path_or_nodeid]
 
-        if re.match(r"^ns=\d+;[isgb]=", target_path_or_nodeid):
-            node = self.opcua_client.get_node(target_path_or_nodeid)
-            self.nodes_cache[target_path_or_nodeid] = node
-            self.path_to_nodeid[target_path_or_nodeid] = target_path_or_nodeid 
+        if self._is_node_id(normalized_target): #if ,2:s..
+            nodeid = self._normalize_node_id(normalized_target)
+            node = self.opcua_client.get_node(nodeid)
+            self.nodes_cache[normalized_target] = node
+            self.path_to_nodeid[normalized_target] = node.nodeid.to_string() ##
             return node
-
+        
         try:
             future = asyncio.run_coroutine_threadsafe(
                 self._async_resolve_path(target_path_or_nodeid), self.loop
             )
-            node = future.result(timeout=5.0)
+            return future.result(timeout=5.0)
 
-            return node
         except Exception as e:
             raise
 
     async def async_get_node(self, node_id):
         if node_id not in self.nodes_cache:
-            node = self.opcua_client.get_node(node_id)
+            if self._is_node_id(node_id):
+                canon_id = self._normalize_node_id(node_id)
+                node = self.opcua_client.get_node(canon_id)
+            else:
+                node = await self._async_resolve_path(node_id)
+            
             self.nodes_cache[node_id] = node
+            self.path_to_nodeid[node_id] = node.nodeid.to_string()
+            
         return self.nodes_cache[node_id]
 
-    def read_value(self, browse_path: str, block_type: str = "IX"):
+    def read_value(self, browse_path: str, block_type: str):
         try:
             node = self._sync_get_node(browse_path)
             node_id_str = self.path_to_nodeid[browse_path]

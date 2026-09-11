@@ -24,8 +24,8 @@ def main():
                   'INFO': logging.INFO,
                   'DEBUG': logging.DEBUG}
 
-    address = '0.0.0.0'
-    port_diac = 61499
+    address = '127.0.0.1'
+    port_diac = 61498
     port_opc = 4840
     log_level = log_levels['INFO']
 

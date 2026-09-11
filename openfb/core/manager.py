@@ -287,4 +287,5 @@ class Manager:
         # parses the description file
         self.manager_ua_fboot(config)
         self.manager_ua_fboot.from_fboot()
+        #self.manager_ua_fboot.create_custom_nodes(self.manager_ua_fboot.NODES_TO_CREATE)
         self.ua_integration = True

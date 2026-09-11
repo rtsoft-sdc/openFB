@@ -1,7 +1,6 @@
 from openfb.resources.function_blocks.opcua.OpcUaIO import OpcUaIO
 
 class QR(OpcUaIO):
-    
     def schedule(self, event_input_name, event_input_value, QI, PARAMS, OUT):
         if event_input_name == "INIT":
             self._init_block(QI, PARAMS)

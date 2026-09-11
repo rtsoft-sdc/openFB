@@ -10,7 +10,7 @@ class IR(OpcUaIO):
             if self.updated:
                 self.updated = False
                 return event_input_value, None, event_input_value, True, self.status, None
-            return event_input_value, None, None, self.QO, self.status, None
+            return event_input_value, None, None, self.QO, self.status, 0.0
 
         if event_input_name == "REQ":
             if not self._check_ready(QI):

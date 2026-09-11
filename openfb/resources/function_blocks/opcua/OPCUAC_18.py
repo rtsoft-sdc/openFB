@@ -11,7 +11,7 @@ from asyncua import Client, ua
 import queue
 
 
-class OPCUAC_8:
+class OPCUAC_18:
     def __init__(self):
         self.channel = None
         self.fb_registry = None
@@ -118,7 +118,7 @@ class OPCUAC_8:
         self.status = "Stopped"
 
     def schedule(self, event_input_name, event_input_value, QI, PARAMS, 
-                 IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7):
+                 IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7, IO8, IO9, IO10, IO11, IO12, IO13, IO14, IO15, IO16, IO17):
         
         if event_input_name == "MAP":
 
@@ -146,7 +146,7 @@ class OPCUAC_8:
 
                 print(self.fb_registry)
                 
-                io_list = [IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7]
+                io_list = [IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7, IO8, IO9, IO10, IO11, IO12, IO13, IO14, IO15, IO16, IO17]
                 for idx, io_block in enumerate(io_list):
                     io_block_name = normalize_IO_fb_id(io_block)
                     if not io_block_name:
@@ -154,8 +154,8 @@ class OPCUAC_8:
 
                     fb_wrapper = None
                     for val in self.fb_registry.values():
-                        print(f"\n\n {val.fb_name}")
                         if val.fb_name.split('.')[-1] == io_block_name:
+                            
                             print(f"Found FB wrapper for {io_block_name}: {val}")
                             fb_wrapper = val.fb_obj #######################
                             break

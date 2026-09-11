@@ -5,6 +5,7 @@ description = "Runtime environment IEC 614999 for ML tasks' support."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "asyncua>=2.0.1",
     "cryptography>=46.0.3",
     "numpy>=2.2.6",
     "opcua>=0.98.13",

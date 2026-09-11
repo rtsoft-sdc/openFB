@@ -91,7 +91,7 @@ class Configuration:
             
             #  remake later
             try:
-                if fb_type in ("MBUSLAVE8TCP", "MBUS_8_tcp", "OPCUAC_8"):
+                if fb_type in ("MBUSLAVE8TCP", "MBUS_8_tcp", "OPCUAC_8", "OPCUAC_18"):
                     fb_obj.set_fb_registry(self.fb_dictionary)
             except Exception as e:
                 logging.error(f"Error setting fb_registry for {fb_name}: {e}")

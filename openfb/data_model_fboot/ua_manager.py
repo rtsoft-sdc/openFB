@@ -1,9 +1,12 @@
+from opcua import ua
+
 from openfb.opc_ua import peer
 from xml.etree import ElementTree as ETree
 from openfb.data_model_fboot import ua_object, monitor, utils, ua_method
 import logging
 import os
 from openfb.core.configuration import Configuration
+from opcua.ua.uaerrors import BadNodeIdUnknown
 
 class UaManagerFboot(peer.UaPeer):
 
@@ -30,6 +33,26 @@ class UaManagerFboot(peer.UaPeer):
 
         self.config_dictionary = conf_dict
         self.main_manager = main_manager
+        
+        self.NODES_TO_CREATE = [
+            '/Objects/2:Fte/2:Tank1/2:VALVEPOS',
+            '/Objects/2:Fte/2:Tank1/2:AIRVALVEPOS',
+            '/Objects/2:Fte/2:Tank1/2:REAGENTFEEDRATE',
+            '/Objects/2:Fte/2:Tank1/2:BUBBLESIZE',
+            '/Objects/2:Fte/2:Tank1/2:LEVEL',
+            '/Objects/2:Fte/2:Tank1/2:CURRENTVALVEPOS',
+            '/Objects/2:Fte/2:Tank1/2:CURRENTAIRVALVEPOS',
+            '/Objects/2:Fte/2:Tank1/2:AIRFLOW',
+
+            '/Objects/2:Fte/2:Tank2/2:VALVEPOS',
+            '/Objects/2:Fte/2:Tank2/2:AIRVALVEPOS',
+            '/Objects/2:Fte/2:Tank2/2:REAGENTFEEDRATE',
+            '/Objects/2:Fte/2:Tank2/2:BUBBLESIZE',
+            '/Objects/2:Fte/2:Tank2/2:LEVEL',
+            '/Objects/2:Fte/2:Tank2/2:CURRENTVALVEPOS',
+            '/Objects/2:Fte/2:Tank2/2:CURRENTAIRVALVEPOS',
+            '/Objects/2:Fte/2:Tank2/2:AIRFLOW',
+        ]
 
     def __call__(self, config):
         # base idx for the opc-ua nodeId
@@ -41,11 +64,53 @@ class UaManagerFboot(peer.UaPeer):
         self.ROOT_PATH = self.generate_path(self.ROOT_LIST)
         # configuration (connection to 4diac code)
         self.config = config
-
+        #self.create_custom_nodes(self.NODES_TO_CREATE) ##
         # if we need this?? 1/2
         # create the monitor hardware variables
         # self.monitor_hardware = monitor.MonitorSystem(self)
         # self.monitor_hardware.start()
+
+    def create_custom_nodes(self, node_paths):
+        objects_node = self.get_objects_node()
+        created_nodes_cached = {}
+
+        for path in node_paths:
+            parts = [p for p in path.strip('/').split('/') if p]
+            
+            if parts and parts[0].lower() in ['objects', '0:objects']:
+                parts = parts[1:]
+
+            current_node = objects_node
+            path_accumulator = []
+
+            for i, part in enumerate(parts):
+                if ':' in part:
+                    ns_str, name = part.split(':', 1)
+                    ns_idx = int(ns_str)
+                else:
+                    ns_idx = 2
+                    name = part
+
+                path_accumulator.append(name)
+                
+                unique_string_id = "/".join(path_accumulator)
+                node_id_str = f"ns={ns_idx};s={unique_string_id}"
+
+                if node_id_str in created_nodes_cached:
+                    current_node = created_nodes_cached[node_id_str]
+                    continue
+                
+                browse_name = f"{ns_idx}:{name}"
+                
+                is_leaf = (i == len(parts) - 1)
+                if is_leaf:
+                    child_node = current_node.add_variable(node_id_str, browse_name, 0.0)
+                    child_node.set_writable(True)
+                else:
+                    child_node = current_node.add_object(node_id_str, browse_name)
+                    
+                created_nodes_cached[node_id_str] = child_node
+                current_node = child_node
 
     def set_config_dictionary(self, conf_dict):
         self.config_dictionary = conf_dict
