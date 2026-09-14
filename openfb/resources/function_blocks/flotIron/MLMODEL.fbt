@@ -6,11 +6,9 @@
 		<EventInputs>
 			<Event Name="REQ" Type="Event">
 				<With Var="CURRENTLEVEL"/>
+				<With Var="CURRENTVALVEPOS"/>
 				<With Var="CURRENTFROTHFLOW"/>
 				<With Var="CURRENTBUBBLESIZE"/>
-				<With Var="CURRENTAIRFLOW"/>
-				<With Var="CURRENTREAGENTFEED"/>
-				<With Var="CURRENTOUTPUTFLOW"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
@@ -28,11 +26,9 @@
 		</EventOutputs>
 		<InputVars>
 			<VarDeclaration Name="CURRENTLEVEL" Type="REAL"/>
+			<VarDeclaration Name="CURRENTVALVEPOS" Type="REAL"/>
 			<VarDeclaration Name="CURRENTFROTHFLOW" Type="REAL"/>
 			<VarDeclaration Name="CURRENTBUBBLESIZE" Type="REAL"/>
-			<VarDeclaration Name="CURRENTAIRFLOW" Type="REAL"/>
-			<VarDeclaration Name="CURRENTREAGENTFEED" Type="REAL"/>
-			<VarDeclaration Name="CURRENTOUTPUTFLOW" Type="REAL"/>
 		</InputVars>
 		<OutputVars>
 			<VarDeclaration Name="DSPLEVELVALVE" Type="REAL" /> 

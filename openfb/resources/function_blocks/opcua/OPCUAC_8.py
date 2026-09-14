@@ -154,7 +154,6 @@ class OPCUAC_8:
 
                     fb_wrapper = None
                     for val in self.fb_registry.values():
-                        print(f"\n\n {val.fb_name}")
                         if val.fb_name.split('.')[-1] == io_block_name:
                             print(f"Found FB wrapper for {io_block_name}: {val}")
                             fb_wrapper = val.fb_obj #######################
