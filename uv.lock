@@ -601,6 +601,7 @@ dependencies = [
     { name = "opencv-python" },
     { name = "psutil" },
     { name = "pyhid-usb-relay" },
+    { name = "pymodbus" },
     { name = "shared-memory-dict" },
 ]
 
@@ -619,6 +620,7 @@ requires-dist = [
     { name = "opencv-python", specifier = ">=4" },
     { name = "psutil", specifier = ">=7.2.1" },
     { name = "pyhid-usb-relay", specifier = ">=1.2.0" },
+    { name = "pymodbus", specifier = ">=3.15.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0.2" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.14.13" },
     { name = "shared-memory-dict", specifier = ">=0.7.2" },
@@ -732,6 +734,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d4/68/9b23e50a35b161092f20733cfb4badd0b5b70e594d49b8db7c32b74f8770/pyhid_usb_relay-1.2.0.tar.gz", hash = "sha256:955464ba2c6cf5e8356e730d5f2c9d8239b4bd5b2b8b90a945216c79ad796914", size = 8052, upload-time = "2024-05-20T14:12:23.466Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5b/7c/b83154a3e82dcf2ff5c7d56c5fe9e83edb930ff1cfdc480ac83a1405f28a/pyhid_usb_relay-1.2.0-py2.py3-none-any.whl", hash = "sha256:f1909b642d3749e9b73898dcfa3c65354a449927aeb1d85c5975475004399b55", size = 10104, upload-time = "2024-05-20T14:12:22.203Z" },
+]
+
+[[package]]
+name = "pymodbus"
+version = "3.15.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/b8/03dace16e0e5d1c3eb16e8b9bcce9885f5e8a38db34345ec375cd70ed2e2/pymodbus-3.15.0.tar.gz", hash = "sha256:4c5f715128bfeba59f4c9fb3542b0c32a8afd4b90081111e39c12f7af0c89aae", size = 168238, upload-time = "2026-08-13T09:33:33.049Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/27/7b/fa75ca74270ad3786234c6573f3c6c524441d3eb686882e280c717ce6d04/pymodbus-3.15.0-py3-none-any.whl", hash = "sha256:74d8dee961f23845f18a8481253183504dca05c4fcd102890cd28f4d7ce09267", size = 167602, upload-time = "2026-08-13T09:33:31.474Z" },
 ]
 
 [[package]]

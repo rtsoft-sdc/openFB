@@ -12,6 +12,7 @@ dependencies = [
     "opencv-python>=4",
     "psutil>=7.2.1",
     "pyhid-usb-relay>=1.2.0",
+    "pymodbus>=3.15.0",
     "shared-memory-dict>=0.7.2",
 ]
 

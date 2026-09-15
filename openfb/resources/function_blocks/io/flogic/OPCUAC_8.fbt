@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<FBType Name="OPCUAC_8" Comment="8-Channel OPC UA Client Interface Block">
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+  <InterfaceList>
+    <EventInputs>
+      <Event Name="MAP" Type="Event" Comment="Initialization Request">
+        <With Var="QI" />
+        <With Var="PARAMS" />
+    		<With Var="IO0" />
+        <With Var="IO1" />
+        <With Var="IO2" />
+        <With Var="IO3" />
+        <With Var="IO4" />
+        <With Var="IO5" />
+        <With Var="IO6" />
+        <With Var="IO7" />
+      </Event>
+    </EventInputs>
+    <EventOutputs>
+      <Event Name="MAPO" Type="Event" Comment="Initialization Confirm">
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+      <Event Name="IND" Type="Event" Comment="Execution Confirm">
+        <With Var="QO" />
+        <With Var="STATUS" />
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration Name="QI" Type="BOOL" Comment="Event Input Qualifier" />
+      <VarDeclaration Name="PARAMS" Type="STRING" Comment="Initialization Parameters" />
+      <VarDeclaration Name="IO0" Type="STRING" Comment="Input Output 0" />
+      <VarDeclaration Name="IO1" Type="STRING" Comment="Input Output 1" />
+      <VarDeclaration Name="IO2" Type="STRING" Comment="Input Output 2" />
+      <VarDeclaration Name="IO3" Type="STRING" Comment="Input Output 3" />
+      <VarDeclaration Name="IO4" Type="STRING" Comment="Input Output 4" />
+      <VarDeclaration Name="IO5" Type="STRING" Comment="Input Output 5" />
+      <VarDeclaration Name="IO6" Type="STRING" Comment="Input Output 6" />
+      <VarDeclaration Name="IO7" Type="STRING" Comment="Input Output 7" />
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Name="QO" Type="BOOL" Comment="Event Output Qualifier" />
+      <VarDeclaration Name="STATUS" Type="WSTRING" Comment="Service Status" />
+    </OutputVars>
+  </InterfaceList>
+</FBType>
