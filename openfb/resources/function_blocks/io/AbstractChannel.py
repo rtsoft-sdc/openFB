@@ -12,5 +12,9 @@ class AbstractChannel(ABC):
         pass
     
     @abstractmethod
+    def parse_IO_params(self, params):
+        pass
+    
+    @abstractmethod
     def stop(self) -> None:
         pass

@@ -1,6 +1,6 @@
-from openfb.resources.function_blocks.modbus.ModbusSlaveChannel import ModbusSlaveChannel
-from openfb.resources.function_blocks.modbus.ModbusSlaveChannelAdapter import ModbusSlaveChannelAdapter
-from openfb.resources.function_blocks.modbus.utils import normalize_fb_id, get_host_port_unitid
+from openfb.resources.function_blocks.io.flogic.ModbusSlaveChannel import ModbusSlaveChannel
+from openfb.resources.function_blocks.io.flogic.ModbusSlaveChannelAdapter import ModbusSlaveChannelAdapter
+from openfb.resources.function_blocks.io.flogic.utils import normalize_fb_id, get_host_port_unitid
 from pymodbus.server import StartTcpServer
 from pymodbus.datastore import ModbusSequentialDataBlock, ModbusServerContext, ModbusDeviceContext
 import time
@@ -16,10 +16,15 @@ class MBUSLAVE8TCP:
         self.server_thread = None
         self.store = None
         self.status = "Created"
-        self.MEMSIZE = 65536 
+        self.MEMSIZE = 65536
+        self.fb_name = ""
+        self.fb_prefix = "" 
         
-    def set_fb_registry(self, fb_registry):
+    def set_fb_registry_and_name(self, fb_registry, fb_name):
         self.fb_registry = fb_registry
+        self.fb_name = str(fb_name)
+        self.fb_prefix = self.fb_name.rpartition('.')[0] + "."
+
         
     def _run_server(self, host, port, context: ModbusServerContext):
         try:
@@ -42,14 +47,16 @@ class MBUSLAVE8TCP:
         self.channel = None
         
     def _find_fb_object(self, ioblock_id):
-        if not self.fb_registry or not ioblock_id:
+            if not self.fb_registry:
+                return None
+            targetid = self.fb_prefix + normalize_fb_id(ioblock_id)
+            if not targetid:
+                return None
+            for val in self.fb_registry.values():
+                fb_name = getattr(val, "fb_name", '')
+                if fb_name == targetid:
+                    return getattr(val, 'fb_obj', None)
             return None
-        targetid = normalize_fb_id(ioblock_id)
-        for val in self.fb_registry.values():
-            fb_name = getattr(val, "fb_name", '')
-            if fb_name.split('.')[-1] == targetid:
-                return getattr(val, 'fb_obj', None)
-        return None
         
     def schedule(self, event_input_name, event_input_value, QI, PARAMS, 
                      IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7):
@@ -80,7 +87,10 @@ class MBUSLAVE8TCP:
                 for io_block in io_list:
                     fb_obj = self._find_fb_object(io_block)
                     if fb_obj and hasattr(fb_obj, 'bind_channel'):
-                        fb_obj.bind_channel(self.adapter)
+                        try:
+                            fb_obj.bind_channel(self.adapter)
+                        except Exception as e:
+                            logging.error(f"!!! {e}")
 
                 self.server_thread = threading.Thread(
                     target=self._run_server, 

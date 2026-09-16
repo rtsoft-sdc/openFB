@@ -1,11 +1,10 @@
 import json
-import ast
 import re
 
 def normalize_fb_id(raw_id) -> str:
     if raw_id is None or raw_id.strip() == "":
         return ""
-    block_name = raw_id.split(".")[1]
+    block_name = raw_id.split(".")[-1]
     return block_name
 
 

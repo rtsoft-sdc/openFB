@@ -1,9 +1,9 @@
-from openfb.resources.function_blocks.modbus.ModbusChannel import ModbusChannel
-from openfb.resources.function_blocks.modbus.utils import normalize_fb_id, get_host_port_unitid
-from openfb.resources.function_blocks.modbus.ModbusChannelAdapter import ModbusChannelAdapter
+from openfb.resources.function_blocks.io.flogic.ModbusChannel import ModbusChannel
+from openfb.resources.function_blocks.io.flogic.utils import normalize_fb_id, get_host_port_unitid
+from openfb.resources.function_blocks.io.flogic.ModbusChannelAdapter import ModbusChannelAdapter
 import logging 
 
-class MBUS8TCP:
+class MBUS8TCP: # later add correct error handling
     def __init__(self):
         self.status = "CREATED"
         self.channel = None
@@ -12,9 +12,13 @@ class MBUS8TCP:
         self.address = None
         self.port = None
         self.unitid = 1
+        self.fb_name = ""
+        self.fb_prefix = ""
         
-    def set_fb_registry(self, fb_registry):
+    def set_fb_registry_and_name(self, fb_registry, fb_name):
         self.fb_registry = fb_registry
+        self.fb_name = str(fb_name)
+        self.fb_prefix = self.fb_name.rpartition('.')[0] + "."
 
     def stop_channel(self):
         if self.adapter:
@@ -35,13 +39,12 @@ class MBUS8TCP:
     def _find_fb_object(self, ioblock_id):
         if not self.fb_registry:
             return None
-        targetid = normalize_fb_id(ioblock_id)
+        targetid = self.fb_prefix + normalize_fb_id(ioblock_id)
         if not targetid:
             return None
-        print(f"\n\nNOW:\n {self.fb_registry.values()}")##############
         for val in self.fb_registry.values():
             fb_name = getattr(val, "fb_name", '')
-            if fb_name.split('.')[-1] == targetid:
+            if fb_name == targetid:
                 return getattr(val, 'fb_obj', None)
         return None
             
@@ -54,11 +57,10 @@ class MBUS8TCP:
                 return event_input_value, None, False, self.status
         
             try:
-                self.address, self.port, unitid, self.status = get_host_port_unitid(PARAMS)
+                self.address, self.port, self.unitid, self.status = get_host_port_unitid(PARAMS)
                 if not self.address or not self.port:
                     self.status = f"Invalid params: {PARAMS}"
                     return event_input_value, None, False, self.status
-                self.unitid = unitid if unitid is not None else 1
                 
                 self.stop_channel()
                 self.channel = ModbusChannel(address=self.address, port=self.port)
@@ -67,7 +69,7 @@ class MBUS8TCP:
                     self.status = "CONNECTION_FAILED {} {}".format(self.address, self.port)
                     return event_input_value, None, False, self.status
                 
-                adapter = ModbusChannelAdapter(self.channel, self.unitid)
+                self.adapter = ModbusChannelAdapter(self.channel, self.unitid)
                 
                 io_list = [IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7]
                 for io_block in io_list:
@@ -76,9 +78,11 @@ class MBUS8TCP:
                     
                     fb_obj = self._find_fb_object(io_block)
                     if fb_obj and hasattr(fb_obj, 'bind_channel'):
-                        fb_obj.bind_channel(self.adapter)
-                    else:
-                        logging.warning(f"no 'bind_channel' attribute")
+                        try:
+                            fb_obj.bind_channel(self.adapter)
+                        except Exception as e:
+                            logging.error(f"!!! {e}")
+
                     
                 self.status = "CONNECTED {} {}".format(self.address, self.port)
                 return event_input_value, event_input_value, True, self.status

@@ -1,5 +1,5 @@
 from openfb.resources.function_blocks.io.AbstractChannel import AbstractChannel
-from openfb.resources.function_blocks.opcua.OpcuaMasterChannel import OpcUaMasterChannel
+from openfb.resources.function_blocks.io.flogic.OpcuaMasterChannel import OpcUaMasterChannel
 
 
 class OpcUaChannelAdapter(AbstractChannel):

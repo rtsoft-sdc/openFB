@@ -1,12 +1,12 @@
 import re
 
-from openfb.resources.function_blocks.opcua.OpcuaMasterChannel import OpcUaMasterChannel
+from openfb.resources.function_blocks.io.flogic.OpcuaMasterChannel import OpcUaMasterChannel
 import logging
 import asyncio
 import time
 import threading
 import json
-from openfb.resources.function_blocks.opcua.utils import normalize_IO_fb_id
+from openfb.resources.function_blocks.io.flogic.utils import normalize_IO_fb_id
 from asyncua import Client, ua
 import queue
 

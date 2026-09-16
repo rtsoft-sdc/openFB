@@ -89,10 +89,10 @@ class Configuration:
 
             self.set_fb(fb_name, fb_element)
             
-            #  remake later
+            # set_fb_registry_and_name - method only for protocol's clients\servers
             try:
-                if fb_type in ("MBUSLAVE8TCP", "MBUS_8_tcp", "OPCUAC_8", "OPCUAC_18"):
-                    fb_obj.set_fb_registry(self.fb_dictionary)
+                if hasattr(fb_obj, "set_fb_registry_and_name"):
+                    fb_obj.set_fb_registry_and_name(self.fb_dictionary, fb_name)
             except Exception as e:
                 logging.error(f"Error setting fb_registry for {fb_name}: {e}")
             
