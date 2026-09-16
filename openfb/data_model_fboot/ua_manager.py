@@ -33,26 +33,6 @@ class UaManagerFboot(peer.UaPeer):
 
         self.config_dictionary = conf_dict
         self.main_manager = main_manager
-        
-        self.NODES_TO_CREATE = [
-            '/Objects/2:Fte/2:Tank1/2:VALVEPOS',
-            '/Objects/2:Fte/2:Tank1/2:AIRVALVEPOS',
-            '/Objects/2:Fte/2:Tank1/2:REAGENTFEEDRATE',
-            '/Objects/2:Fte/2:Tank1/2:BUBBLESIZE',
-            '/Objects/2:Fte/2:Tank1/2:LEVEL',
-            '/Objects/2:Fte/2:Tank1/2:CURRENTVALVEPOS',
-            '/Objects/2:Fte/2:Tank1/2:CURRENTAIRVALVEPOS',
-            '/Objects/2:Fte/2:Tank1/2:AIRFLOW',
-
-            '/Objects/2:Fte/2:Tank2/2:VALVEPOS',
-            '/Objects/2:Fte/2:Tank2/2:AIRVALVEPOS',
-            '/Objects/2:Fte/2:Tank2/2:REAGENTFEEDRATE',
-            '/Objects/2:Fte/2:Tank2/2:BUBBLESIZE',
-            '/Objects/2:Fte/2:Tank2/2:LEVEL',
-            '/Objects/2:Fte/2:Tank2/2:CURRENTVALVEPOS',
-            '/Objects/2:Fte/2:Tank2/2:CURRENTAIRVALVEPOS',
-            '/Objects/2:Fte/2:Tank2/2:AIRFLOW',
-        ]
 
     def __call__(self, config):
         # base idx for the opc-ua nodeId
@@ -64,7 +44,6 @@ class UaManagerFboot(peer.UaPeer):
         self.ROOT_PATH = self.generate_path(self.ROOT_LIST)
         # configuration (connection to 4diac code)
         self.config = config
-        #self.create_custom_nodes(self.NODES_TO_CREATE) ##
         # if we need this?? 1/2
         # create the monitor hardware variables
         # self.monitor_hardware = monitor.MonitorSystem(self)

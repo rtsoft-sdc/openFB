@@ -7,7 +7,7 @@ from openfb.resources.function_blocks.io.AbstractChannel import AbstractChannel
 THREAD_POOL = concurrent.futures.ThreadPoolExecutor(max_workers=10)
 
 class BaseIO:
-    def __init__(self, datatype: str): #datatype "IX"
+    def __init__(self, datatype: str): # e.g. datatype "IX"
         self.channel: Optional[AbstractChannel] = None
         self.datatype = datatype
         self.address: Any = None
@@ -32,7 +32,7 @@ class BaseIO:
         ##
         return params
     
-    def init_block(self, QI, PARAMS):
+    def _init_block(self, QI, PARAMS):
         if not QI or not PARAMS:
             self.QO = False
             self.status = "Disabled"
