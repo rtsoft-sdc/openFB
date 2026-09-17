@@ -26,7 +26,7 @@ class BaseIO:
     def bind_channel(self, channel: AbstractChannel):
         self.channel = channel
     
-    def _init_block(self, QI, PARAMS):
+    def _init_block(self, QI, PARAMS): # maybe remake (parse_IO_params) for improved versatility
         if not QI or not PARAMS:
             self.QO = False
             self.status = "Disabled"
