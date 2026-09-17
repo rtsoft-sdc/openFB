@@ -1,4 +1,4 @@
-from openfb.resources.function_blocks.io.BaseIO import BaseIO
+from openfb.resources.function_blocks.io.flogic.base.BaseIO import BaseIO
 
 class IWStr(BaseIO):
     def __init__(self):

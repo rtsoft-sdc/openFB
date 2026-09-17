@@ -1,7 +1,7 @@
 import time
 import concurrent.futures
 from typing import Any, Optional
-from openfb.resources.function_blocks.io.AbstractChannel import AbstractChannel
+from openfb.resources.function_blocks.io.flogic.base.AbstractChannel import AbstractChannel
 
 THREAD_POOL = concurrent.futures.ThreadPoolExecutor(max_workers=10)
 

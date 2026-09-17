@@ -1,6 +1,6 @@
-from openfb.resources.function_blocks.io.AbstractChannel import AbstractChannel
-from openfb.resources.function_blocks.io.flogic.ModbusChannel import ModbusChannel
-from openfb.resources.function_blocks.io.flogic.utils import get_addr_update_delay_mode, parse_register_value
+from openfb.resources.function_blocks.io.flogic.base.AbstractChannel import AbstractChannel
+from openfb.resources.function_blocks.io.flogic.base.ModbusChannel import ModbusChannel
+from openfb.resources.function_blocks.io.flogic.base.utils import get_addr_update_delay_mode, parse_register_value
 
 class ModbusChannelAdapter(AbstractChannel):
     def __init__(self, modbus_channel: ModbusChannel, default_unitid: int = 1):

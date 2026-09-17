@@ -103,13 +103,6 @@ def parse_time_to_seconds(time_str):
             elif unit == "s":
                 return value
     return None
-
-
-def normalize_IO_fb_id(raw_id) -> str:
-    if raw_id is None or raw_id.strip() == "":
-        return ""
-    block_name = raw_id.split(".")[1]
-    return block_name
     
 
 def OPC_parse_input_data_string(data_string):
