@@ -13,5 +13,4 @@ class QX(BaseIO):
                 return None, event_input_value, self.QO, self.status
             bit_value = bool(OUT)
             self.execute_write(bit_value)
-            print(self.status)
             return None, event_input_value, self.QO, self.status
