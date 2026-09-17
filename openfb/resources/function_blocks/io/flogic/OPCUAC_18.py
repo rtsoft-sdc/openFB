@@ -1,6 +1,7 @@
 import re
-
-from openfb.resources.function_blocks.io.flogic.OpcuaMasterChannel import OpcUaMasterChannel
+from openfb.resources.function_blocks.io.flogic.OpcuaChannel import OpcUaChannel
+from openfb.resources.function_blocks.io.flogic.OpcUaChannelAdapter import OpcUaChannelAdapter
+from openfb.resources.function_blocks.io.flogic.utils import normalize_fb_id
 import logging
 import asyncio
 import time
@@ -21,9 +22,27 @@ class OPCUAC_18:
         self.status = "Created"
         self.queue = queue.Queue()
         self.client_ready_event = threading.Event()
+        self.adapter = None
+        self.address = None
+        self.fb_name = ""
+        self.fb_prefix = ""
 
-    def set_fb_registry(self, fb_registry):
+    def set_fb_registry_and_name(self, fb_registry, fb_name):
         self.fb_registry = fb_registry
+        self.fb_name = str(fb_name)
+        self.fb_prefix = self.fb_name.rpartition('.')[0] + "."
+        
+    def _find_fb_object(self, ioblock_id):
+        if not self.fb_registry:
+            return None
+        targetid = self.fb_prefix + normalize_fb_id(ioblock_id)
+        if not targetid:
+            return None
+        for val in self.fb_registry.values():
+            fb_name = getattr(val, "fb_name", '')
+            if fb_name == targetid:
+                return getattr(val, 'fb_obj', None)
+        return None   
 
     def _parse_params(self, params_raw: str):
         default_url = "opc.tcp://127.0.0.1:4840"
@@ -77,7 +96,7 @@ class OPCUAC_18:
         async def setup_and_connect():
             await self.client.connect()
             queue.put(
-                OpcUaMasterChannel(
+                OpcUaChannel(
                 opcua_client=self.client, 
                 loop=self.loop, 
                 mode=mode, 
@@ -100,9 +119,19 @@ class OPCUAC_18:
             self.loop.close()
 
     def _stop_channel(self):
-
+        if self.adapter:
+            try:
+                self.adapter.stop()
+            except Exception as e:
+                logging.error(f"Adapter stop error: {e}")
+            self.adapter = None
+            
         if self.channel:
-            self.channel.stop()
+            try:
+                self.channel.stop()
+            except Exception as e:
+                logging.error(f"Channel stop error: {e}")
+            self.channel = None
 
         if self.loop and self.loop.is_running():
             self.loop.call_soon_threadsafe(self.loop.stop)
@@ -113,9 +142,8 @@ class OPCUAC_18:
         self.client_thread = None
         self.loop = None
         self.client = None
-        self.channel = None
         self.client_ready_event.clear()
-        self.status = "Stopped"
+        self.status = "STOPPED"
 
     def schedule(self, event_input_name, event_input_value, QI, PARAMS, 
                  IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7, IO8, IO9, IO10, IO11, IO12, IO13, IO14, IO15, IO16, IO17):
@@ -143,24 +171,20 @@ class OPCUAC_18:
                 if not self.client_ready_event.wait(timeout=timeout + 2.0) or not self.channel:
                     print(f"[ERROR] OPC UA Master failed to connect to {url} within timeout.")
                     return None, event_input_value, False, f"ERROR: failed to connect {url}"
-
-                print(self.fb_registry)
                 
-                io_list = [IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7, IO8, IO9, IO10, IO11, IO12, IO13, IO14, IO15, IO16, IO17]
-                for idx, io_block in enumerate(io_list):
-                    io_block_name = normalize_IO_fb_id(io_block)
-                    if not io_block_name:
+                self.adapter = OpcUaChannelAdapter(self.channel)
+                                
+                io_list = [IO0, IO1, IO2, IO3, IO4, IO5, IO6, IO7]
+                for io_block in io_list:
+                    if not io_block:
                         continue
 
-                    fb_wrapper = None
-                    for val in self.fb_registry.values():
-                        if val.fb_name.split('.')[-1] == io_block_name:
-                            
-                            print(f"Found FB wrapper for {io_block_name}: {val}")
-                            fb_wrapper = val.fb_obj #######################
-                            break
-                    fb_wrapper.bind_channel(channel=self.channel)
-                    print(f"Bound {io_block_name} to channel {self.channel}")
+                    fb_obj = self._find_fb_object(io_block)
+                    if fb_obj and hasattr(fb_obj, 'bind_channel'):
+                        try:
+                            fb_obj.bind_channel(self.adapter)
+                        except Exception as e:
+                            logging.error(f"opcua error:{e}")
 
                 print(f"CONNECTED to {url} [{mode.upper()} mode]")
                 self.status = f"OK"

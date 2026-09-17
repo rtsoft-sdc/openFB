@@ -1,10 +1,15 @@
 from openfb.resources.function_blocks.io.AbstractChannel import AbstractChannel
-from openfb.resources.function_blocks.io.flogic.OpcuaMasterChannel import OpcUaMasterChannel
-
+from openfb.resources.function_blocks.io.flogic.OpcuaChannel import OpcUaChannel
 
 class OpcUaChannelAdapter(AbstractChannel):
-    def __init__(self, master_channel: OpcUaMasterChannel):
+    def __init__(self, master_channel: OpcUaChannel):
         self.channel = master_channel
+        
+    def parse_IO_params(self, params):
+        address = str(params).strip().strip("'\"") if params else None
+        if address is None:
+            address = params
+        return address, 0.0, 0.0, "sync", "OK"
         
     def read_data(self, address, datatype):
         browse_path = str(address)

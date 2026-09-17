@@ -40,8 +40,6 @@ class MLMODEL:
             elif 0.0 < CURRENTBUBBLESIZE < 0.8:
                 delta_reagent -= 0.5
 
-            print(f"[MLMODEL] Calculated Deltas -> Level: {delta_level:+.3f}m | Air: {delta_air:+.3f} | Reagent: {delta_reagent:+.3f}")
-
             return (
                 event_input_value,
                 round(delta_level, 3), self.level_lim_h, self.level_lim_l,

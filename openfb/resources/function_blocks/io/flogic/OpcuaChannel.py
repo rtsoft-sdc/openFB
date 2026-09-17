@@ -41,7 +41,7 @@ class SubscriptionHandler:
         else:
             logging.info(f"unknown node: {node_id}")
 
-class OpcUaMasterChannel:
+class OpcUaChannel:
     def __init__(self, opcua_client: Client, loop: asyncio.AbstractEventLoop, mode: str = "ind", poll_period: float = 1.0):
         self.opcua_client = opcua_client
         self.loop = loop
@@ -52,7 +52,7 @@ class OpcUaMasterChannel:
         self.subscription_handler = SubscriptionHandler(self.cached_values)
         self.path_to_nodeid = {}
 
-        self.is_running = True # true
+        self.is_running = True
         self.mode = mode
         self.poll_interval = poll_period
         

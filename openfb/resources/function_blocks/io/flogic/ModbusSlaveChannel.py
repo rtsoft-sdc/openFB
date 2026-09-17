@@ -1,17 +1,14 @@
 import logging
 from pymodbus.datastore import ModbusServerContext
 
+logger = logging.getLogger(__name__)
+
 class ModbusSlaveChannel:
     def __init__(self, server_context: ModbusServerContext):
         self.context = server_context
         self.is_running = True
-        self._fx_map = {
-            'c': (1, 15), # coils
-            'd': (2, None), # discrete inputs
-            'h': (3, 16), # holding registers
-            'i': (4, None) # input registers
-        }
-        
+        self._type_idx_map = {'c': 0, 'd': 1, 'h': 2, 'i': 3}
+
     def _get_slave_context(self, deviceid: int):
         try:
             return self.context._devices[deviceid]
@@ -19,67 +16,112 @@ class ModbusSlaveChannel:
             try:
                 return self.context._devices[0]
             except Exception:
-                logging.error(f"Device ID {deviceid} not found in context")
-                return None          
-    
+                logger.error(f"Device ID {deviceid} not found in context")
+                return None
+
+    def _get_sim_entry(self, slave_ctx, reg_type: str):
+        """Вспомогательный метод получения нужного SimData блока из SimDevice."""
+        idx = self._type_idx_map.get(reg_type, 2)
+        simdevice = getattr(slave_ctx, 'simdevice', None)
+        if not simdevice or not hasattr(simdevice, 'simdata'):
+            return None
+        
+        simdata_group = simdevice.simdata[idx]
+        if isinstance(simdata_group, (list, tuple)) and len(simdata_group) > 0:
+            return simdata_group[0]
+        return simdata_group
+
+    def _read_values_from_store(self, slave_ctx, reg_type: str, address: int, count: int):
+        entry = self._get_sim_entry(slave_ctx, reg_type)
+        if not entry or not hasattr(entry, 'values'):
+            return None
+        
+        base_addr = getattr(entry, 'address', 0)
+        offset = address - base_addr
+        if offset < 0:
+            offset = address
+
+        return entry.values[offset : offset + count]
+
+    def _write_values_to_store(self, slave_ctx, reg_type: str, address: int, values: list) -> bool:
+        entry = self._get_sim_entry(slave_ctx, reg_type)
+        if not entry or not hasattr(entry, 'values'):
+            return False
+
+        base_addr = getattr(entry, 'address', 0)
+        offset = address - base_addr
+        if offset < 0:
+            offset = address
+
+        for i, val in enumerate(values):
+            idx = offset + i
+            if idx < len(entry.values):
+                entry.values[idx] = val
+            else:
+                entry.values.extend([0] * (idx - len(entry.values))) # extend address
+                entry.values.append(val)
+        return True
+
     def read_bit_sequence(self, address: int, bit_count: int, reg_type: str, device_id: int):
         try:
             slave_ctx = self._get_slave_context(device_id)
             if not slave_ctx:
                 return None
-            read_fx = self._fx_map.get(reg_type, (1, None))[0]
-            bits = slave_ctx.getValues(read_fx, address, count=bit_count)
-            
+
+            bits = self._read_values_from_store(slave_ctx, reg_type, address, bit_count)
+            if bits is None or len(bits) < bit_count:
+                return None
+
             value = 0
             for i in range(bit_count):
                 if bits[i]:
                     value |= (1 << i)
             return value
         except Exception as e:
-            logging.error(f"Error reading at {reg_type} {address}: {e}")
-            return False
-            
-    def write_bit_sequence(self, address: int, value: int, bit_count: int, device_id: int, reg_type: str):
+            logger.error(f"Error reading bit sequence at {reg_type} {address}: {e}")
+            return None
+
+    def write_bit_sequence(self, address: int, value: int, bit_count: int, device_id: int, reg_type: str) -> bool:
         try:
             slave_ctx = self._get_slave_context(device_id)
             if not slave_ctx:
-                return None
-            write_fx = self._fx_map.get(reg_type, (1, 15))[1] or 15
+                return False
+
             bits = [bool((value >> i) & 1) for i in range(bit_count)]
-            slave_ctx.setValues(write_fx, address, bits)
-            return True
+            return self._write_values_to_store(slave_ctx, reg_type, address, bits)
         except Exception as e:
-            logging.error(f"Error writing {reg_type} at address {address}: {e}")
+            logger.error(f"Error writing bit sequence at {reg_type} address {address}: {e}")
             return False
-            
+
     def read_register_sequence(self, address: int, reg_count: int, reg_type: str, device_id: int):
         try:
             slave_ctx = self._get_slave_context(device_id)
             if not slave_ctx:
                 return None
-            read_fx = self._fx_map.get(reg_type, (3, None))[0]
-            registers = slave_ctx.getValues(read_fx, address, count=reg_count)
+
+            registers = self._read_values_from_store(slave_ctx, reg_type, address, reg_count)
+            if registers is None or len(registers) < reg_count:
+                return None
+
             value = 0
             for i in range(reg_count):
-                value |= (registers[i] << (16 * i))
+                value |= (int(registers[i]) << (16 * i))
             return value
         except Exception as e:
-            logging.error(f"Error reading {reg_type} at address {address}: {e}")
-            return False
-        
-    def write_register_sequence(self, address: int, value: int, reg_count: int, device_id: int, reg_type: str):
+            logger.error(f"Error reading register sequence at {reg_type} {address}: {e}")
+            return None
+
+    def write_register_sequence(self, address: int, value: int, reg_count: int, device_id: int, reg_type: str) -> bool:
         try:
             slave_ctx = self._get_slave_context(device_id)
             if not slave_ctx:
-                return None
+                return False
+
             registers = [(value >> (16 * i)) & 0xFFFF for i in range(reg_count)]
-            write_fx = self._fx_map.get(reg_type, (1, 15))[1] or 15
-            slave_ctx.setValues(write_fx, address, registers)
-            return True
+            return self._write_values_to_store(slave_ctx, reg_type, address, registers)
         except Exception as e:
-            logging.error(f"Error writing {reg_type} at address {address}: {e}")
+            logger.error(f"Error writing register sequence at {reg_type} address {address}: {e}")
             return False
-        
 
     def stop(self):
-        pass
+        self.is_running = False

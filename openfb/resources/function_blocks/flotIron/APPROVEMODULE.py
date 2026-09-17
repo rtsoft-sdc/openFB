@@ -9,7 +9,6 @@ class APPROVEMODULE:
             if CURRENTVALUE is None or DSPVALUEVEPOS is None or VALUELIMH is None or VALUELIML is None:
                 return event_input_value, self.SP, VALUELIML, VALUELIMH
             if self.SP + DSPVALUEVEPOS > VALUELIMH or self.SP + DSPVALUEVEPOS < VALUELIML:
-                print(f"AAWAWAWAW")
                 return event_input_value, self.SP, VALUELIML, VALUELIMH
             self.SP += DSPVALUEVEPOS
             return event_input_value, self.SP, VALUELIML, VALUELIMH

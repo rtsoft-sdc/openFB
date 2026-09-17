@@ -15,7 +15,7 @@ class ModbusChannelAdapter(AbstractChannel):
         
     def read_data(self, address, datatype):
         reg_type, reg_value = parse_register_value(address)
-        if datatype in ("QX", "IX", "BOOL"):
+        if datatype in ("QX", "IX"):
             return self.channel.read_bit_sequence(
                 address=reg_value, bit_count=1, reg_type=reg_type, device_id=self.default_unitid
             )
@@ -24,10 +24,10 @@ class ModbusChannelAdapter(AbstractChannel):
                 address=reg_value, reg_count=1, reg_type=reg_type, device_id=self.default_unitid
             )
 
-    def write_data(self, address, value, data_type):
+    def write_data(self, address, value, datatype):
         reg_type, reg_value = parse_register_value(address)
         
-        if data_type in ("QX", "IX", "BOOL"):
+        if datatype in ("QX", "IX"):
             return self.channel.write_bit_sequence(
                 address=reg_value, value=int(bool(value)), bit_count=1, device_id=self.default_unitid, reg_type=reg_type
             )
