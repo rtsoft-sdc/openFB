@@ -3,7 +3,6 @@ from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ModbusException
 from typing import List
 
-
 logger = logging.getLogger(__name__)
 
 class ModbusChannel:
@@ -36,8 +35,6 @@ class ModbusChannel:
             self.client.close()
             self.is_connected = False
             logger.info(f"disconnected from Modbus at {self.address}:{self.port}")
-            
-    # bit operations 
     
     def read_bit_sequence(self, address:int, bit_count:int, reg_type: str, device_id: int):
         self._ensure_connection()
@@ -78,9 +75,7 @@ class ModbusChannel:
         except ModbusException as e:
             logger.error(f"Modbus write coils error: {e}")
             return False
-        
-    # register operations
-    
+            
     def read_register_sequence(self, address: int, reg_count: int, reg_type: str, device_id: int):
         self._ensure_connection()
         try:

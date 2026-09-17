@@ -3,7 +3,7 @@ from openfb.resources.function_blocks.io.flogic.utils import normalize_fb_id, ge
 from openfb.resources.function_blocks.io.flogic.ModbusChannelAdapter import ModbusChannelAdapter
 import logging 
 
-class MBUS8TCP: # later add correct error handling
+class MBUS8TCP:
     def __init__(self):
         self.status = "CREATED"
         self.channel = None
@@ -81,7 +81,7 @@ class MBUS8TCP: # later add correct error handling
                         try:
                             fb_obj.bind_channel(self.adapter)
                         except Exception as e:
-                            logging.error(f"!!! {e}")
+                            logging.error(f"Cannot bind channel {e}")
 
                     
                 self.status = "CONNECTED {} {}".format(self.address, self.port)
@@ -89,7 +89,6 @@ class MBUS8TCP: # later add correct error handling
             except Exception as e:
                 self.status = f"Exception in MBUS8TCP: {str(e)}"
                 self.stop_channel()
-                
                 return event_input_value, None, False, self.status
             
     def __del__(self):

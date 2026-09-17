@@ -1,12 +1,8 @@
-import threading
 import logging
-import time
-import json
 import asyncio
 from asyncua import Client, ua
 import re
 
-# later move to common utils
 OPCUA_TYPE_MAPPING = {
     "IX": ua.VariantType.Boolean,
     "IB": ua.VariantType.Byte,
@@ -37,7 +33,6 @@ class SubscriptionHandler:
         node_id = node.nodeid.to_string()
         if node_id in self._cached_dict:
             self._cached_dict[node_id] = val
-            logging.info(f"data change notification {node_id}: {val}")
         else:
             logging.info(f"unknown node: {node_id}")
 
@@ -107,7 +102,7 @@ class OpcUaChannel:
         if target_path_or_nodeid in self.nodes_cache:
             return self.nodes_cache[target_path_or_nodeid]
 
-        if self._is_node_id(normalized_target): #if ,2:s..
+        if self._is_node_id(normalized_target): # if ,2:s..
             nodeid = self._normalize_node_id(normalized_target)
             node = self.opcua_client.get_node(nodeid)
             self.nodes_cache[normalized_target] = node

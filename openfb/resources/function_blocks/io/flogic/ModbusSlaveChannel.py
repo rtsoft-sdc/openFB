@@ -19,8 +19,7 @@ class ModbusSlaveChannel:
                 logger.error(f"Device ID {deviceid} not found in context")
                 return None
 
-    def _get_sim_entry(self, slave_ctx, reg_type: str):
-        """Вспомогательный метод получения нужного SimData блока из SimDevice."""
+    def _get_sim_entry(self, slave_ctx, reg_type: str): # get SimData from SimDevice
         idx = self._type_idx_map.get(reg_type, 2)
         simdevice = getattr(slave_ctx, 'simdevice', None)
         if not simdevice or not hasattr(simdevice, 'simdata'):

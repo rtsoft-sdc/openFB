@@ -169,7 +169,6 @@ class OPCUAC_18:
                 self.channel = self.queue.get()
                 
                 if not self.client_ready_event.wait(timeout=timeout + 2.0) or not self.channel:
-                    print(f"[ERROR] OPC UA Master failed to connect to {url} within timeout.")
                     return None, event_input_value, False, f"ERROR: failed to connect {url}"
                 
                 self.adapter = OpcUaChannelAdapter(self.channel)
@@ -186,7 +185,6 @@ class OPCUAC_18:
                         except Exception as e:
                             logging.error(f"opcua error:{e}")
 
-                print(f"CONNECTED to {url} [{mode.upper()} mode]")
                 self.status = f"OK"
                 return event_input_value, None, True, self.status
 

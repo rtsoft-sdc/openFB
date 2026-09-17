@@ -72,7 +72,7 @@ class MBUSLAVE8TCP:
                 
                 self._stop_channel()
                 device_context = ModbusDeviceContext(
-                    di = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE), ##check 0x00
+                    di = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE), # 0x00 will cause memory exception 
                     co = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE),
                     hr = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE),
                     ir = ModbusSequentialDataBlock(0x01, [0]*self.MEMSIZE),
@@ -90,7 +90,7 @@ class MBUSLAVE8TCP:
                         try:
                             fb_obj.bind_channel(self.adapter)
                         except Exception as e:
-                            logging.error(f"!!! {e}")
+                            logging.error(f"Cannot bind channel {e}")
 
                 self.server_thread = threading.Thread(
                     target=self._run_server, 

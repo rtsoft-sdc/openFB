@@ -4,7 +4,6 @@ from openfb.resources.function_blocks.io.flogic.OpcUaChannelAdapter import OpcUa
 from openfb.resources.function_blocks.io.flogic.utils import normalize_fb_id
 import logging
 import asyncio
-import time
 import threading
 import json
 from openfb.resources.function_blocks.io.flogic.utils import normalize_IO_fb_id
@@ -110,7 +109,7 @@ class OPCUAC_8:
             logging.error(f"[OPC UA Master Thread] Connection error to {url}: {e}")
             self.status = f"ERROR: {str(e)}"
         finally:
-            self.client_ready_event.set() # Сигнализируем в случае ошибки, чтобы не заблокировать поток
+            self.client_ready_event.set() # for not thread blocking
             if self.client:
                 try:
                     self.loop.run_until_complete(self.client.disconnect())
@@ -169,7 +168,6 @@ class OPCUAC_8:
                 self.channel = self.queue.get()
                 
                 if not self.client_ready_event.wait(timeout=timeout + 2.0) or not self.channel:
-                    print(f"[ERROR] OPC UA Master failed to connect to {url} within timeout.")
                     return None, event_input_value, False, f"ERROR: failed to connect {url}"
                 
                 self.adapter = OpcUaChannelAdapter(self.channel)
@@ -186,8 +184,7 @@ class OPCUAC_8:
                         except Exception as e:
                             logging.error(f"opcua error:{e}")
 
-                print(f"CONNECTED to {url} [{mode.upper()} mode]")
-                self.status = f"OK"
+                self.status = f"CONNECTED to {url} [{mode.upper()} mode]"
                 return event_input_value, None, True, self.status
 
             except Exception as e:

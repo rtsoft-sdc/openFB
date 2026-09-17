@@ -1,5 +1,4 @@
 import time
-import logging
 import concurrent.futures
 from typing import Any, Optional
 from openfb.resources.function_blocks.io.AbstractChannel import AbstractChannel
@@ -18,7 +17,7 @@ class BaseIO:
         
         self.update_interval = 0.0
         self.delay = 0.0
-        self.mode = "sync" #ind
+        self.mode = "sync" # or "ind"
         
         self.start_timestamp = None
         self.last_update_timstamp = None
