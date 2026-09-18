@@ -28,7 +28,7 @@ class BaseProtocolFB:
         return None
     
     def bind_and_connect_channels(self, *io_list):
-        for io_block in io_list:
+        for io_block in io_list[0]:
             if not io_block:
                 continue
             fb_obj = self._find_fb_object(io_block)
@@ -37,6 +37,7 @@ class BaseProtocolFB:
                     fb_obj.bind_channel(self.adapter)
                 except Exception as e:
                     logging.error(f"OpcUA error:{e}")
+        self.status = "OK"
     
     def stop_channel(self):
         if self.adapter:

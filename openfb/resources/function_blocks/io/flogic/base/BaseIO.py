@@ -20,7 +20,7 @@ class BaseIO:
         self.mode = "sync" # or "ind"
         
         self.start_timestamp = None
-        self.last_update_timstamp = None
+        self.last_update_timestamp = None
         self.is_async_running = False
                 
     def bind_channel(self, channel: AbstractChannel):
@@ -35,7 +35,7 @@ class BaseIO:
             self.status = "Disabled"
             return False
         
-        self.PARAMS = PARAMS        
+        self.PARAMS = PARAMS
         self.address, self.update_interval, self.delay, self.mode, self.status = self.channel.parse_IO_params(PARAMS)
         self.start_timestamp = time.monotonic() + self.delay
         self.QO = True
@@ -43,9 +43,13 @@ class BaseIO:
         return True
     
     def _check_ready(self, QI):
-        if not QI or not self.channel:
+        if not QI:
             self.QO = False
-            self.status = "Not ready"
+            self.status = "Disabled"
+            return False
+        if not self.channel:
+            self.QO = False
+            self.status = "Channel not bound"
             return False
         return True
     
@@ -56,7 +60,7 @@ class BaseIO:
             return False
         
         if self.update_interval > 0:
-            if (now - self.last_update_timstamp < self.update_interval):
+            if (now - self.last_update_timestamp < self.update_interval):
                 self.status = "Waiting"
                 return False
         return True

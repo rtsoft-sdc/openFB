@@ -7,13 +7,10 @@ class BaseOutputBlock(BaseIO):
     def schedule(self, event_input_name, event_input_value, QI, PARAMS, OUT):
         if event_input_name == "INIT":
             self._init_block(QI, PARAMS)
-            return event_input_value, None, None, self.QO, self.status, None
+            return event_input_value, None, self.QO, self.status
         
         if event_input_name == "REQ":
             if not self._check_ready(QI):
-                return None, event_input_value, None, self.QO, self.status, None
-            value = self._process_data(OUT)
-            raw_value = self.execute_write(value)
-            return None, event_input_value, None, self.QO, self.status, value
-        
-        return None, None, None, self.QO, self.status, None
+                return None, event_input_value, self.QO, self.status
+            raw_value = self.execute_write(self._process_data(OUT))
+            return None, event_input_value, self.QO, self.status

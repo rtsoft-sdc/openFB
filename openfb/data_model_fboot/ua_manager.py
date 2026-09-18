@@ -1,13 +1,9 @@
-from opcua import ua
-
 from openfb.opc_ua import peer
 from xml.etree import ElementTree as ETree
 from openfb.data_model_fboot import ua_object, monitor, utils, ua_method
 import logging
 import os
 from openfb.core.configuration import Configuration
-from opcua.ua.uaerrors import BadNodeIdUnknown
-
 class UaManagerFboot(peer.UaPeer):
 
     class InvalidFbootState(Exception):

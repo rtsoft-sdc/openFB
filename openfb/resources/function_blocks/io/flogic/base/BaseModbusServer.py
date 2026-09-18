@@ -30,7 +30,7 @@ class BaseModbusServer(BaseProtocolFB):
             self.server_thread.join(timeout=2)
             self.server_thread = None
 
-    def _start_server_and_bind(self, event_input_name, event_input_value, QI, PARAMS, io_blocks):
+    def _execute(self, event_input_name, event_input_value, QI, PARAMS, io_blocks):
         if event_input_name != "MAP":
             return event_input_value, None, False, self.status
 

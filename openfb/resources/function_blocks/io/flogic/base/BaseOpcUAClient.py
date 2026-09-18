@@ -18,24 +18,7 @@ class BaseOpcUAClient(BaseProtocolFB):
         self.loop = None
         self.client = None
         self.queue = queue.Queue()
-        self.client_ready_event = threading.Event()
-
-    def set_fb_registry_and_name(self, fb_registry, fb_name):
-        self.fb_registry = fb_registry
-        self.fb_name = str(fb_name)
-        self.fb_prefix = self.fb_name.rpartition('.')[0] + "."
-        
-    def _find_fb_object(self, ioblock_id):
-        if not self.fb_registry:
-            return None
-        targetid = self.fb_prefix + normalize_fb_id(ioblock_id)
-        if not targetid:
-            return None
-        for val in self.fb_registry.values():
-            fb_name = getattr(val, "fb_name", '')
-            if fb_name == targetid:
-                return getattr(val, 'fb_obj', None)
-        return None    
+        self.client_ready_event = threading.Event() 
 
     def _parse_params(self, params_raw: str):
         default_url = "opc.tcp://127.0.0.1:4840"
@@ -110,31 +93,17 @@ class BaseOpcUAClient(BaseProtocolFB):
                 except Exception:
                     pass
             self.loop.close()
-            
-    def stop_channel(self):
-        super().stop_channel()
-        if self.loop and self.loop.is_running():
-            self.loop.call_soon_threadsafe(self.loop.stop)
-        if self.client_thread and self.client_thread.is_alive():
-            self.client_thread.join(timeout=2)
-        self.client_thread = None
-        self.loop = None
-        self.client = None
-        self.client_ready_event.clear()
 
-    def schedule(self, event_input_name, event_input_value, QI, PARAMS, 
+    def _execute(self, event_input_name, event_input_value, QI, PARAMS, 
                  io_blocks):
         
         if event_input_name == "MAP":
-
             if not QI:
-                self._stop_channel()
+                self.stop_channel()
                 return event_input_value, None, False, "Disabled"
-
             try:
                 url, mode, poll_period, timeout = self._parse_params(PARAMS)
-                
-                self._stop_channel()
+                self.stop_channel()
                 self.client_ready_event.clear()
 
                 self.client_thread = threading.Thread(
@@ -149,16 +118,12 @@ class BaseOpcUAClient(BaseProtocolFB):
                     return None, event_input_value, False, f"ERROR: failed to connect {url}"
                 
                 self.adapter = OpcUaChannelAdapter(self.channel)
-                                
-                self.bind_channels(io_blocks)
+                self.bind_and_connect_channels(io_blocks)
 
                 self.status = f"CONNECTED to {url} [{mode.upper()} mode]"
                 return event_input_value, None, True, self.status
 
             except Exception as e:
-                self._stop_channel()
+                self.stop_channel()
                 self.status = f"ERROR: {str(e)}"
                 return event_input_value, None, False, self.status
-
-    def __del__(self):
-        self._stop_channel()

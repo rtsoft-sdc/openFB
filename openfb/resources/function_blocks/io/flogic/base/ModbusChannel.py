@@ -103,7 +103,7 @@ class ModbusChannel:
                 response = self.client.write_register(address=address, value=value, device_id=device_id)
             else:
                 registers: List[int] = [(value >> (16 * i)) & 0xFFFF for i in range(reg_count)]
-                response = self.client.write_registers(address=address, values=registers, device_id=device_id)
+                response = self.client.write_registers(address=address, values=registers, device_id=device_id)            
             if response.isError():
                 logger.error(f"Error writing registers at address {address}: {response}")
                 return False
