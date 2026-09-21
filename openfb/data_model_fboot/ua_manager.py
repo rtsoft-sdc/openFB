@@ -4,7 +4,7 @@ from openfb.data_model_fboot import ua_object, monitor, utils, ua_method
 import logging
 import os
 from openfb.core.configuration import Configuration
-    
+ 
 class UaManagerFboot(peer.UaPeer):
 
     class InvalidFbootState(Exception):
@@ -41,7 +41,7 @@ class UaManagerFboot(peer.UaPeer):
         self.ROOT_PATH = self.generate_path(self.ROOT_LIST)
         # configuration (connection to 4diac code)
         self.config = config
-        
+ 
         # if we need this?? 1/2
         # create the monitor hardware variables
         # self.monitor_hardware = monitor.MonitorSystem(self)
