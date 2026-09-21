@@ -53,8 +53,8 @@ This block starts a Modbus TCP server in a background daemon thread and creates 
 Configure the blocks through the `PARAMS` parameter using the following format:
 
 `"<Address_and_Type>, <Update_Interval>, <Delay>, <Mode>"`
-`"{“addr”:”C22”}"`
 
+например, `"{“addr”:”C22”, "update":"1000ms", "delay":"3s"}"`
 #### Modbus Register Types
 
 | Code | Register type | Access | Description |
