@@ -9,4 +9,5 @@ opencv-python
 shared_memory_dict
 # USB relay example 
 pyhid-usb-relay
-
+asyncua
+pymodbus
