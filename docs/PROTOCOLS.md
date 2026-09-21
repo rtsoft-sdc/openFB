@@ -10,7 +10,7 @@ This document describes the architecture and configuration of the client, server
 
 The Modbus communication module consists of three components:
 
-* **Connection manager (`MBUS8TCP` / `MBUSLAVE8TCP`)**: A client or server that supports up to eight I/O blocks.
+* **Connection manager (`MBUS8TCP` / `MBUSLAVE8TCP`)**: A client or server that supports up to 8 (by the ordinal number in the name for convenience; easy to modify by expanding the quantity) I/O blocks.
 * **Communication layer (`ModbusChannel` / `ModbusChannelAdapter`)**: A wrapper around the `pymodbus` library that converts IEC data types (`QX`, `IX`, and others) into Modbus operations.
 * **I/O blocks (`BaseIO`)**: Provide direct data read/write operations, timing control, and synchronous or asynchronous execution modes.
 
@@ -24,9 +24,13 @@ The block is initialized by the `MAP` event and operates as a Modbus TCP master.
     * `Host` — the server IP address.
     * `Port` — the server port (default: `502`).
     * `Unit ID` — the device identifier (default: `1`).
+    * `delay` — postponing the start moment by a certain number of mks, ms, s.
+    * `mode` — the mode of the read operation (ind – asynchronous read mode, req – synchronous mode, upon receiving the REQ event).
+    * `update` — update frequency, a number with the suffix ms, mks, hz, khz; the default is mks.
   * `IO0` ... `IO7`: String identifiers of the `BaseIO` blocks registered with the adapter.
 * **Output parameters:**
   * `STATUS` (`STRING`): The current status (`CREATED`, `CONNECTED <ip>:<port>`, `CONNECTION FAILED`, or `DISABLED`).
+`"{"host":"127.0.0.1:1502", "update":"500ms","id":"1"}"`
 
 ### 2. Configuring the `MBUSLAVE8TCP` Server
 
@@ -36,7 +40,7 @@ This block starts a Modbus TCP server in a background daemon thread and creates 
   * `QI` (`BOOL`): `True` starts the server and allocates memory; `False` stops the server and sets the status to `Disabled`.
   * `PARAMS` (`STRING`): Connection parameters:
     * `Host` — the IP address (`0.0.0.0` for all interfaces or `127.0.0.1`).
-    * `Port` — the port (`502`, or `5020` when root privileges are unavailable).
+    * `Port` — the port (`502` default).
     * `Unit ID` — the slave device identifier (default: `1`).
   * `IO0` ... `IO7`: Identifiers of the `BaseIO` blocks to register.
 * **Memory configuration:**
@@ -49,6 +53,7 @@ This block starts a Modbus TCP server in a background daemon thread and creates 
 Configure the blocks through the `PARAMS` parameter using the following format:
 
 `"<Address_and_Type>, <Update_Interval>, <Delay>, <Mode>"`
+`"{“addr”:”C22”}"`
 
 #### Modbus Register Types
 
@@ -59,7 +64,7 @@ Configure the blocks through the `PARAMS` parameter using the following format:
 | `h` | Holding Registers | R/W | Read and write 16-bit registers |
 | `i` | Input Registers | Read | Read-only 16-bit registers |
 
-> **Addressing example:** `h4001` or `h10`. IEC 61499 data types are converted into the corresponding register operations automatically.
+> **Addressing example:** `с21` or `h10`. IEC 61499 data types are converted into the corresponding register operations automatically.
 
 * **Timing parameters:**
   * `Update Interval` — the polling interval in seconds. When set to `0`, polling occurs on every cycle without restrictions.
@@ -104,8 +109,8 @@ Configure the blocks through the `PARAMS` parameter, which specifies the OPC UA 
 
 #### Addressing Methods
 
-* **`BrowsePath`** (relative or complete path): `Objects/MyDevice/Temperature` or `0:Objects/2:MyDevice`.
-* **`NodeId`** (node identifier): `ns=2;s=MyVariable`, `2:s=MyVariable`, or `ns=1;i=1001`.
+* **`BrowsePath`** (complete path): `Objects/MyDevice/Temperature`.
+* **`NodeId`** (node identifier): `,2:s=Path.To.MyVariable`.
 
 > **Note:** Addresses are automatically resolved to actual `NodeId` values and cached on first access.
 
