@@ -119,7 +119,7 @@ class BaseOpcUAClient(BaseProtocolFB):
                 
                 self.adapter = OpcUaChannelAdapter(self.channel)
                 self.bind_and_connect_channels(io_blocks)
-
+                print("!!!!!")
                 self.status = f"CONNECTED to {url} [{mode.upper()} mode]"
                 return event_input_value, None, True, self.status
 
