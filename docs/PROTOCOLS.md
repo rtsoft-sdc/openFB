@@ -30,7 +30,8 @@ The block is initialized by the `MAP` event and operates as a Modbus TCP master.
   * `IO0` ... `IO7`: String identifiers of the `BaseIO` blocks registered with the adapter.
 * **Output parameters:**
   * `STATUS` (`STRING`): The current status (`CREATED`, `CONNECTED <ip>:<port>`, `CONNECTION FAILED`, or `DISABLED`).
-`"{"host":"127.0.0.1:1502", "update":"500ms","id":"1"}"`
+
+e.g. `"{"host":"127.0.0.1:1502", "update":"500ms","id":"1"}"`
 
 ### 2. Configuring the `MBUSLAVE8TCP` Server
 
@@ -47,6 +48,9 @@ This block starts a Modbus TCP server in a background daemon thread and creates 
   * The server allocates 65,536 elements for each of the four memory regions: `co` (Coils, `0x01`), `di` (Discrete Inputs, `0x01`), `hr` (Holding Registers, `0x01`), and `ir` (Input Registers, `0x01`).
 * **Output parameters:**
   * `STATUS` (`STRING`): One of the following values: `Created`, `LISTENING on <host>:<port>`, `Disabled / Stopped`, or `ERROR: <text>`.
+
+The PARAMS of the block are used exclusively to configure the modbus component, for example:
+`"{"host":"127.0.0.1:1502", "id":"1"}"`
 
 ### 3. Configuring I/O Blocks (`BaseIO`)
 
@@ -109,7 +113,7 @@ Configure the blocks through the `PARAMS` parameter, which specifies the OPC UA 
 
 #### Addressing Methods
 
-* **`BrowsePath`** (complete path): `Objects/MyDevice/Temperature`.
+* **`BrowsePath`** (relative or complete path): `Objects/MyDevice/Temperature` or `0:Objects/2:MyDevice`.
 * **`NodeId`** (node identifier): `,2:s=Path.To.MyVariable`.
 
 > **Note:** Addresses are automatically resolved to actual `NodeId` values and cached on first access.
