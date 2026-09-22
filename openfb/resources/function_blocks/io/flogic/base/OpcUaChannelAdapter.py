@@ -9,7 +9,7 @@ class OpcUaChannelAdapter(AbstractChannel):
         address = str(params).strip().strip("'\"") if params else None
         if address is None:
             address = params
-        return address, 0.0, 0.0, "sync", "OK"
+        return address, 0.0, 0.0, "req", "OK"
         
     def read_data(self, address, datatype):
         browse_path = str(address)

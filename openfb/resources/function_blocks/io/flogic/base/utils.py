@@ -72,7 +72,7 @@ def get_addr_update_delay_mode(data):
     address = input_data.get("addr")
     update_interval_str = input_data.get("update", "")
     start_delay_str = input_data.get("delay", "")
-    mode = input_data.get("mode", "ind")
+    mode = input_data.get("mode", "req")
 
     update_interval = parse_time_to_seconds(update_interval_str) if update_interval_str else 0
     start_delay = parse_time_to_seconds(start_delay_str) if start_delay_str else 0

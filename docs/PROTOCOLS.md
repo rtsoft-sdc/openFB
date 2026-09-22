@@ -74,7 +74,7 @@ Configure the blocks through the `PARAMS` parameter using the following format:
   * `Update Interval` — the polling interval in seconds. When set to `0`, polling occurs on every cycle without restrictions.
   * `Delay` — the startup delay in seconds, used to prevent network load spikes.
 * **Operating modes (`Mode`):**
-  * `sync` (synchronous) — a read/write operation blocks the thread until the server responds or the request times out.
+  * `req` (synchronous) — a read/write operation blocks the thread until the server responds or the request times out.
   * `ind` (asynchronous) — tasks are submitted to `THREAD_POOL` without blocking the main IEC 61499 cycle; the block returns the last known value.
 * **Operation logic:**
   * **Client mode:** The blocks send requests over the network.
@@ -100,7 +100,7 @@ The block is initialized by a `MAP` event and operates as an OPC UA client.
   * `QI` (`BOOL`): `True` connects to the OPC UA server and starts the asynchronous thread; `False` stops the thread, terminates the connection, and sets the status to `Disabled`.
   * `PARAMS` (`STRING` / `JSON` / `DICT`): Connection parameters:
     * `url` — the server endpoint URL (default: `opc.tcp://127.0.0.1:4840`).
-    * `mode` — the operating mode (`ind` for asynchronous subscriptions or `sync` for direct requests).
+    * `mode` — the operating mode (`ind` for asynchronous subscriptions or `req` for direct requests).
     * `poll_period` — the subscription/polling period in seconds (default: `0.1`).
     * `timeout` — the connection timeout in seconds (default: `5.0`).
   * `IO0` ... `IO7`: Identifiers of the `BaseIO` blocks registered with the adapter.
@@ -134,7 +134,7 @@ Configure the blocks through the `PARAMS` parameter, which specifies the OPC UA 
 #### Operating Modes and Logic
 
 * **`ind` (asynchronous):** An OPC UA `DataChange Notification` subscription is created. Values are read from the `SubscriptionHandler` cache without blocking the IEC 61499 event loop.
-* **`sync` (synchronous):** Each read and write operation sends a direct request to the server through the event loop.
+* **`req` (synchronous):** Each read and write operation sends a direct request to the server through the event loop.
 * **Operation logic:**
   * **Read (`execute_read`):** The block retrieves the current value from the subscription cache or performs a direct read from the server.
   * **Write (`execute_write`):** The block wraps the value in a `ua.Variant` object with the appropriate data type and writes it to the OPC UA server node.

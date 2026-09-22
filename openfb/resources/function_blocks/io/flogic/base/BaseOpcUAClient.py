@@ -22,7 +22,7 @@ class BaseOpcUAClient(BaseProtocolFB):
 
     def _parse_params(self, params_raw: str):
         default_url = "opc.tcp://127.0.0.1:4840"
-        default_mode = "async"
+        default_mode = "req" #
         default_poll = 0.1
         default_timeout = 5.0
 

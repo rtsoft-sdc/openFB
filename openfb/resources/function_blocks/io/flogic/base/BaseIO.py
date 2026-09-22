@@ -17,7 +17,7 @@ class BaseIO:
         
         self.update_interval = 0.0
         self.delay = 0.0
-        self.mode = "sync" # or "ind"
+        self.mode = "req"
         
         self.start_timestamp = None
         self.last_update_timestamp = None
@@ -83,7 +83,7 @@ class BaseIO:
     
     def _run_io_task(self, io_func):
         now = time.monotonic()
-        if self.mode == "sync":
+        if self.mode == "req":
             self.last_update_timestamp = now
             try:
                 res = io_func()
