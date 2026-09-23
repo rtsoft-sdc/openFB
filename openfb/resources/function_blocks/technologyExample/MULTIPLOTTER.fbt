@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="MULTIPLOTTER" Comment="generate flot image" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="QI"/>
+				<With Var="DST_QUEUE_ID"/>
+			</Event>
+			<Event Name="REQ" Type="Event">
+				<With Var="V1"/>
+				<With Var="PARAMS1"/>
+				<With Var="V2"/>
+				<With Var="PARAMS2"/>
+				<With Var="V3"/>
+				<With Var="PARAMS3"/>
+				<With Var="V4"/>
+				<With Var="PARAMS4"/>
+				<With Var="V5"/>
+				<With Var="PARAMS5"/>
+				<With Var="V6"/>
+				<With Var="PARAMS6"/>
+				<With Var="V7"/>
+				<With Var="PARAMS7"/>
+				<With Var="V8"/>
+				<With Var="PARAMS8"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event">
+				<With Var="QO"/>
+				<With Var="IMG_ID"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="DST_QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="V1" Type="REAL"/>
+			<VarDeclaration Name="PARAMS1" Type="STRING"/>
+			<VarDeclaration Name="V2" Type="REAL"/>
+			<VarDeclaration Name="PARAMS2" Type="STRING"/>
+			<VarDeclaration Name="V3" Type="REAL"/>
+			<VarDeclaration Name="PARAMS3" Type="STRING"/>
+			<VarDeclaration Name="V4" Type="REAL"/>
+			<VarDeclaration Name="PARAMS4" Type="STRING"/>
+			<VarDeclaration Name="V5" Type="REAL"/>
+			<VarDeclaration Name="PARAMS5" Type="STRING"/>
+			<VarDeclaration Name="V6" Type="REAL"/>
+			<VarDeclaration Name="PARAMS6" Type="STRING"/>
+			<VarDeclaration Name="V7" Type="REAL"/>
+			<VarDeclaration Name="PARAMS7" Type="STRING"/>
+			<VarDeclaration Name="V8" Type="REAL"/>
+			<VarDeclaration Name="PARAMS8" Type="STRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" /> 
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

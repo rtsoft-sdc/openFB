@@ -10,6 +10,7 @@ class IMSHOW:
     def __init__(self):
         self.title = "Waiting for Image"
         self.window_is_open = True
+        self.is_visible = False
         self.frame_queue = queue.Queue()
         self.last_frame = None
         self.root = None
@@ -43,7 +44,7 @@ class IMSHOW:
         
         frame = None
         try:
-            frame = self.frame_queue.get()
+            frame = self.frame_queue.get_nowait()
         except queue.Empty:
             pass
         if frame is not None:
@@ -53,7 +54,9 @@ class IMSHOW:
                     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                     success, encoded_img = cv2.imencode('.ppm', rgb_image)
                     if success:
-                        self.root.deiconify()
+                        if not self.is_visible:
+                            self.root.deiconify()
+                            self.is_visible = True
                         tk_img = tk.PhotoImage(master=self.root, data=encoded_img.tobytes())
                         self.label.config(image=tk_img)
                         self.label.image = tk_img 
