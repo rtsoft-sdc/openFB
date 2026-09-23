@@ -1,4 +1,4 @@
-class MLMODEL:
+class MLMODELSIM:
     def __init__(self):
         self.level_lim_h = 100.0 # can be more flexible
         self.level_lim_l = 0

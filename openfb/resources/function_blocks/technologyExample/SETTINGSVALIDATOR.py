@@ -1,4 +1,4 @@
-class APPROVEMODULE:
+class SETTINGSVALIDATOR:
     def __init__(self):
         pass
 

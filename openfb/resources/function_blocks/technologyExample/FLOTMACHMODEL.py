@@ -12,14 +12,14 @@ class FLOTMACHMODEL:
         self.LevelMax = 4.2
         self.Level = 3.8
         
-        self.BubbleSize = 1.2 #mm
-        self.OutputFlow = 0.0 #m^3/s
+        self.BubbleSize = 1.2 # mm
+        self.OutputFlow = 0.0 # m^3/s
         self.OutputFroth = 0.0 # m^3/s
         
         self.InputFlow = 0.1
         self.CurrentValvePos = 0.55
         self.CurrentAirValvePos = 0.60
-        self.CurrentReagentFeed = 15.0 #gr/m^3
+        self.CurrentReagentFeed = 15.0 # gr/m^3
         
         self.K_valve_max = 0.45
         self.AirFlowMax = 0.1

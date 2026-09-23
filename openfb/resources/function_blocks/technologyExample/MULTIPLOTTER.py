@@ -13,7 +13,6 @@ class MULTIPLOTTER:
         self.is_initialized = False
         
     def plot_init(self, width: int = 1000, height: int = 600, max_plots: int = 8):
-        """Инициализация плоттера графиков."""
         self.width = width
         self.height = height
         self.max_plots = min(max_plots, 8)
@@ -65,13 +64,12 @@ class MULTIPLOTTER:
                 self.plot_configs[idx]["color"] = color
 
     def _parse_and_apply_params(self, idx: int, params_input):
-        """Парсинг настроек из JSON формата:
-        '{"min": 0, "max": 100, "offset": 50, "color": [255, 0, 0], "label": "MyParam"}'
+        """
+        format: '{"min": 0, "max": 100, "offset": 50, "color": [255, 0, 0], "label": "MyParam"}'
         """
         if not params_input:
             return
 
-        # Распознаем строку JSON или готовый словарь dict
         if isinstance(params_input, str):
             try:
                 data = json.loads(params_input)
@@ -84,13 +82,11 @@ class MULTIPLOTTER:
 
         config = self.plot_configs[idx]
 
-        # Извлекаем значения (поддерживаем ключи min/min_val и max/max_val)
         min_val = data.get("min", data.get("min_val", config["min_val"]))
         max_val = data.get("max", data.get("max_val", config["max_val"]))
         label = data.get("label", config["label"])
         offset = data.get("offset", config["offset"])
         
-        # Обработка цвета [B, G, R] или "B,G,R"
         color = config["color"]
         raw_color = data.get("color")
         if isinstance(raw_color, (list, tuple)) and len(raw_color) == 3:

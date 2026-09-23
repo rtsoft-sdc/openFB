@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="APPROVEMODULE" Comment="flotation reservoiur" >
+<FBType Name="SETTINGSVALIDATOR" Comment="Value validator for setting the parameters of the flotation tank" >
 	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
 	</VersionInfo>
 	<InterfaceList>
