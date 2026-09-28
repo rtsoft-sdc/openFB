@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="FLOTMACHMODEL" Comment="Model simulating the operation of an ore flotation tank" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="VALVEPOS"/>
+				<With Var="AIRVALVEPOS"/>
+				<With Var="REAGENTFEEDRATE"/>
+				<With Var="INPUTFLOW"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="BUBBLESIZE" /> 
+				<With Var="LEVEL"/>
+				<With Var="OUTPUTFROTH"/>
+				<With Var="CURRENTVALVEPOS" />
+				<With Var="CURRENTAIRVALVEPOS"/>
+				<With Var="AIRFLOW"  />
+				<With Var="OUTPUTFLOW" />
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="VALVEPOS" Type="REAL"/>
+			<VarDeclaration Name="AIRVALVEPOS" Type="REAL"/>
+			<VarDeclaration Name="REAGENTFEEDRATE" Type="REAL"/>
+			<VarDeclaration Name="INPUTFLOW" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BUBBLESIZE" Type="REAL" /> 
+			<VarDeclaration Name="LEVEL" Type="REAL"/>
+			<VarDeclaration Name="OUTPUTFROTH" Type="REAL"/>
+			<VarDeclaration Name="CURRENTVALVEPOS" Type="REAL" />
+			<VarDeclaration Name="CURRENTAIRVALVEPOS" Type="REAL"/>
+			<VarDeclaration Name="AIRFLOW" Type="REAL" />
+			<VarDeclaration Name="OUTPUTFLOW" Type="REAL" />
+		</OutputVars>
+	</InterfaceList>
+</FBType>

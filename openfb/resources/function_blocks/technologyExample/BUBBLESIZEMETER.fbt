@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="BUBBLESIZEMETER" Comment="Module that computes bubbles diameter on flotation froth" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="SRC_QUEUE_ID"/>
+				<With Var="IMG_ID"/>
+				<With Var="DST_QUEUE_ID"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="IMG_IDO"/>
+				<With Var="AVG_D"/>
+				<With Var="MIN_D"/>
+				<With Var="MAX_D"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="SRC_QUEUE_ID" Type="STRING"/>
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="DST_QUEUE_ID" Type="STRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="IMG_IDO" Type="UDINT"/>
+			<VarDeclaration Name="AVG_D" Type="REAL"/>
+			<VarDeclaration Name="MIN_D" Type="REAL"/>
+			<VarDeclaration Name="MAX_D" Type="REAL"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

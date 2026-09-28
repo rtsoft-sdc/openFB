@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="FROTHIMAGEGEN" Comment="Image generator of foam obtained during ore flotation" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event">
+				<With Var="QI"/>
+				<With Var="QUEUE_ID"/>
+			</Event>
+			<Event Name="REQ" Type="Event">
+				<With Var="QI"/>
+				<With Var="WIDTH"/>
+				<With Var="HEIGHT"/>
+				<With Var="AVGRADIUS"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event">
+				<With Var="QO"/>
+				<With Var="STATUS"/>
+			</Event>
+			<Event Name="CNF" Type="Event">
+				<With Var="QO"/>
+				<With Var="IMG_ID"/>
+				<With Var="STATUS"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL"/>
+			<VarDeclaration Name="WIDTH" Type="UDINT"/>
+			<VarDeclaration Name="HEIGHT" Type="UDINT"/>
+			<VarDeclaration Name="AVGRADIUS" Type="UDINT"/>
+			<VarDeclaration Name="QUEUE_ID" Type="STRING"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" /> 
+			<VarDeclaration Name="IMG_ID" Type="UDINT"/>
+			<VarDeclaration Name="STATUS" Type="STRING"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

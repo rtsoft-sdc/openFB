@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="BUBBLESIZEGEN" Comment="Flotation reservoir level-based bubble size generator" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="LEVEL"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="BUBBLESIZE"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="LEVEL" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="BUBBLESIZE" Type="REAL"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>

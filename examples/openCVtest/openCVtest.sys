@@ -38,6 +38,7 @@
 				<Connection Source="ARUCODETECTOR_1.IMG_IDO" Destination="DRAWARUCOMARKERS.IMG_ID" dx1="229.41"/>
 				<Connection Source="CAMERA.IMG_ID" Destination="ARUCODETECTOR_1.IMG_ID" dx1="111.76"/>
 				<Connection Source="ARUCODETECTOR_1.MARKERCOUNT" Destination="DRAWARUCOMARKERS.MARKERCOUNT" dx1="447.06"/>
+				<Connection Source="ARUCODETECTOR_1.IDS" Destination="DRAWARUCOMARKERS.IDS" dx1="500"/>
 			</DataConnections>
 		</SubAppNetwork>
 	</Application>

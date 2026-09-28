@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.3.0] - 2026-09-28
+
+### Added
+
+- Modbus TCP Client FB  for Master role (`MBUS_8_tcp`, supports up to 8 BaseIO blocks).
+- Modbus TCP server with local memory mapping (`MSLAVE_8_tcp`, supports up to 8 BaseIO blocks).
+- OPC UA Client FB manager running an async event loop (`OPCUAC_8`, supports up to 8 BaseIO blocks).
+- Scalable I/O interface, allowing easy adjustment of the number of I/O block inputs on manager FBs
+- Universal multi-protocol I/O FBs (`IX`, `QW`, ...) configured dynamically by the client/server manager.
+- OPC UA protocol support for resource configuration (replacing direct TCP).
+
 ## [1.2.0] - 2026-07-20
 
 ### Added

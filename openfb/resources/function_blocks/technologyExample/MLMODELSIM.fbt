@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="MLMODELSIM" Comment="Module that simulates the operation of an ML model for adjusting values for regulators" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="CURRENTLEVEL"/>
+				<With Var="CURRENTVALVEPOS"/>
+				<With Var="CURRENTFROTHFLOW"/>
+				<With Var="CURRENTBUBBLESIZE"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="DSPLEVELVALVE" /> 
+				<With Var="LEVELLIMH"/>
+				<With Var="LEVELLIML"/>
+				<With Var="DSPAIRVALVE" />
+				<With Var="AIRLIMH"/>
+				<With Var="AIRLIML"  />
+				<With Var="DSPREAGENTSVALVE" />
+				<With Var="REAGENTSLIMH" />
+				<With Var="REAGENTSLIML" />
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="CURRENTLEVEL" Type="REAL"/>
+			<VarDeclaration Name="CURRENTVALVEPOS" Type="REAL"/>
+			<VarDeclaration Name="CURRENTFROTHFLOW" Type="REAL"/>
+			<VarDeclaration Name="CURRENTBUBBLESIZE" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DSPLEVELVALVE" Type="REAL" /> 
+			<VarDeclaration Name="LEVELLIMH" Type="REAL"/>
+			<VarDeclaration Name="LEVELLIML" Type="REAL"/>
+			<VarDeclaration Name="DSPAIRVALVE" Type="REAL" />
+			<VarDeclaration Name="AIRLIMH" Type="REAL"/>
+			<VarDeclaration Name="AIRLIML" Type="REAL" />
+			<VarDeclaration Name="DSPREAGENTSVALVE" Type="REAL" />
+			<VarDeclaration Name="REAGENTSLIMH" Type="REAL" />
+			<VarDeclaration Name="REAGENTSLIML" Type="REAL" />
+		</OutputVars>
+	</InterfaceList>
+</FBType>

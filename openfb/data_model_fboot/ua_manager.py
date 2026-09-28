@@ -170,7 +170,7 @@ class UaManagerFboot(peer.UaPeer):
             # Remove string/wstring entities
             line = line.replace("&quot;", "").replace("&apos;", "")
             # Remove start fb from line
-            chunks = line.split(';')
+            chunks = line.split(';', 1)
             resource_name = chunks[0]
             
             if len(chunks) != 2:
@@ -236,7 +236,7 @@ class UaManagerFboot(peer.UaPeer):
             # Remove string/wstring entities
             line = line.replace("&quot;", "").replace("&apos;", "")
             # Remove start fb from line
-            chunks = line.split(';')
+            chunks = line.split(';', 1)
             if len(chunks) != 2:
                 raise self.InvalidFbootState
             if self.validate_xml_with_details(chunks[1]) != True:

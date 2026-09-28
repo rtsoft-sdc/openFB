@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="SETTINGSVALIDATOR" Comment="Value validator for setting the parameters of the flotation tank" >
+	<VersionInfo Organization="SWDC RTSoft" Version="1.0" Author="AN">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event">
+				<With Var="CURRENTVALUE"/>
+				<With Var="DSPVALUEVEPOS"/>
+				<With Var="VALUELIML"/>
+				<With Var="VALUELIMH"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event">
+				<With Var="NEWDVALUE" /> 
+				<With Var="NEWVALUELIML"/>
+				<With Var="NEWVALUELIMH"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="CURRENTVALUE" Type="REAL"/>
+			<VarDeclaration Name="DSPVALUEVEPOS" Type="REAL"/>
+			<VarDeclaration Name="VALUELIML" Type="REAL"/>
+			<VarDeclaration Name="VALUELIMH" Type="REAL"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="NEWDVALUE" Type="REAL" /> 
+			<VarDeclaration Name="NEWVALUELIML" Type="REAL"/>
+			<VarDeclaration Name="NEWVALUELIMH" Type="REAL"/>
+		</OutputVars>
+	</InterfaceList>
+</FBType>
