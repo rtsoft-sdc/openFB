@@ -26,8 +26,10 @@ class BaseModbusClient(BaseProtocolFB):
 
             self.stop_channel()
             self.channel = ModbusChannel(address=self.address, port=self.port)
-            if not self.channel.connect():
-                self.status = f"CONNECTION_FAILED {self.address} {self.port}"
+            try:
+                self.channel.connect()
+            except Exception as e:    
+                self.status = f"CONNECTION_FAILED {self.address} {self.port} : {e}"
                 return event_input_value, None, False, self.status
 
             self.adapter = ModbusChannelAdapter(self.channel, self.unitid)
